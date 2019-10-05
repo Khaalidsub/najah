@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 //const userRoute = require('./routes/usersRoute');
-const userRoute = require('./routes/usersRoute');
+
 const app = express();
+const userRoute = require('./routes/usersRoute');
 
 const db = require('./config/keys').MongoURI;
 //connect
@@ -22,6 +23,7 @@ app.set('view engine', 'hbs');
 
 // routes
 app.use('/user/login', userRoute.login);
+//app.use(userRoute);
 app.use('/user/register', userRoute.register);
 app.get('/user/registerUser', userRoute.registerUser);
 // error handler
