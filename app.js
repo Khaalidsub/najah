@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
-//const userRoute = require('./routes/usersRoute');
-
 const app = express();
+
+//userController giving the functions and routes
 const userRoute = require('./routes/usersRoute');
 
 const db = require('./config/keys').MongoURI;
+
 //connect
 mongoose
 	.connect(db, { useUnifiedTopology: true })
@@ -13,22 +14,17 @@ mongoose
 	.catch((err) => console.log(err));
 
 app.set('port', process.env.PORT || 3000);
-//userController giving the functions and routes
 
 //set handlebars view engine
 var handlebars = require('express3-handlebars').create({ defaultLayout: 'main' }, { ext: 'hbs' });
-
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'hbs');
 
 // routes
-//app.use('/user/login', userRoute.login);
+//for getting all routes
 app.use(userRoute);
-//app.use(userRoute.login);
-//app.use(userRoute.register);
-//app.use(userRoute.registerUser);
-//app.use('/user/register', userRoute.register);
-//app.get('/user/registerUser', userRoute.registerUser);
+//for debugging or checking one route, use this e.g
+//app.use('/user/login', userRoute.login);
 // error handler
 
 //server
