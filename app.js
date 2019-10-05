@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+//const userRoute = require('./routes/usersRoute');
+const userRoute = require('./routes/usersRoute');
 const app = express();
 
 const db = require('./config/keys').MongoURI;
@@ -11,7 +13,6 @@ mongoose
 
 app.set('port', process.env.PORT || 3000);
 //userController giving the functions and routes
-const userRoute = require('./routes/usersRoute');
 
 //set handlebars view engine
 var handlebars = require('express3-handlebars').create({ defaultLayout: 'main' }, { ext: 'hbs' });

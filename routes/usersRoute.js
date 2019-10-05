@@ -5,7 +5,7 @@ var router = express.Router();
 const User = require('../models/User');
 
 //Dao aka viewModels
-const userView = require('../viewModels/userViewModel');
+const userView = require('../viewModel/userViewModel');
 
 module.exports = {
 	registerRoutes: (app) => {
@@ -17,10 +17,12 @@ module.exports = {
 		console.log('inside the login function ' + req.body);
 		res.render('login');
 	},
+
 	register: (req, res) => {
 		console.log('inside the register function ' + req.body);
 		res.render('registerUser');
 	},
+
 	registerUser: (req, res, next) => {
 		var name = req.params.name;
 		var email = req.params.email;
