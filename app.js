@@ -22,10 +22,13 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'hbs');
 
 // routes
-app.use('/user/login', userRoute.login);
-//app.use(userRoute);
-app.use('/user/register', userRoute.register);
-app.get('/user/registerUser', userRoute.registerUser);
+//app.use('/user/login', userRoute.login);
+app.use(userRoute);
+//app.use(userRoute.login);
+//app.use(userRoute.register);
+//app.use(userRoute.registerUser);
+//app.use('/user/register', userRoute.register);
+//app.get('/user/registerUser', userRoute.registerUser);
 // error handler
 
 //server
