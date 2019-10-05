@@ -4,6 +4,9 @@ const app = express();
 
 //userController giving the functions and routes
 const userRoute = require('./routes/usersRoute');
+const loginRoute = require('./routes/loginRoute');
+const memberRoute = require('./routes/memberRoute');
+const employeeRoute = require('./routes/employeeRoute');
 
 const db = require('./config/keys').MongoURI;
 
@@ -23,6 +26,9 @@ app.set('view engine', 'hbs');
 // routes
 //for getting all routes
 app.use(userRoute);
+app.use(loginRoute);
+app.use(memberRoute);
+app.use(employeeRoute);
 //for debugging or checking one route, use this e.g
 //app.use('/user/login', userRoute.login);
 // error handler
