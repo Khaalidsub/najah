@@ -11,15 +11,15 @@ const employeeRoute = require('./routes/employeeRoute');
 app.set('port', process.env.PORT || 3000);
 
 //set handlebars view engine
-var handlebars = require('express3-handlebars').create({ defaultLayout: 'main' }, { ext: 'hbs' });
+const handlebars = require('express3-handlebars').create({ defaultLayout: 'main' });
 app.engine('handlebars', handlebars.engine);
-app.set('view engine', 'hbs');
+app.set('view engine', 'handlebars');
 
 // routes
 //for getting all routes
 app.use(loginRoute);
 app.use(memberRoute);
-app.use(employeeRoute);
+//app.use(employeeRoute);
 //for debugging or checking one route, use this e.g
 //app.use('/user/login', userRoute.login);
 // error handler
