@@ -1,20 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+require('./config/mongoose');
 
 //userController giving the functions and routes
-const userRoute = require('./routes/usersRoute');
 const loginRoute = require('./routes/loginRoute');
 const memberRoute = require('./routes/memberRoute');
 const employeeRoute = require('./routes/employeeRoute');
-
-const db = require('./config/keys').MongoURI;
-
-//connect
-mongoose
-	.connect(db, { useUnifiedTopology: true })
-	.then(() => console.log('MongoDB connected...'))
-	.catch((err) => console.log(err));
 
 app.set('port', process.env.PORT || 3000);
 
@@ -25,7 +17,6 @@ app.set('view engine', 'hbs');
 
 // routes
 //for getting all routes
-app.use(userRoute);
 app.use(loginRoute);
 app.use(memberRoute);
 app.use(employeeRoute);

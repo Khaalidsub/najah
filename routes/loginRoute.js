@@ -5,7 +5,7 @@ var router = express.Router();
 const User = require('../models/User');
 
 //Dao aka viewModels
-const userView = require('../viewModel/userViewModel');
+const userView = require('../viewModel/memberDao');
 
 login: router.get('/user/login', (req, res) => {
 	console.log('inside the login function ' + req.body);
