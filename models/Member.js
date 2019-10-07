@@ -18,6 +18,6 @@ const MemberSchema = new mongoose.Schema({
 		required: true
 	}
 });
-const Member = mongoose.model('Member', UserSchema);
+const Member = mongoose.model('Member', MemberSchema);
 
 module.exports = Member;

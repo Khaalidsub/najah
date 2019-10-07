@@ -18,7 +18,7 @@ app.set('view engine', 'handlebars');
 // routes
 //for getting all routes
 app.use(loginRoute);
-app.use(memberRoute);
+app.use('/member', memberRoute);
 //app.use(employeeRoute);
 //for debugging or checking one route, use this e.g
 //app.use('/user/login', userRoute.login);
