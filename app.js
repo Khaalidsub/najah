@@ -1,40 +1,45 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const passport = require('passport')
+const User = require('./models/User')
+const auth = require('./middlewares/checkAuthentication')
+const userroute = require('./routes/userRouter')
+
+
+const session = require('express-session')
+require('./config/passport')(passport)
+require('./config/mongoose') // to initialize mongoose and mongodb connection
+//const db = require('./config/keys').MongoURI;
+
 const app = express();
-
-//userController giving the functions and routes
-const userRoute = require('./routes/usersRoute');
-const loginRoute = require('./routes/loginRoute');
-const memberRoute = require('./routes/memberRoute');
-const employeeRoute = require('./routes/employeeRoute');
-
-const db = require('./config/keys').MongoURI;
-
-//connect
-mongoose
-	.connect(db, { useUnifiedTopology: true })
-	.then(() => console.log('MongoDB connected...'))
-	.catch((err) => console.log(err));
-
-app.set('port', process.env.PORT || 3000);
+port = process.env.PORT || 3000
 
 //set handlebars view engine
 var handlebars = require('express3-handlebars').create({ defaultLayout: 'main' }, { ext: 'hbs' });
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'hbs');
+app.use(express.json())
+app.use(require('body-parser').urlencoded({ extended: false }));
 
-// routes
-//for getting all routes
-app.use(userRoute);
-app.use(loginRoute);
-app.use(memberRoute);
-app.use(employeeRoute);
-//for debugging or checking one route, use this e.g
-//app.use('/user/login', userRoute.login);
-// error handler
+
+//creating express session object
+
+//**COOKIE EXPIRE TIME NEED TO BE ADDED***
+app.use(session({
+    secret:"HarryPotty",
+    resave:false,
+    saveUninitialized: false
+}))
+app.use(express.urlencoded({ extended: false }))
+
+//Passport middlewares for session handling
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+// All the route files, please Configure Here
+app.use(userroute)
 
 //server
-app.listen(app.get('port'), () => {
-	console.log(`Express up and running on chocoalte port buu ${app.get('port')}`);
-	console.log('yeahhh');
-});
+app.listen(port,()=>{console.log("the server is up and running at port "+ port);
+})
