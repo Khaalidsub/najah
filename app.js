@@ -15,7 +15,7 @@ const app = express();
 port = process.env.PORT || 3000
 
 //set handlebars view engine
-var handlebars = require('express3-handlebars').create({ defaultLayout: 'main' }, { ext: 'hbs' });
+const handlebars = require('express3-handlebars').create({ defaultLayout: 'main' });
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'hbs');
 app.use(express.json())
