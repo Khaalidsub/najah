@@ -5,16 +5,20 @@ const MemberSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	email: {
+	gender: {
 		type: String,
 		required: true
 	},
-	password: {
+	type: {
 		type: String,
 		required: true
 	},
-	DOB: {
-		type: Date,
+	status: {
+		type: String,
+		required: true
+	},
+	idurl: {
+		type: String,
 		required: true
 	}
 });
