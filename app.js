@@ -5,6 +5,8 @@ const User = require('./models/User');
 const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
+const employeeroute = require('./routes/employeeRouter')
+const flash = require('connect-flash')
 const session = require('express-session');
 
 require('./config/passport')(passport);
@@ -24,13 +26,13 @@ app.use(require('body-parser').urlencoded({ extended: false }));
 //creating express session object
 
 //**Session EXPIRE TIME NEED TO BE ADDED***
-app.use(
-	session({
+app.use(session({
 		secret: 'HarryPotty',
-		resave: false,
-		saveUninitialized: false
+		saveUninitialized: false,
+		resave:false,
 	})
 );
+app.use(flash())
 app.use(express.urlencoded({ extended: false }));
 //to register stylesheets and images
 app.use(express.static('public/images'));
@@ -40,12 +42,14 @@ app.use(express.static('public/stylesheets'));
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 // All the route files, please Configure Here
 //login routes
 
 app.use(userroute);
 //member routes
 app.use(memberroute);
+app.use(employeeroute)
 //server
 app.listen(port, () => {
 	console.log('the server is up and running at port ' + port);

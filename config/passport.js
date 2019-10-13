@@ -7,21 +7,17 @@ module.exports = function(passport) {
 
 	passport.use(
 		'local',
-		new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, async function(
-			username,
-			password,
-			done
-		) {
+		new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, async function(username,password,done) {
 			try {
 				const dbuser = await userDA.findByCredentials(username, password);
 				if (!dbuser) {
-					done(null, false, { message: 'Invalid username/password' });
+					done(null, false, {error:'invalid username/Password'});
 				}
 				if (dbuser) {
 					done(null, dbuser);
 				}
 			} catch (error) {
-				done(error, null);
+				done(error, null, {msg:"Please Enter the details"});
 			}
 		})
 	);

@@ -1,24 +1,46 @@
 const User = require('../models/User');
-const Applicant = require('../models/Application');
+const Application = require('../models/Application')
 const mongoose = require('mongoose');
 
 const addApplication = async (User) => {
 	try {
+		
+		
 		var comment = '';
 		var status = 'pending';
 		var owner = User._id;
 
-		const Applicantion = new Applicant({
+		       
+		const Applicant = new Application({
 			comment,
 			status,
 			owner
 		});
-		await Applicantion.save();
-		await User.populate({ path: 'application' }).execPopulate();
-		console.log(User.application);
+		await Applicant.save();
 	} catch (e) {
 		console.log(e);
 	}
 };
 
-module.exports = { addApplication: addApplication };
+ const fetchApps = async (query)=>{
+	  try {  
+		  
+		const apps = await Application.find({status: query})
+		console.log(apps);
+		
+		if(!apps){
+			return null;
+		}
+		for( var app of apps){
+			const own = await app.populate('owner','-password').execPopulate()	
+		}
+        return apps;
+	  } catch (error) {
+		  console.log(error);
+
+	  }
+	 
+ };
+
+
+module.exports = { addApplication: addApplication, fetchApps: fetchApps };

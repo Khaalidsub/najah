@@ -56,6 +56,13 @@ const userSchema = new mongoose.Schema(
 				}
 			}
 		},
+		 
+		status: {
+			type:String,
+			enum: ['active','inactive']
+
+		}
+		,
 
 		//roles will be assigned by the server.
 		role: {
