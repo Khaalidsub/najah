@@ -14,18 +14,12 @@ const userSchema = new mongoose.Schema(
 			default: undefined,
 			trim: true
 		},
-		// IC: {
-		// 	type: String,
-		// 	requried: false,
-		// 	default: undefined,
-		// 	trim: true,
-		// 	//checking Identity number, does not matter where it is from
-		// 	validate(value) {
-		// 		if (!validator.isIdentityCard(value, 'any')) {
-		// 			throw new error('IC not valid');
-		// 		}
-		// 	}
-		// },
+		IC: {
+			type: String,
+			requried: false,
+			default: undefined,
+			trim: true
+		},
 		gender: {
 			type: String,
 			requried: true,
@@ -74,6 +68,7 @@ const userSchema = new mongoose.Schema(
 		timestamps: true
 	}
 );
+//this method is connecting witrh the Application table during runtime
 userSchema.virtual('application', {
 	ref: 'Application',
 	localField: '_id',

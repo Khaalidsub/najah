@@ -6,6 +6,7 @@ const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
 const session = require('express-session');
+
 require('./config/passport')(passport);
 require('./config/mongoose'); // to initialize mongoose and mongodb connection
 //const db = require('./config/keys').MongoURI;
@@ -31,6 +32,9 @@ app.use(
 	})
 );
 app.use(express.urlencoded({ extended: false }));
+//to register stylesheets and images
+app.use(express.static('public/images'));
+app.use(express.static('public/stylesheets'));
 
 //Passport middlewares for session handling
 app.use(passport.initialize());
@@ -38,6 +42,7 @@ app.use(passport.session());
 
 // All the route files, please Configure Here
 //login routes
+
 app.use(userroute);
 //member routes
 app.use(memberroute);

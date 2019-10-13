@@ -1,0 +1,6 @@
+.img {
+	background-image: url('/public/images/back.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
