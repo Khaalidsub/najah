@@ -5,8 +5,8 @@ const User = require('./models/User');
 const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
-const employeeroute = require('./routes/employeeRouter')
-const flash = require('connect-flash')
+const employeeroute = require('./routes/employeeRouter');
+const flash = require('connect-flash');
 const session = require('express-session');
 
 require('./config/passport')(passport);
@@ -14,7 +14,12 @@ require('./config/mongoose'); // to initialize mongoose and mongodb connection
 //const db = require('./config/keys').MongoURI;
 
 const app = express();
-port = process.env.PORT || 3000;
+port = process.env.PORT || 3000; /*
+
+ADDD EMAIL PART WHERE IT WILL SAY YOU ADDED AND APPLICATION IS PERNDING
+
+
+*/
 
 //set handlebars view engine
 const handlebars = require('express3-handlebars').create({ defaultLayout: 'main' });
@@ -26,13 +31,14 @@ app.use(require('body-parser').urlencoded({ extended: false }));
 //creating express session object
 
 //**Session EXPIRE TIME NEED TO BE ADDED***
-app.use(session({
+app.use(
+	session({
 		secret: 'HarryPotty',
 		saveUninitialized: false,
-		resave:false,
+		resave: false
 	})
 );
-app.use(flash())
+app.use(flash());
 app.use(express.urlencoded({ extended: false }));
 //to register stylesheets and images
 app.use(express.static('public/images'));
@@ -42,14 +48,13 @@ app.use(express.static('public/stylesheets'));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 // All the route files, please Configure Here
 //login routes
 
 app.use(userroute);
 //member routes
 app.use(memberroute);
-app.use(employeeroute)
+app.use(employeeroute);
 //server
 app.listen(port, () => {
 	console.log('the server is up and running at port ' + port);

@@ -1,5 +1,5 @@
 .img {
-	background-image: url('/public/images/back.jpg');
+	background-image: url('back.jpg');
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;

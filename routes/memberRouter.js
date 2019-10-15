@@ -22,4 +22,9 @@ router.post('/member/register', async (req, res) => {
 		res.send(error);
 	}
 });
+router.get('/member/memberMyProfile', isauthenticated, (req, res) => {
+	const profile = req.user;
+	profile.password = '';
+	res.render('memberMyProfile', { profile });
+});
 module.exports = router;
