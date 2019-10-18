@@ -1,7 +1,7 @@
 const express = require('express');
 const router = new express.Router();
 const passport = require('passport');
-const employeeDA = require('../viewModel/employeeDA')
+const userDA = require('../viewModel/UserDA')
 const appDA = require('../viewModel/ApplicationDA')
 const User = require('../models/User');
 const isauthenticated = require('../middlewares/checkAuthentication');
@@ -21,7 +21,7 @@ router.post('/admin/register',isauthenticated,isAdmin,async (req,res)=>{
    employee.role  = 'admin'
    const emp = new User(employee)
    try{
-     await employeeDA.registerEmployee(emp)
+     await userDA.registerEmployee(emp)
      res.send('The admin Has been registered successfully!')
    }catch(e){
        res.send(e)
@@ -32,25 +32,19 @@ router.post('/admin/register',isauthenticated,isAdmin,async (req,res)=>{
 router.get('/admin/viewapplications',isauthenticated,isAdmin, async (req,res)=>{
     const query = req.query.status
    const fetchedApps = await appDA.fetchApps(query);
-  if(fetchedApps.length < 1){res.send('no applications to display')}
+   // *** render same page with no applicaitoion flash mesg
+  if(fetchedApps.length < 1){res.send('no applications to display')}else
       res.render('applications',{apps:fetchedApps})
 })
 //accept or reject the application of the member
 
-
-
 //route for member search
+router.post('/admin/usersearch', isauthenticated, isAdmin, async (req,res)=>{
+   const member = await userDA.searchUser(req.body.email);
+     
+})
 
 
-
-//route for employee search
-
-
-//
-
-
-
-//more routers
 
 
 module.exports = router

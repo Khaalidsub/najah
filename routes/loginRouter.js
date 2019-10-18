@@ -8,18 +8,21 @@ router.get('/', (req, res) => {
 	res.render('Home');
 });
 router.get('/loginpage', (req, res) => {
-	res.render('login');
+	
+	res.render('login', {error: req.flash('error')});
 });
-router.post('/login', passport.authenticate('local', { failureFlash: true }), (req, res) => {
+router.post('/login', passport.authenticate('local', { failureRedirect: '/loginPage',failureFlash: true }), (req, res) => {
 	//res.send('you are loggedin as adeen' + req.user.name);
-	console.log(req.session);
+	
+	const profile = req.user;
+		profile.password = '';
+		
 	//pages rendering depending on the user roles
 	if (req.user.role == 'user') {
-		console.log(`user role : ${req.user.role}`);
-		const profile = req.user;
-		profile.password = '';
-		res.render('memberMyProfile', { profile });
+		//console.log(`user role : ${req.user.role}`);
+		res.render('memberMyProfile', { profile});
 	} else if (req.user.role == 'admin') {
+		res.render('memberMyProfile' ,{profile})
 	} else {
 		console.log(`error, no user role found : ${req.user.role}`);
 	}
