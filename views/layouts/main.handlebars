@@ -16,8 +16,14 @@
 
 
         
+        
 <div class="min-vh-10">
+    {{#if profile}}
 {{>navigation}}
+{{else}}
+{{>overallNavigation}}
+    {{/if}}
+    
 </div>
 
 <div class="img min-vh-100">
