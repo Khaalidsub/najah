@@ -35,10 +35,11 @@ app.use(
 	session({
 		secret: 'HarryPotty',
 		saveUninitialized: false,
-		resave: false
+		resave: false,
+		//cookie:{_expires: 12000}
 	})
 );
-app.use(flash());
+app.use(flash()); // for flash messages!
 app.use(express.urlencoded({ extended: false }));
 //to register stylesheets and images
 app.use(express.static('public/images'));

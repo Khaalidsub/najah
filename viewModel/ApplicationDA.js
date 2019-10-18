@@ -4,8 +4,6 @@ const mongoose = require('mongoose');
 
 const addApplication = async (User) => {
 	try {
-		
-		
 		var comment = '';
 		var status = 'pending';
 		var owner = User._id;
@@ -24,13 +22,17 @@ const addApplication = async (User) => {
 
  const fetchApps = async (query)=>{
 	  try {  
-		  
-		const apps = await Application.find({status: query})
-		console.log(apps);
+		  var apps;
+		  if(query){
+			  apps = await Application.find({status: query})
+		  }else{
+			  apps = await Application.find()
+		  }
 		
 		if(!apps){
 			return null;
 		}
+		// here we are populating the owner fields, means fetching data of one database table from other
 		for( var app of apps){
 			const own = await app.populate('owner','-password').execPopulate()	
 		}

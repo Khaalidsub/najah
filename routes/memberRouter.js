@@ -2,7 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const passport = require('passport');
 const User = require('../models/User');
-const memberDA = require('../viewModel/memberDA');
+const userDA = require('../viewModel/UserDA');
 const applicationDA = require('../viewModel/ApplicationDA');
 const isauthenticated = require('../middlewares/checkAuthentication');
 
@@ -15,7 +15,7 @@ router.post('/member/register', async (req, res) => {
 	const user = new User(req.body); // instacne of user model
 	user.role = 'user';
 	try {
-		memberDA.registerMember(user); //user.save();
+		userDA.registerMember(user); //user.save();
 		applicationDA.addApplication(user);
 		res.render('login');
 	} catch (error) {

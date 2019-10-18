@@ -11,13 +11,13 @@ module.exports = function(passport) {
 			try {
 				const dbuser = await userDA.findByCredentials(username, password);
 				if (!dbuser) {
-					done(null, false, {error:'invalid username/Password'});
+					done(null, false, {message:'invalid username/Password'});
 				}
 				if (dbuser) {
 					done(null, dbuser);
 				}
 			} catch (error) {
-				done(error, null, {msg:"Please Enter the details"});
+				done(error, null);
 			}
 		})
 	);
