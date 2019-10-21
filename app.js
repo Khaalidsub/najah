@@ -6,6 +6,7 @@ const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
 const employeeroute = require('./routes/employeeRouter');
+const equipmentRouter = require('./routes/equipmentRouter');
 const flash = require('connect-flash');
 const session = require('express-session');
 
@@ -56,6 +57,8 @@ app.use(userroute);
 //member routes
 app.use(memberroute);
 app.use(employeeroute);
+//equipmentRouters
+app.use(equipmentRouter);
 //server
 app.listen(port, () => {
 	console.log('the server is up and running at port ' + port);

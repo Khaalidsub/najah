@@ -1,0 +1,59 @@
+   <br>
+ <div class="row mt-5">
+ 
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <h1 class="text-center mb-3"><i class="fas fa-plus"></i> Add Equipment</h1>
+        <form action="/member/addEquipment" method="POST">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Equipment Name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Cost</label>
+                    <input type="number" class="form-control" name="cost" id="cost" placeholder="Equipment Cost">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Supplier Name</label>
+                    <input type="text" class="form-control" name="supplier_name" id="supplier_name" placeholder="Supplier Name For The Equipment">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Supplier Phone</label>
+                    <input type="text" class="form-control" name="supplier_phone" id="supplier_phone" placeholder="Supplier Phone For The Equipment">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Date Of Buy</label>
+                    <input type="date" class="form-control" name="date" id="date">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Visibility</label>
+                    <select name="visibility" id="visibility" class="form-control">
+                        <option selected value="1">Show</option>
+                        <option value="0">Hide</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Mintainance</label>
+                    <select name="maintenance" id="maintenance" class="form-control">
+                        <option selected value="1">Working</option>
+                        <option value="0">Under Mintainance</option>
+                    </select>
+                </div>
+            </div>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" name="photo" id="photo" required>
+                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                <div class="invalid-feedback">Example invalid custom file feedback</div>
+            </div>
+            <br>
+            <br>
+            <button type="submit" class="btn btn-primary">Add Equipment</button>
+        </form>
+        </div>
+      </div>   
+  </div>

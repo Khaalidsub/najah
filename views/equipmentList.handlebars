@@ -1,0 +1,20 @@
+   <br>
+ <div class="row mt-5">
+ 
+    <div class="col-md-12 m-auto">
+      <div class="card card-body">
+        <h1 class="text-center mb-3"><i class="fas fa-list"></i> View Equipment</h1>
+        <div class="row text-center m-auto">
+        {{#each equ}}
+            <div class="col-3 m-auto" style="width: 18rem;">
+                <div class="card m-2">
+                    <img src="/dumbbell.png" class="card-img-top" alt="{{this.path}}">
+                    <div class="card-body">
+                        <p class="card-text">{{this.name}}</p>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+        </div>
+      </div>   
+  </div>
