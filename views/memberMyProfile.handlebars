@@ -1,9 +1,20 @@
-<div class="row h-25" style=" background-color: black;">
+<!--
+dont forget for flashes
+-update failure
+-update success
+
+-->
+
+<div class="row h-50" style="">
+
+
+
     <div class="col">
-        <div class="img h-100 vw-100 p-3">
+        <div class="img h-100 ">
 
         </div>
     </div>
+
 </div>
 <br>
 <br>
@@ -11,18 +22,19 @@
     <div class="col-3">
         <div class="card bg-primary mb-3" style="max-width: 20rem;">
             <div class="card-header">Today's workout</div>
+            <h5 class="card-title"> Pull</h5>
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Cras justo odio
-                    <span class="badge badge-primary badge-pill">14</span>
+                    Deadlift
+                    <span class="badge badge-primary badge-pill">4sets/10reps</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Dapibus ac facilisis in
-                    <span class="badge badge-primary badge-pill">2</span>
+                    Pull-up
+                    <span class="badge badge-primary badge-pill">until failure</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Morbi leo risus
-                    <span class="badge badge-primary badge-pill">1</span>
+
+                    <span class="badge badge-primary badge-pill">1sets</span>
                 </li>
             </ul>
         </div>
@@ -36,26 +48,32 @@
                 <li class="list-group-item text-white bg-primary">IC : {{profile.IC}}</li>
             </ul>
             <div class="card-body">
-                <a href="/member/editmemberProfile" class="card-link text-white">Edit Profile</a>
-                <a href="/member/editmemberProfile" class="card-link text-white">Add Profile Image</a>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#forupdate">
+                    Edit Profile
+                </button>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#forimage">
+                    Add Profile Image
+                </button>
             </div>
         </div>
     </div>
     <div class="col-3">
         <div class="card bg-primary mb-3" style="max-width: 20rem;">
-            <div class="card-header">Today's workout</div>
+            <div class="card-header">Latest Payments</div>
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Cras justo odio
-                    <span class="badge badge-primary badge-pill">14</span>
+
+                    <span class="badge badge-primary badge-pill">none</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Dapibus ac facilisis in
-                    <span class="badge badge-primary badge-pill">2</span>
+
+                    <span class="badge badge-primary badge-pill">none</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Morbi leo risus
-                    <span class="badge badge-primary badge-pill">1</span>
+
+                    <span class="badge badge-primary badge-pill">none</span>
                 </li>
             </ul>
         </div>
@@ -63,54 +81,151 @@
 
 
 
-    <div class="w-100">
+    <br>
+    <br>
+
+    <div class="row">
+
+
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body bg-primary text-white">
+                    <h5 class="card-title">Deactivate Account</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                        the
+                        card's
+                        content.</p>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fordeactivate">
+                        Deactivate
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body text-white" style="background-color: rgb(255, 82, 2);">
+                    <h5 class="card-title">Check Member status</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                        the
+                        card's
+                        content.</p>
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body bg-primary text-white">
+                    <h5 class="card-title">Finance history</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                        the
+                        card's
+                        content.</p>
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="container">
-        <div class="row">
+</div>
 
 
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the
-                            card's
-                            content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </div>
+<!-- Modal update -->
+<div class="modal fade" id="forupdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Update Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the
-                            card's
-                            content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+            <div class="modal-body">
+                <form action="/member/updateMember" method="post">
+                    <div class="form-group">
+                        <label for="phone">phone</label>
+                        <input type="phone" id="phone" name="phone" class="form-control" value="{{profile.phone}}" />
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="password">Previous Password</label>
+                        <input type="password" id="password" name="old_password" class="form-control"
+                            placeholder="Enter your previous password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input type="password" id="password" name="new_password" class="form-control"
+                            placeholder="Enter your new Password" />
+                    </div>
             </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Update changes</button>
+                </form>
 
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the
-                            card's
-                            content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </div>
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal add image -->
+<div class="modal fade" id="forimage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Update Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/member/updateMember" method="post">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile01"
+                                aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        </div>
+                    </div </div> <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Upload image</button>
+                </form>
+
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal deactivate -->
+<div class="modal fade" id="doedeactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Deactivate Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want your account to be activated?</p>
+                    </div </div> <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Deactivate</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
