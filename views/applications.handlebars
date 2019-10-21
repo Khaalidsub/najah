@@ -1,18 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+{{!-- <button id="{{@index}}"  name="button1" type="button" class="btn btn-primary" data-toggle="modal" 
+          data-target="#myModal">View Application</button> --}}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <head>
+    {{!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  </head>
+</head>
+<title>Document</title>
+</head>
+
+<body>
+
+  {{#if error}}
+  <div class="alert alert-warning" role="alert">
+    {{{error}}}
+  </div>
+  {{/if}}
+
+  {{#if noView}}
+  <div class="alert alert-warning" role="alert">
+    {{{noView}}}
+  </div>
+  {{/if}}
+
+  {{#if msg}}
+  <div class="alert alert-success" role="alert">
+    {{{msg}}}
+  </div>
+  {{/if}}
+
+
+{{#if apps}}
+
+</html>
+
 <table class="table table-hover">
   <thead>
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
       <th scope="col">Status</th>
+      <th scope="col">Actions</th>
     </tr>
   </thead>
-  <tbody> 
-     {{#each apps}}
-     <tr class="table-active">
+  <tbody>
+    {{#each apps}}
+    <tr class="table-light">
       <td>{{this.owner.name}}</td>
       <td>{{this.owner.email}}</td>
       <td>{{this.status}}</td>
+      <td>
+        <button id="{{@index}}" name="button1" type="button" class="viewapp btn btn-primary" data-toggle="modal"
+          data-target="#myModal">View Application</button>
+        {{!-- <a href="/admin/accept/{{this.id}}" id="1"><img src="/public/images/accepticon.png"
+            style="width:82px; height:86px" title="Accept Application" alt="icon"></a> --}}
+        {{!-- <a  href="/admin/accept/{{this.id}}" name="accept" id="1" type="button" class="btn btn-primary">Accept</a> --}}
+       
+      </td>
     </tr>
-       {{/each}}
-    
-    </tbody></table>
+    {{/each}}
+  </tbody>
+</table>
+
+
+
+<div class="container">
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Application View</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+        </div>
+
+          <div class="modal-footer">
+           <p>*Please make sure before accepting and rejecting application!</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</html>
+</body>
+
+{{/if}}
+
+<script>
+  document.getElementsByClassName('viewapp').onclick = (e) => {
+    if (!confirm('Are you sure you?')) {
+      e.preventDefault()
+    }
+  }
+
+ 
+
+  $('.viewapp').on('click', function (event) {
+    var id = parseInt(this.id)
+    var app = {{{get apps}}}
+   
+  
+
+      var html = '';
+  html += `
+        <img src="/public/images/deleteicon.png" alt="User Profile Pic">
+        <br><br><br><br>
+       <h5 style="float:left">Name      : </h5><p> ${app[id].owner.name}</p><br>
+       <h5 style="float:left">Email     : </h5><p> ${app[id].owner.email}</p><br>
+       <h5 style="float:left">IC#       : </h5><p> ${app[id].owner.IC}</p><br>
+       <h5 style="float:left">Address   : </h5><p> ${app[id].owner.address}</p><br>
+       <h5 style="float:left">Phone     : </h5><p> ${app[id].owner.phone}</p><br>
+       <h5 style="float:left">Created At: </h5><p> ${app[id].owner.createdAt}</p><br>
+       <a  href="/admin/performAction/${app[id]._id}/accept" name="accept" id="1" type="button" class="btn btn-primary">Accept</a>
+        <a href="/admin/performAction/${app[id]._id}/reject" name="reject" id="2" type="button" class="action btn btn-primary">Reject</a>
+        <a href="/admin/performAction/${app[id]._id}/delete" name="delete" id="3" type="button" class="action btn btn-primary">Delete</a>
+      `;
+
+  $('.modal-body').html(html)
+  })
+   
+
+</script>
