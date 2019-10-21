@@ -23,9 +23,18 @@ ADDD EMAIL PART WHERE IT WILL SAY YOU ADDED AND APPLICATION IS PERNDING
 */
 
 //set handlebars view engine
-const handlebars = require('express3-handlebars').create({ defaultLayout: 'main' });
+const handlebars = require('express3-handlebars').create({
+	defaultLayout: 'main',
+	helpers: {
+		get: function (obj) {
+			return JSON.stringify(obj)
+		}
+	}
+}
+);
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
+
 app.use(express.json());
 app.use(require('body-parser').urlencoded({ extended: false }));
 
@@ -36,7 +45,7 @@ app.use(
 	session({
 		secret: 'HarryPotty',
 		saveUninitialized: false,
-		resave: false,
+		resave: false
 		//cookie:{_expires: 12000}
 	})
 );
@@ -45,7 +54,7 @@ app.use(express.urlencoded({ extended: false }));
 //to register stylesheets and images
 app.use(express.static('public/images'));
 app.use(express.static('public/stylesheets'));
-
+app.use(express.static('public/javascripts'));
 //Passport middlewares for session handling
 app.use(passport.initialize());
 app.use(passport.session());
