@@ -35,7 +35,7 @@ app.use(
 	session({
 		secret: 'HarryPotty',
 		saveUninitialized: false,
-		resave: false,
+		resave: false
 		//cookie:{_expires: 12000}
 	})
 );
@@ -44,7 +44,7 @@ app.use(express.urlencoded({ extended: false }));
 //to register stylesheets and images
 app.use(express.static('public/images'));
 app.use(express.static('public/stylesheets'));
-
+app.use(express.static('public/javascripts'));
 //Passport middlewares for session handling
 app.use(passport.initialize());
 app.use(passport.session());
