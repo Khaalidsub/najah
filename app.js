@@ -22,9 +22,18 @@ ADDD EMAIL PART WHERE IT WILL SAY YOU ADDED AND APPLICATION IS PERNDING
 */
 
 //set handlebars view engine
-const handlebars = require('express3-handlebars').create({ defaultLayout: 'main' });
+const handlebars = require('express3-handlebars').create({
+	defaultLayout: 'main',
+	helpers: {
+		get: function (obj) {
+			return JSON.stringify(obj)
+		}
+	}
+}
+);
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
+
 app.use(express.json());
 app.use(require('body-parser').urlencoded({ extended: false }));
 
