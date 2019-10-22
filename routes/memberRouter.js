@@ -47,9 +47,30 @@ router.post('/member/register', async (req, res) => {
 		res.send(error);
 	}
 });
+router.post('/member/updateMember', async (req, res) => {
+	//const user = new User(req.)
+	const user = req.user;
+
+	//const old_pass = req.body.old_password;
+	//const new_pass = req.body.new_password;
+	const phone = req.body.phone;
+
+	//if phone is same
+	//if phone not same
+	try {
+		//user.password = new_pass;
+		user.phone = phone;
+
+		userDA.updateMember(user);
+	} catch (error) {
+		console.log(error);
+	}
+	res.render('memberMyProfile', { profile: user });
+});
 router.get('/member/memberMyProfile', isauthenticated, (req, res) => {
 	const profile = req.user;
 	profile.password = '';
 	res.render('memberMyProfile', { profile });
 });
+
 module.exports = router;
