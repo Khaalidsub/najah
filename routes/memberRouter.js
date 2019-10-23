@@ -21,37 +21,36 @@ router.post('/member/register', async (req, res) => {
 	console.log(user.email);
 
 	try {
-		if (userDA.registerMember(user)) {
-			req.flash('exists', 'User email already exists !');
-			res.render('registerMember', { exists: req.flash('exists') });
-		} else {
-			application = applicationDA.addApplication(user); // saving the application
+		await userDA.registerMember(user);
+		application = await applicationDA.addApplication(user); // saving the application
+
+		try {
 			//connecting with the email proxy
-			const mailer = connectEmail.connect;
-			try {
-				//sending mail to the user email
-				await mailer.sendMail({
-					from: 'khaalidsubaan@hotmail.com',
-					to: user.email,
-					subject: 'Registration Najah Complete',
-					text:
-						'Thank you for applying to najah gym. Your application is in the process and we will response to you shortly!',
-					dsn: {
-						id: 'some random message specific id',
-						return: 'headers',
-						notify: [ 'failure', 'delay' ],
-						recipient: 'khaalidsubaan@hotmail.com'
-					}
-				});
-			} catch (error) {
-				console.log(error);
-			}
-			req.flash('registered', 'We have sent you an email and it should have reached you by now!');
-			user.password = '';
-			res.render('Login', { success: req.flash('registered'), application: application, user: user });
+			const mailer = await connectEmail.connect;
+			//sending mail to the user email
+			console.log('I am hereee');
+			await mailer.sendMail({
+				from: 'khaalidsubaan@hotmail.com',
+				to: user.email,
+				subject: 'Registration Najah Complete',
+				text:
+					'Thank you for applying to najah gym. Your application is in the process and we will response to you shortly!',
+				dsn: {
+					id: 'some random message specific id',
+					return: 'headers',
+					notify: [ 'failure', 'delay' ],
+					recipient: 'khaalidsubaan@hotmail.com'
+				}
+			});
+		} catch (error) {
+			console.log(error);
 		}
+		req.flash('registered', 'We have sent you an email and it should have reached you by now!');
+		user.password = '';
+		res.render('pendingProfile', { pending: req.flash('registered'), application: application, user: user });
 	} catch (error) {
-		res.send(error);
+		req.flash('exists', 'User email already exists !');
+		res.render('registerMember', { emailError: req.flash('exists') });
 	}
 });
 router.post('/member/updateMember', async (req, res) => {
