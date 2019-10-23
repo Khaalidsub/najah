@@ -9,6 +9,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
   <head>
+    <link rel="stylesheet" href="/public/stylesheets/confirmModal.css">
     {{!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -32,65 +33,70 @@
   </div>
   {{/if}}
 
-  {{#if msg}}
+  {{#if info}}
+  <div class="alert alert-warning" role="alert">
+    {{{info}}}
+  </div>
+  {{/if}}
+  {{#if warning}}
   <div class="alert alert-success" role="alert">
-    {{{msg}}}
+    {{{warning}}}
   </div>
   {{/if}}
 
 
-{{#if apps}}
+  {{#if apps}}
 
-</html>
 
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Status</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each apps}}
-    <tr class="table-light">
-      <td>{{this.owner.name}}</td>
-      <td>{{this.owner.email}}</td>
-      <td>{{this.status}}</td>
-      <td>
-        <button id="{{@index}}" name="button1" type="button" class="viewapp btn btn-primary" data-toggle="modal"
-          data-target="#myModal">View Application</button>
-        {{!-- <a href="/admin/accept/{{this.id}}" id="1"><img src="/public/images/accepticon.png"
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each apps}}
+      <tr class="table-light">
+        <td>{{this.owner.name}}</td>
+        <td>{{this.owner.email}}</td>
+        <td>{{this.status}}</td>
+        <td>
+          <button id="{{@index}}" name="button1" type="button" class="viewapp btn btn-primary" data-toggle="modal"
+            data-target="#myModal">View Application</button>
+          {{!-- <a href="/admin/accept/{{this.id}}" id="1"><img src="/public/images/accepticon.png"
             style="width:82px; height:86px" title="Accept Application" alt="icon"></a> --}}
-        {{!-- <a  href="/admin/accept/{{this.id}}" name="accept" id="1" type="button" class="btn btn-primary">Accept</a> --}}
-       
-      </td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
+          {{!-- <a  href="/admin/accept/{{this.id}}" name="accept" id="1" type="button" class="btn btn-primary">Accept</a> --}}
+
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
 
 
 
-<div class="container">
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+  <div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
 
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Application View</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-        <div class="modal-body">
-        </div>
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Application View</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          </div>
 
           <div class="modal-footer">
-           <p>*Please make sure before accepting and rejecting application!</p>
+            <p>*Please make sure before accepting and rejecting application!</p>
           </div>
         </div>
 
@@ -98,26 +104,22 @@
     </div>
 
   </div>
-</div>
+  </div>
+
+</body>
 
 </html>
-</body>
+
 
 {{/if}}
 
-<script>
-  document.getElementsByClassName('viewapp').onclick = (e) => {
-    if (!confirm('Are you sure you?')) {
-      e.preventDefault()
-    }
-  }
 
- 
+<script>
 
   $('.viewapp').on('click', function (event) {
     var id = parseInt(this.id)
-    var app = {{{get apps}}}
-   
+    var app = {{{get apps }}}
+  
   
 
       var html = '';
@@ -130,13 +132,20 @@
        <h5 style="float:left">Address   : </h5><p> ${app[id].owner.address}</p><br>
        <h5 style="float:left">Phone     : </h5><p> ${app[id].owner.phone}</p><br>
        <h5 style="float:left">Created At: </h5><p> ${app[id].owner.createdAt}</p><br>
-       <a  href="/admin/performAction/${app[id]._id}/accept" name="accept" id="1" type="button" class="btn btn-primary">Accept</a>
-        <a href="/admin/performAction/${app[id]._id}/reject" name="reject" id="2" type="button" class="action btn btn-primary">Reject</a>
-        <a href="/admin/performAction/${app[id]._id}/delete" name="delete" id="3" type="button" class="action btn btn-primary">Delete</a>
+       <a  href="/admin/performAction/${app[id]._id}/accept" onclick="doConfirm(event)" name="accept" title="Accept Applicaiton" id="1" type="button" class="action"><i class=" btn btn-success fa fa-check" aria-hidden="true" style="font-size:28px"></i></a>
+        <a href="/admin/performAction/${app[id]._id}/reject" onclick="doConfirm(event)" name="reject" title="Reject Applicaiton" id="2" type="button" class="action"><i class=" btn btn-warning fa fa-times" aria-hidden="true" style="font-size:28px"></i></a>
+        <a href="/admin/performAction/${app[id]._id}/delete" onclick="doConfirm(event)" name="delete" title="Delete Applicaiton" id="3" type="button" class="action "><i class=" btn btn-danger fa fa-trash" aria-hidden="true" style="font-size:28px"></i></a>
       `;
 
   $('.modal-body').html(html)
   })
-   
+
+  doConfirm = function (event) {
+    if (!confirm('are you sure?')) {
+      event.preventDefault()
+    }
+  }
+  //for alerts to go away after few seconds
+
 
 </script>
