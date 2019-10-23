@@ -25,20 +25,44 @@ const updateMember = async (user) => {
 
 const searchUser = async (email) => {
 	try {
-		const member = await User.find({ email: email });
-		if (!member) {
-			res.send('no member found');
-		} else {
-			res.send(member);
-		}
+		const member = await User.find({ email: email },{password:0,role:0}); //excluding the sensitive information
+		return member
+		
 	} catch (e) {
-		res.send(e);
+		return;
 	}
 };
 
+const fetchMembers = async function(){
+	try {
+		// taking out the sensitive information of the user, before sending back to the client!
+		dbValues = await User.find({role: "user"},{password:0, role:0})
+         if(!dbValues){
+			 throw new Error()
+		 }
+		return dbValues 
+		 
+	} catch (error) {
+		return null
+	}
+}
+const deleteMember = async function(id)
+{ try {
+	const deletedMember = await User.findByIdAndDelete(id);
+	if(!deleteMember){
+		throw new Error
+	}else
+	return deletedMember;
+} catch (error) {
+	return null
+}
+	
+}
 module.exports = {
 	registerMember: registerMember,
 	registerEmployee: registerEmployee,
 	updateMember: updateMember,
-	searchUser: searchUser
+	searchUser: searchUser,
+	fetchMembers:fetchMembers,
+	deleteMember:deleteMember
 };
