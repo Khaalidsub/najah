@@ -8,25 +8,55 @@ const isauthenticated = require('../middlewares/checkAuthentication');
 
 const connectEmail = require('../config/mail');
 
-//THESE ROUTES WERE CREATED FOR TESTING PURPOSES
+//registerpage
 router.get('/member/registerPage', (req, res) => {
-	res.render('registerMember');
+	//for navigation recognition
+	const user = req.user;
+	if (!user == null) {
+		//for navigation recognition
+		user.password = '';
+		res.render('registerMember', {
+			emailError: req.flash('email'),
+			registered: req.flash('registered'),
+			admin: user
+		});
+	} else {
+		res.render('registerMember', { emailError: req.flash('email'), registered: req.flash('registered') });
+	}
+});
+//main dashboard
+router.get('/member/memberProfile', isauthenticated, (req, res) => {
+	const user = req.user;
+	user.password = '';
+	res.render('memberMyProfile', { profile: user });
 });
 
+//registerhandler
 router.post('/member/register', async (req, res) => {
+	console.log(req.user);
+
 	const user = new User(req.body); // instacne of user model
 	var application;
 	user.role = 'user';
-	user.status = 'pending';
-	console.log(user.email);
+
+	//console.log(user.email);
 
 	try {
-		await userDA.registerMember(user);
-		application = await applicationDA.addApplication(user); // saving the application
-
+		if (!req.user == null) {
+			if (!req.user.role == 'admin') {
+				await userDA.registerMember(user);
+				user.status = 'active';
+			} else {
+				console.log(req.user);
+			}
+		} else {
+			user.status = 'pending';
+			await userDA.registerMember(user);
+			application = await applicationDA.addApplication(user); // saving the application
+		}
+		//connecting with the email proxy
+		const mailer = await connectEmail.connect;
 		try {
-			//connecting with the email proxy
-			const mailer = await connectEmail.connect;
 			//sending mail to the user email
 			console.log('I am hereee');
 			await mailer.sendMail({
@@ -45,12 +75,19 @@ router.post('/member/register', async (req, res) => {
 		} catch (error) {
 			console.log(error);
 		}
-		req.flash('registered', 'We have sent you an email and it should have reached you by now!');
-		user.password = '';
-		res.render('pendingProfile', { pending: req.flash('registered'), application: application, user: user });
+		if (!req.user == null) {
+			if (req.user.role == 'admin') {
+				req.flash('registered', 'The member has been registered successfully!');
+				res.redirect(req.get('referer'));
+			}
+		} else {
+			req.flash('registered', 'We have sent you an email and it should have reached you by now!');
+			user.password = '';
+			res.render('pendingProfile', { pending: req.flash('registered'), application: application, user: user });
+		}
 	} catch (error) {
-		req.flash('exists', 'User email already exists !');
-		res.render('registerMember', { emailError: req.flash('exists') });
+		req.flash('email', 'User email already exists !');
+		res.redirect(req.get('referer'));
 	}
 });
 router.post('/member/updateMember', async (req, res) => {
@@ -88,6 +125,7 @@ router.post('/member/deactivateAccount', async (req, res) => {
 		console.log(error);
 	}
 	//add flash messages
+	//req.flash('email', 'User email already exists !');
 	res.render('login');
 });
 

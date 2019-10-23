@@ -29,11 +29,13 @@ router.post(
 				res.render('pendingProfile', { pending: req.flash('pending'), user: profile });
 			} else if (req.user.status == 'deactivated') {
 				//displaying alert card asking to reApply
+
 				req.flash('deactivated', 'Your Account has been deactivated, Would you like to re-apply?');
 				res.render('login');
 			} else {
 				//console.log(`user role : ${req.user.role}`);
-				res.render('adminProfile', { profile });
+
+				res.redirect('/member/memberProfile');
 			}
 		} else if (req.user.role == 'admin') {
 			res.render('adminProfile', { admin: profile });
