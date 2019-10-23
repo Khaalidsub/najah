@@ -1,3 +1,4 @@
+
 <br>
 <br>
 <div class="row mt-5">
@@ -27,3 +28,15 @@
     </div>
   </div>
 </div>
+{{#if success}}
+<div class="col">
+<div class="alert alert-dismissible alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Registeration Success! </strong>{{success}}
+  <p>Your name :{{user.name}}</p>
+  <p>Your email :{{user.name}}</p>
+  <p>Your Application status :{{application.status}}</p>
+  <p>Your Phone :{{user.phone}}</p>
+</div>
+</div>
+{{/if}}

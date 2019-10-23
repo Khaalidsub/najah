@@ -15,34 +15,41 @@ router.get('/member/registerPage', (req, res) => {
 
 router.post('/member/register', async (req, res) => {
 	const user = new User(req.body); // instacne of user model
+	var application;
 	user.role = 'user';
+	user.status = 'pending';
 	console.log(user.email);
 
 	try {
-		userDA.registerMember(user); //user.save();
-		applicationDA.addApplication(user); // saving the application
-		//connecting with the email proxy
-		const mailer = connectEmail.connect;
-		try {
-			//sending mail to the user email
-			await mailer.sendMail({
-				from: 'khaalidsubaan@hotmail.com',
-				to: user.email,
-				subject: 'Registration Najah Complete',
-				text:
-					'Thank you for applying to najah gym. Your application is in the process and we will response to you shortly!',
-				dsn: {
-					id: 'some random message specific id',
-					return: 'headers',
-					notify: [ 'failure', 'delay' ],
-					recipient: 'khaalidsubaan@hotmail.com'
-				}
-			});
-		} catch (error) {
-			console.log(error);
+		if (userDA.registerMember(user)) {
+			req.flash('exists', 'User email already exists !');
+			res.render('registerMember', { exists: req.flash('exists') });
+		} else {
+			application = applicationDA.addApplication(user); // saving the application
+			//connecting with the email proxy
+			const mailer = connectEmail.connect;
+			try {
+				//sending mail to the user email
+				await mailer.sendMail({
+					from: 'khaalidsubaan@hotmail.com',
+					to: user.email,
+					subject: 'Registration Najah Complete',
+					text:
+						'Thank you for applying to najah gym. Your application is in the process and we will response to you shortly!',
+					dsn: {
+						id: 'some random message specific id',
+						return: 'headers',
+						notify: [ 'failure', 'delay' ],
+						recipient: 'khaalidsubaan@hotmail.com'
+					}
+				});
+			} catch (error) {
+				console.log(error);
+			}
+			req.flash('registered', 'We have sent you an email and it should have reached you by now!');
+			user.password = '';
+			res.render('Login', { success: req.flash('registered'), application: application, user: user });
 		}
-
-		res.render('login');
 	} catch (error) {
 		res.send(error);
 	}
@@ -71,6 +78,18 @@ router.get('/member/memberMyProfile', isauthenticated, (req, res) => {
 	const profile = req.user;
 	profile.password = '';
 	res.render('memberMyProfile', { profile });
+});
+
+router.post('/member/deactivateAccount', async (req, res) => {
+	const user = req.user;
+	user.status = 'deactivated';
+	try {
+		userDA.deactivateMember(user);
+	} catch (error) {
+		console.log(error);
+	}
+	//add flash messages
+	res.render('login');
 });
 
 module.exports = router;

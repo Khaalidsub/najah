@@ -1,17 +1,15 @@
 const User = require('../models/User');
-const Application = require('../models/Application')
+const Application = require('../models/Application');
 const mongoose = require('mongoose');
 
-const check = async function (id, str) {
+const check = async function(id, str) {
 	const temp = await Application.findById(id);
-	return (temp.status === str)
-}
-const update = async function (id, str) {
-	const val = await Application.findByIdAndUpdate(id, { status: str })
-	return val
-}
-
-
+	return temp.status === str;
+};
+const update = async function(id, str) {
+	const val = await Application.findByIdAndUpdate(id, { status: str });
+	return val;
+};
 
 const addApplication = async (User) => {
 	try {
@@ -19,13 +17,12 @@ const addApplication = async (User) => {
 		var status = 'pending';
 		var owner = User._id;
 
-
 		const Applicant = new Application({
 			comment,
 			status,
 			owner
 		});
-		await Applicant.save();
+		return await Applicant.save();
 	} catch (e) {
 		console.log(e);
 	}
@@ -35,15 +32,14 @@ const fetchApps = async (query) => {
 	try {
 		var apps;
 		if (query) {
-			apps = await Application.find({ status: query })
+			apps = await Application.find({ status: query });
 		} else {
-			apps = await Application.find()
+			apps = await Application.find();
 		}
-		if (!apps)
-			return null;
+		if (!apps) return null;
 		// here we are populating the owner fields, means fetching data of one database table from other
 		for (var app of apps) {
-			const own = await app.populate('owner', '-password -role').execPopulate()
+			const own = await app.populate('owner', '-password -role').execPopulate();
 		}
 		return apps;
 	} catch (e) {
@@ -55,28 +51,21 @@ const performAction = async (id, query) => {
 	var updated;
 	switch (query) {
 		case 'accept':
-			if (await (check(id, 'accepted'))) {
-				return 0
+			if (await check(id, 'accepted')) {
+				return 0;
 			} else {
-				return await update(id, 'accepted')
+				return await update(id, 'accepted');
 			}
 			break;
 		case 'reject':
 			if (await check(id, 'rejected')) {
-				return 0
-			} else
-				return await update(id, 'rejected')
+				return 0;
+			} else return await update(id, 'rejected');
 			break;
 		case 'delete':
-			updated = await Application.findByIdAndDelete(id)
+			updated = await Application.findByIdAndDelete(id);
 			break;
-
-
 	}
-
-
-
-
 
 	// try {
 	// 	//const app = await Application.findById(id)
@@ -91,6 +80,5 @@ const performAction = async (id, query) => {
 	// catch (e) {
 	// 	return (null)
 	// }
-
-}
+};
 module.exports = { addApplication: addApplication, fetchApps: fetchApps, performAction };

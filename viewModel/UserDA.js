@@ -3,7 +3,13 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const registerMember = async (User) => {
-	await User.save();
+	try {
+		//await User.save();
+		await User.save();
+	} catch (error) {
+		console.log(error);
+		return;
+	}
 };
 const registerEmployee = async function(user) {
 	try {
@@ -15,10 +21,18 @@ const registerEmployee = async function(user) {
 const updateMember = async (user) => {
 	try {
 		//await User.u
-		console.log(user);
 
 		await User.findByIdAndUpdate(user.id, { phone: user.phone });
 	} catch (error) {
+		res.status(401).send('something went wrong');
+	}
+};
+const deactivateMember = async (user) => {
+	try {
+		console.log(user);
+		await User.findByIdAndUpdate(user.id, { status: user.status });
+	} catch (error) {
+		console.log(error);
 		res.status(401).send('something went wrong');
 	}
 };
@@ -40,5 +54,6 @@ module.exports = {
 	registerMember: registerMember,
 	registerEmployee: registerEmployee,
 	updateMember: updateMember,
+	deactivateMember: deactivateMember,
 	searchUser: searchUser
 };

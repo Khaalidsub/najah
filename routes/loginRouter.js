@@ -23,8 +23,19 @@ router.post(
 
 		//pages rendering depending on the user roles
 		if (req.user.role == 'user') {
-			//console.log(`user role : ${req.user.role}`);
-			res.render('memberMyProfile', { profile });
+			//if user application has not been accepted yet
+			if (req.user.status == 'pending') {
+				req.flash('pending', 'Your application is still being reviewed by the admins.');
+				res.render('Home', { pending: req.flash('pending') });
+			} else if (req.user.status == 'deactivated') {
+				//displaying alert card asking to reApply
+				req.flash('deactivated', 'Your Account has been deactivated, Would you like to re-apply?');
+
+				res.render('login');
+			} else {
+				//console.log(`user role : ${req.user.role}`);
+				res.render('memberMyProfile', { profile });
+			}
 		} else if (req.user.role == 'admin') {
 			res.render('memberMyProfile', { profile });
 		} else {
