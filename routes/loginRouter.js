@@ -12,9 +12,7 @@ router.get('/', (req, res) => {
 router.get('/loginpage', (req, res) => {
 	res.render('login', { error: req.flash('error') });
 });
-router.post(
-	'/login',
-	passport.authenticate('local', { failureRedirect: '/loginPage', failureFlash: true }),
+router.post('/login',passport.authenticate('local', { failureRedirect: '/loginPage', failureFlash: true }),
 	(req, res) => {
 		//res.send('you are loggedin as adeen' + req.user.name);
 
@@ -46,7 +44,6 @@ router.post(
 
 router.get('/logout', isauthenticated, async (req, res) => {
 	await req.logout();
-	console.log(req.session);
 
 	console.log('logged out' + req.user);
 	res.render('login');
