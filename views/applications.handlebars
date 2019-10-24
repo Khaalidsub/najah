@@ -118,7 +118,7 @@
 
   $('.viewapp').on('click', function (event) {
     var id = parseInt(this.id)
-    var app = {{{get apps }}}
+    var app = {{{ get apps }}}
   
   
 
@@ -131,10 +131,19 @@
        <h5 style="float:left">IC#       : </h5><p> ${app[id].owner.IC}</p><br>
        <h5 style="float:left">Address   : </h5><p> ${app[id].owner.address}</p><br>
        <h5 style="float:left">Phone     : </h5><p> ${app[id].owner.phone}</p><br>
-       <h5 style="float:left">Created At: </h5><p> ${app[id].owner.createdAt}</p><br>
+       <h5 style="float:left">Created At: </h5><p> ${app[id].owner.createdAt}</p><br> 
+            
+          <form action="/admin/performAction/${app[id]._id}/reject" method="get">
+            <input class="form-control" placeholder="Add Your Comments Eg. Your IC is fake" name="comment" required id="message-text">
+
+            <br>
+          
        <a  href="/admin/performAction/${app[id]._id}/accept" onclick="doConfirm(event)" name="accept" title="Accept Applicaiton" id="1" type="button" class="action"><i class=" btn btn-success fa fa-check" aria-hidden="true" style="font-size:28px"></i></a>
-        <a href="/admin/performAction/${app[id]._id}/reject" onclick="doConfirm(event)" name="reject" title="Reject Applicaiton" id="2" type="button" class="action"><i class=" btn btn-warning fa fa-times" aria-hidden="true" style="font-size:28px"></i></a>
-        <a href="/admin/performAction/${app[id]._id}/delete" onclick="doConfirm(event)" name="delete" title="Delete Applicaiton" id="3" type="button" class="action "><i class=" btn btn-danger fa fa-trash" aria-hidden="true" style="font-size:28px"></i></a>
+
+       <button type="submit"  name="reject" title="Reject Applicaiton" id="2" type="button" class="action btn btn-warning fa fa-times"  aria-hidden="true" style="font-size:28px"></button>
+        
+      <a href="/admin/performAction/${app[id]._id}/delete" onclick="doConfirm(event)" name="delete" title="Delete Applicaiton" id="3" type="button" class="action "><i class=" btn btn-danger fa fa-trash" aria-hidden="true" style="font-size:28px"></i></a>
+        </form>
       `;
 
   $('.modal-body').html(html)
@@ -144,6 +153,12 @@
     if (!confirm('are you sure?')) {
       event.preventDefault()
     }
+  }
+  doConfirm2 = function (event) {
+    if (!confirm('are you sure?')) {
+      event.preventDefault()
+    }
+    document.forms['fb'].submit()
   }
   //for alerts to go away after few seconds
 

@@ -54,7 +54,10 @@ router.get('/admin/performAction/:id/:action', isauthenticated, isAdmin, async (
   const urlArr = (req.url).split('/')
   const id = req.params.id;
   const action = req.params.action;
-  const updated = await appDA.performAction(id, action);
+  const com = req.query.comment;
+
+  console.log(com)
+  const updated = await appDA.performAction(id, action, com);
   if (updated == 0) {
     req.flash('info', 'Application already been ' + action + 'ed')
 
@@ -109,6 +112,12 @@ router.get('/admin/searchMember', isauthenticated, isAdmin, async (req, res) => 
   //remove sensitive credentials brefore sending the database object
 })
 
+//Loading an error page if coming request does not matches with 
+//any of the above configured routes
+//MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
+router.get('/admin/*', (req,res)=>{
+  res.render('errorPage');
+})
 
 
 

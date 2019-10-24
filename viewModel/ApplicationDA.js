@@ -51,7 +51,7 @@ const fetchApps = async (query) => {
 	}
 };
 
-const performAction = async (id, query) => {
+const performAction = async (id, query, com) => {
 	var updated;
 	switch (query) {
 		case 'accept':
@@ -64,8 +64,10 @@ const performAction = async (id, query) => {
 		case 'reject':
 			if (await check(id, 'rejected')) {
 				return 0
-			} else
-				return await update(id, 'rejected')
+			} else{
+					   await update(id, 'rejected')
+					   await Application.findOneAndUpdate(id,{comment:com})
+			}
 			break;
 		case 'delete':
 			updated = await Application.findByIdAndDelete(id)

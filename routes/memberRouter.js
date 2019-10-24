@@ -73,4 +73,16 @@ router.get('/member/memberMyProfile', isauthenticated, (req, res) => {
 	res.render('memberMyProfile', { profile });
 });
 
+
+//Loading an error page if coming request does not matches with 
+//any of the above configured routes
+//MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
+router.get('/member/*', (req,res)=>{
+	res.render('errorPage');
+  })
+
+  router.get('/member/registerPage/*', (req,res)=>{
+	res.render('errorPage');
+  })
+
 module.exports = router;

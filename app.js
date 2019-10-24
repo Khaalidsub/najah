@@ -27,6 +27,11 @@ const handlebars = require('express3-handlebars').create({
 	helpers: {
 		get: function (obj) {
 			return JSON.stringify(obj)
+		},
+		
+		math: function(val){
+			parseInt(val);
+			return val+1
 		}
 	}
 }

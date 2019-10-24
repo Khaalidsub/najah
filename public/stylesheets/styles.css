@@ -1,3 +1,13 @@
+
+
+html, body {
+    height: 100%;
+    min-height: 100%;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
 .img {
 	background-image: url('home1.jpg');
 	background-repeat: no-repeat;
