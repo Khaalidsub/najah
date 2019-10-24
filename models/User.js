@@ -1,3 +1,13 @@
+
+//****************************//
+    // Author of this Code:
+    // Muhammad Adeen Rabbani
+    // A17CS4006
+    //****************************// 
+    
+
+
+
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');

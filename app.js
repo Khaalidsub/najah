@@ -25,8 +25,13 @@ ADDD EMAIL PART WHERE IT WILL SAY YOU ADDED AND APPLICATION IS PERNDING
 const handlebars = require('express3-handlebars').create({
 	defaultLayout: 'main',
 	helpers: {
-		get: function(obj) {
-			return JSON.stringify(obj);
+		get: function (obj) {
+			return JSON.stringify(obj)
+		},
+		
+		math: function(val){
+			parseInt(val);
+			return val+1
 		}
 	}
 });

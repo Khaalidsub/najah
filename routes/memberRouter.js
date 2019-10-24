@@ -1,3 +1,13 @@
+
+//****************************//
+    // Author of this Code:
+    // Khaalid Subaan
+    // A17CS4037
+    //****************************// 
+    
+
+
+
 const express = require('express');
 const router = new express.Router();
 const passport = require('passport');
@@ -58,7 +68,7 @@ router.post('/member/register', async (req, res) => {
 		const mailer = await connectEmail.connect;
 		try {
 			//sending mail to the user email
-			console.log('I am hereee');
+			
 			await mailer.sendMail({
 				from: 'khaalidsubaan@gmail.com',
 				to: user.email,
@@ -116,6 +126,7 @@ router.get('/member/memberMyProfile', isauthenticated, (req, res) => {
 	res.render('memberMyProfile', { profile });
 });
 
+
 router.post('/member/deactivateAccount', async (req, res) => {
 	const user = req.user;
 	user.status = 'deactivated';
@@ -128,5 +139,16 @@ router.post('/member/deactivateAccount', async (req, res) => {
 	//req.flash('email', 'User email already exists !');
 	res.render('login');
 });
+
+//Loading an error page if coming request does not matches with 
+//any of the above configured routes
+//MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
+router.get('/member/*', (req,res)=>{
+	res.render('errorPage');
+  })
+
+  router.get('/member/registerPage/*', (req,res)=>{
+	res.render('errorPage');
+  })
 
 module.exports = router;

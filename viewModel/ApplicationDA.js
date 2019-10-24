@@ -1,4 +1,12 @@
+
+//****************************//
+// Author of this Code:
+// Muhammad Adeen Rabbani
+// A17CS4006
+//****************************//
+
 const User = require('../models/User');
+const userDA = require('../viewModel/UserDA');
 const Application = require('../models/Application');
 const mongoose = require('mongoose');
 
@@ -7,6 +15,7 @@ const check = async function(id, str) {
 	return temp.status === str;
 };
 const update = async function(id, str) {
+	
 	const val = await Application.findByIdAndUpdate(id, { status: str });
 	return val;
 };
@@ -47,38 +56,30 @@ const fetchApps = async (query) => {
 	}
 };
 
-const performAction = async (id, query) => {
+const performAction = async (id, query, com) => {
 	var updated;
 	switch (query) {
 		case 'accept':
 			if (await check(id, 'accepted')) {
 				return 0;
 			} else {
-				return await update(id, 'accepted');
+				 const use = await update(id, 'accepted','_id');
+				   await userDA.useractive(use.owner._id);
+				   	 
 			}
 			break;
 		case 'reject':
 			if (await check(id, 'rejected')) {
-				return 0;
-			} else return await update(id, 'rejected');
+				return 0
+			} else{
+					   await update(id, 'rejected')
+					   await Application.findOneAndUpdate(id,{comment:com})
+			}
 			break;
 		case 'delete':
 			updated = await Application.findByIdAndDelete(id);
 			break;
 	}
 
-	// try {
-	// 	//const app = await Application.findById(id)
-
-	// 	const foundApp = await Application.findByIdAndUpdate(id,{status:'accepted'})
-	// 	console.log(foundApp);
-
-	// 	if (!foundApp) { throw new Error() }
-	// 	else return foundApp
-	// }
-
-	// catch (e) {
-	// 	return (null)
-	// }
 };
 module.exports = { addApplication: addApplication, fetchApps: fetchApps, performAction };

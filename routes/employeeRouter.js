@@ -1,3 +1,10 @@
+
+//****************************//
+// Author of this Code:
+// Muhammad Adeen Rabbani
+// A17CS4006
+//****************************//
+
 const express = require('express');
 const router = new express.Router();
 const passport = require('passport');
@@ -64,19 +71,25 @@ router.get('/admin/viewapplications', isauthenticated, isAdmin, async (req, res)
 //This is done to skip the redundant code in all the routes
 
 router.get('/admin/performAction/:id/:action', isauthenticated, isAdmin, async (req, res) => {
-	const urlArr = req.url.split('/');
-	const id = req.params.id;
-	const action = req.params.action;
-	const updated = await appDA.performAction(id, action);
-	if (updated == 0) {
-		req.flash('info', 'Application already been ' + action + 'ed');
 
-		res.redirect(req.get('referer'));
-	} else {
-		req.flash('warning', 'Application has been ' + action + 'ed successfully!');
-		res.redirect(req.get('referer'));
-	}
-});
+  const urlArr = (req.url).split('/')
+  const id = req.params.id;
+  const action = req.params.action;
+  const com = req.query.comment;
+
+  
+  const updated = await appDA.performAction(id, action, com);
+  if (updated == 0) {
+    req.flash('info', 'Application already been ' + action + 'ed')
+
+    res.redirect(req.get('referer'))
+  }
+  else {
+	 
+    req.flash('warning', 'Application has been ' + action + 'ed successfully!')
+    res.redirect(req.get('referer'))
+  }
+})
 
 router.get('/admin/viewMembers', isauthenticated, isAdmin, async (req, res) => {
 	const members = await userDA.fetchMembers();
@@ -120,23 +133,25 @@ router.get('/admin/viewMembers', isauthenticated, isAdmin, async (req, res) => {
 });
 //route for member search
 router.get('/admin/searchMember', isauthenticated, isAdmin, async (req, res) => {
-	const member = await userDA.searchUser(req.query.email);
-	console.log(member);
 
-	//for navigation recognition
+  const member = await userDA.searchUser(req.query.email);
+  console.log(member);
+
+  	//for navigation recognition
 	const user = req.user;
 	user.password = '';
 
-	if (member.length) {
-		req.flash('foundsearch', 'We have found a member!');
-		res.render('MembersView', { apps: member, searchsuccess: req.flash('foundsearch'), admin: user });
-	} else {
-		req.flash('nosearch', 'No member found with this email. Please provide valid email.');
-		res.redirect('/admin/viewMembers');
-	}
+  if (member.length) {
+    req.flash('foundsearch', 'We have found a member!')
+    res.render('MembersView', { apps: member, searchsuccess: req.flash('foundsearch'),admin:user })
+  } else {
+    req.flash('nosearch', 'No member found with this email. Please provide valid email.');
+    res.redirect('/admin/viewMembers')
+  }
 
-	//remove sensitive credentials brefore sending the database object
-});
+  //remove sensitive credentials brefore sending the database object
+})
+
 
 //admin dashboard
 router.get('/admin/adminProfile', isauthenticated, isAdmin, (req, res) => {
@@ -144,5 +159,17 @@ router.get('/admin/adminProfile', isauthenticated, isAdmin, (req, res) => {
 	user.password = '';
 	res.render('adminProfile', { admin: user });
 });
+//Loading an error page if coming request does not matches with 
+//any of the above configured routes
+//MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
+router.get('/admin/*', (req,res)=>{
+  res.render('errorPage');
+})
+
+
+
+
+
+
 
 module.exports = router;

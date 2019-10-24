@@ -1,18 +1,18 @@
 <br>
 <br>
-  {{#if registered}}
-        <div class="alert alert-danger" role="alert">
-          {{{registered}}}
-        </div>
-       {{/if}}
+{{#if registered}}
+<div class="alert alert-danger" role="alert">
+  {{{registered}}}
+</div>
+{{/if}}
 <div class="row mt-5">
   <div class="col-md-6 m-auto">
     <div class="card card-body">
-              {{#if emailError}}
-        <div class="alert alert-danger" role="alert">
-          {{{emailError}}}
-        </div>
-       {{/if}}
+      {{#if emailError}}
+      <div class="alert alert-danger" role="alert">
+        {{{emailError}}}
+      </div>
+      {{/if}}
       <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i> Register</h1>
       <form action="/member/register" method="post">
         <div class="form-group">
@@ -25,7 +25,7 @@
         </div>
         <div class="form-group">
           <label for="name">IC</label>
-          
+
           <input type="IC" id="IC" name="IC" class="form-control" placeholder="Enter IC" />
         </div>
         <div class="form-group">
@@ -33,9 +33,15 @@
           <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" />
         </div>
         <div class="form-group">
-          <label for="date">gender</label>
-          <input type="gender" id="gender" name="DOB" class="form-control" placeholder="Enter gender" />
+
+          <div class="radio">
+            <label><input type="radio" name="gender" value="male" checked>Male</label>
+          </div>
+          <div class="radio">
+            <label><input type="radio" name="gender" value="female">Female</label>
+          </div>
         </div>
+
         <div class="form-group">
           <label for="Type">Phone</label>
           <input type="phone" id="phone" name="phone" class="form-control" placeholder="Enter Phone number" />
@@ -48,9 +54,10 @@
     </div>
   </div>
 </div>
-  
+
 </body>
+
 </html>
 <script>
-  
+
 </script>

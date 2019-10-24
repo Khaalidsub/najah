@@ -10,6 +10,8 @@ const registerMember = async (User) => {
 		res.status(401).send('somthing went wrong');
 	}
 };
+
+
 const registerEmployee = async function(user) {
 	try {
 		await user.save();
@@ -67,6 +69,13 @@ const deleteMember = async function(id) {
 		return null;
 	}
 };
+
+ const useractive = async function (id){
+	 
+	  console.log(await User.findByIdAndUpdate(id,{status:'active'}));
+	  
+	  return
+ }
 module.exports = {
 	registerMember: registerMember,
 	registerEmployee: registerEmployee,
@@ -74,5 +83,7 @@ module.exports = {
 	deactivateMember: deactivateMember,
 	searchUser: searchUser,
 	fetchMembers: fetchMembers,
-	deleteMember: deleteMember
+	deleteMember: deleteMember,
+	useractive:useractive
+	
 };
