@@ -5,7 +5,7 @@ dont forget for flashes
 
 -->
 
-<div class="row h-50" style="">
+<div class="row h-50">
 
 
 
@@ -41,7 +41,7 @@ dont forget for flashes
     </div>
     <div class="col-5">
         <div class="card bg-primary">
-            <img src="/back.jpg" class="card-img-top" alt="member Picture">
+            <img src="/marc.jpg" class="card-img-top" alt="member Picture">
             <ul class="list-group list-group-flush text-white bg-primary ">
                 <li class="list-group-item text-white bg-primary">Name : {{profile.name}}</li>
                 <li class="list-group-item text-white bg-primary">Email : {{profile.email}}</li>
@@ -132,6 +132,32 @@ dont forget for flashes
         </div>
     </div>
 </div>
+<!-- Modal deactivate -->
+<div class="modal fade" id="fordeactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Deactivate Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <form action="/member/deactivateAccount" method="post">
+               <p>Are you sure you want to Deactivate your account?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Yes</button>
+                </form>
+
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Not sure yet</button>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- Modal update -->
@@ -208,23 +234,3 @@ dont forget for flashes
     </div>
 </div>
 
-<!-- Modal deactivate -->
-<div class="modal fade" id="doedeactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Deactivate Account</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-             </div>
-            <div class="modal-body">
-                <p>Are you sure you want your account to be activated?</p>
-        </div </div> <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Deactivate</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-</div>
-</div>
-</div>
-</div>
