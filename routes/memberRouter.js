@@ -60,7 +60,7 @@ router.post('/member/register', async (req, res) => {
 			//sending mail to the user email
 			console.log('I am hereee');
 			await mailer.sendMail({
-				from: 'khaalidsubaan@hotmail.com',
+				from: 'khaalidsubaan@gmail.com',
 				to: user.email,
 				subject: 'Registration Najah Complete',
 				text:
@@ -69,7 +69,7 @@ router.post('/member/register', async (req, res) => {
 					id: 'some random message specific id',
 					return: 'headers',
 					notify: [ 'failure', 'delay' ],
-					recipient: 'khaalidsubaan@hotmail.com'
+					recipient: 'khaalidsubaan@gmail.com'
 				}
 			});
 		} catch (error) {
