@@ -1,3 +1,10 @@
+
+//****************************//
+// Author of this Code:
+// Muhammad Adeen Rabbani
+// A17CS4006
+//****************************//
+
 const express = require('express');
 const router = new express.Router();
 const passport = require('passport');
@@ -70,7 +77,7 @@ router.get('/admin/performAction/:id/:action', isauthenticated, isAdmin, async (
   const action = req.params.action;
   const com = req.query.comment;
 
-  console.log(com)
+  
   const updated = await appDA.performAction(id, action, com);
   if (updated == 0) {
     req.flash('info', 'Application already been ' + action + 'ed')
@@ -78,6 +85,7 @@ router.get('/admin/performAction/:id/:action', isauthenticated, isAdmin, async (
     res.redirect(req.get('referer'))
   }
   else {
+	 
     req.flash('warning', 'Application has been ' + action + 'ed successfully!')
     res.redirect(req.get('referer'))
   }
@@ -129,9 +137,13 @@ router.get('/admin/searchMember', isauthenticated, isAdmin, async (req, res) => 
   const member = await userDA.searchUser(req.query.email);
   console.log(member);
 
+  	//for navigation recognition
+	const user = req.user;
+	user.password = '';
+
   if (member.length) {
     req.flash('foundsearch', 'We have found a member!')
-    res.render('MembersView', { apps: member, searchsuccess: req.flash('foundsearch') })
+    res.render('MembersView', { apps: member, searchsuccess: req.flash('foundsearch'),admin:user })
   } else {
     req.flash('nosearch', 'No member found with this email. Please provide valid email.');
     res.redirect('/admin/viewMembers')

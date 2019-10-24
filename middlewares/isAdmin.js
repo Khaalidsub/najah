@@ -1,4 +1,10 @@
 
+//****************************//
+// Author of this Code:
+// Muhammad Adeen Rabbani
+// A17CS4006
+//****************************//
+
 module.exports = function(req,res,next){
     if(req.user.role == 'admin'){
         next()

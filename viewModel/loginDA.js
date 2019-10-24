@@ -1,6 +1,13 @@
 //This file contains all the database access logic for USER database
 
 
+ //****************************//
+    // Author of this Code:
+    // Khaalid Subaan
+    // A17CS4037
+    //****************************// 
+    
+
 const User = require('../models/User')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')

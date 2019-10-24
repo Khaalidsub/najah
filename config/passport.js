@@ -1,3 +1,11 @@
+//****************************//
+// Author of this Code:
+// Muhammad Adeen Rabbani
+// A17CS4006
+//****************************//
+
+
+
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/User');
 const userDA = require('../viewModel/loginDA');

@@ -1,3 +1,13 @@
+
+//****************************//
+    // Author of this Code:
+    // Khaalid Subaan
+    // A17CS4037
+    //****************************// 
+    
+
+
+
 const express = require('express');
 const router = new express.Router();
 const passport = require('passport');
@@ -58,7 +68,7 @@ router.post('/member/register', async (req, res) => {
 		const mailer = await connectEmail.connect;
 		try {
 			//sending mail to the user email
-			console.log('I am hereee');
+			
 			await mailer.sendMail({
 				from: 'khaalidsubaan@hotmail.com',
 				to: user.email,
