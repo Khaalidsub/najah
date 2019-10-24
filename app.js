@@ -28,10 +28,14 @@ const handlebars = require('express3-handlebars').create({
 	helpers: {
 		get: function (obj) {
 			return JSON.stringify(obj)
+		},
+		
+		math: function(val){
+			parseInt(val);
+			return val+1
 		}
 	}
-}
-);
+});
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -55,6 +59,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public/images'));
 app.use(express.static('public/stylesheets'));
 app.use(express.static('public/javascripts'));
+//app.use(express.static('public/assets'));
 //Passport middlewares for session handling
 app.use(passport.initialize());
 app.use(passport.session());

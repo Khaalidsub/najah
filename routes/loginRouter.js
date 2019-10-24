@@ -12,7 +12,9 @@ router.get('/', (req, res) => {
 router.get('/loginpage', (req, res) => {
 	res.render('login', { error: req.flash('error') });
 });
-router.post('/login',passport.authenticate('local', { failureRedirect: '/loginPage', failureFlash: true }),
+router.post(
+	'/login',
+	passport.authenticate('local', { failureRedirect: '/loginPage', failureFlash: true }),
 	(req, res) => {
 		//res.send('you are loggedin as adeen' + req.user.name);
 
@@ -21,10 +23,22 @@ router.post('/login',passport.authenticate('local', { failureRedirect: '/loginPa
 
 		//pages rendering depending on the user roles
 		if (req.user.role == 'user') {
-			//console.log(`user role : ${req.user.role}`);
-			res.render('memberMyProfile', { profile });
+			//if user application has not been accepted yet
+			if (req.user.status == 'pending') {
+				req.flash('pending', 'Your application is still being reviewed by the admins.');
+				res.render('pendingProfile', { pending: req.flash('pending'), user: profile });
+			} else if (req.user.status == 'deactivated') {
+				//displaying alert card asking to reApply
+
+				req.flash('deactivated', 'Your Account has been deactivated, Would you like to re-apply?');
+				res.render('login');
+			} else {
+				//console.log(`user role : ${req.user.role}`);
+
+				res.redirect('/member/memberProfile');
+			}
 		} else if (req.user.role == 'admin') {
-			res.render('memberMyProfile', { profile });
+			res.render('adminProfile', { admin: profile });
 		} else {
 			console.log(`error, no user role found : ${req.user.role}`);
 		}
@@ -33,9 +47,8 @@ router.post('/login',passport.authenticate('local', { failureRedirect: '/loginPa
 
 router.get('/logout', isauthenticated, async (req, res) => {
 	await req.logout();
-
 	console.log('logged out' + req.user);
-	res.render('login');
+	res.render('Home');
 });
 
 module.exports = router;

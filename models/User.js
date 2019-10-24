@@ -1,3 +1,13 @@
+
+//****************************//
+    // Author of this Code:
+    // Muhammad Adeen Rabbani
+    // A17CS4006
+    //****************************// 
+    
+
+
+
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
@@ -56,10 +66,11 @@ const userSchema = new mongoose.Schema(
 				}
 			}
 		},
-
+		//for members to know wether they deactivated or the application is pending
 		status: {
 			type: String,
-			enum: [ 'active', 'inactive' ]
+			default: undefined,
+			enum: [ 'active', 'deactivated', 'pending' ]
 		},
 		//roles will be assigned by the server.
 		role: {
