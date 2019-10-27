@@ -13,6 +13,8 @@ const appDA = require('../viewModel/ApplicationDA');
 const User = require('../models/User');
 const isauthenticated = require('../middlewares/checkAuthentication');
 const isAdmin = require('../middlewares/isAdmin');
+const equipment = require('../models/Equipment');
+const equipmentDA = require('../viewModel/equipmentDA');
 
 //const applications = require('../models/Application')
 
@@ -159,6 +161,50 @@ router.get('/admin/adminProfile', isauthenticated, isAdmin, (req, res) => {
 	user.password = '';
 	res.render('adminProfile', { admin: user });
 });
+
+//Equipment Route//
+router.get('/admin/addEquipmentPage', isauthenticated, isAdmin, (req, res) => {
+	res.render('equipment');
+});
+
+router.get('/admin/viewEquipmentPage', isauthenticated, isAdmin, async (req, res) => {
+    const equs = await equipmentDA.viewEquipment();
+	res.render('equipmentListAdmin',{equ: equs});
+});
+
+router.post('/admin/addEquipment', isauthenticated, isAdmin, async (req, res) => {
+    const equ = new equipment(req.body); // instacne of user model
+    equipmentDA.AddEquipment(equ); //user.save();
+    res.render('equipment');
+});
+
+router.get('/admin/deleteEquipment/:id', isauthenticated, isAdmin, async (req, res) => {
+    const id = req.params.id;
+    const val = await equipmentDA.DelEquipment(id);
+    if (!val) {
+        req.flash('failure', 'Error occured while Deleting!')
+        res.redirect('/admin/viewEquipmentPage')
+    } else {
+        req.flash('deleted', 'Equipment has been deleted Successfully!')
+        res.redirect('/admin/viewEquipmentPage');
+    }
+})
+
+router.get('/admin/updateEquipmentPage/:id', isauthenticated, isAdmin, async (req, res) => {
+    const id = req.params.id;
+    const val = await equipmentDA.SearchEquipment(req.params.id);
+    console.log(id);
+    res.render('updateEquipment', {equ: val});
+})
+
+router.post('/admin/updateEquipment/:id', isauthenticated, isAdmin, async (req, res) => {
+    const id = req.params.id;
+    const val = await equipmentDA.updateEquipment(id, req.body);
+    console.log(id);
+    res.redirect('/admin/viewEquipmentPage');
+})
+
+
 //Loading an error page if coming request does not matches with 
 //any of the above configured routes
 //MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES

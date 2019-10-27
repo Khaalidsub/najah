@@ -1,18 +1,19 @@
    <br>
  <div class="row mt-5">
- 
+    {{#if equ}}
+
     <div class="col-md-6 m-auto">
       <div class="card card-body">
-        <h1 class="text-center mb-3"><i class="fas fa-plus"></i> Add Equipment</h1>
-        <form action="/admin/addEquipment" method="POST">
+        <h1 class="text-center mb-3"><i class="fa fa-wrench"></i> Update Equipment</h1>
+        <form action="/admin/updateEquipment/{{equ._id}}" method="POST">
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label>Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Equipment Name">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Equipment Name" value="{{equ.name}}">
                 </div>
                 <div class="form-group col-md-4">
                     <label>Cost</label>
-                    <input type="number" class="form-control" name="cost" id="cost" placeholder="Equipment Type">
+                    <input type="number" class="form-control" name="cost" id="cost" placeholder="Equipment Type" value="{{equ.cost}}">
                 </div>
                 <div class="form-group col-md-4">
                     <label>Type</label>
@@ -26,17 +27,17 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label>Supplier Name</label>
-                    <input type="text" class="form-control" name="supplier_name" id="supplier_name" placeholder="Supplier Name For The Equipment">
+                    <input type="text" class="form-control" name="supplier_name" id="supplier_name" placeholder="Supplier Name For The Equipment" value="{{equ.supplier_name}}">
                 </div>
                 <div class="form-group col-md-6">
                     <label>Supplier Phone</label>
-                    <input type="text" class="form-control" name="supplier_phone" id="supplier_phone" placeholder="Supplier Phone For The Equipment">
+                    <input type="text" class="form-control" name="supplier_phone" id="supplier_phone" placeholder="Supplier Phone For The Equipment" value="{{equ.supplier_phone}}">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label>Date Of Buy</label>
-                    <input type="date" class="form-control" name="date" id="date">
+                    <input type="date" class="form-control" name="date" id="date" value="{{equ.date_of_buy}}">
                 </div>
                 <div class="form-group col-md-3">
                     <label>Visibility</label>
@@ -53,8 +54,10 @@
                     </select>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Add Equipment</button>
+            <button type="submit" class="btn btn-primary">Update Equipment</button>
         </form>
         </div>
-      </div>   
+      </div>
+      {{/if}}
+
   </div>

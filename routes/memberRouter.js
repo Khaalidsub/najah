@@ -15,6 +15,9 @@ const User = require('../models/User');
 const userDA = require('../viewModel/UserDA');
 const applicationDA = require('../viewModel/ApplicationDA');
 const isauthenticated = require('../middlewares/checkAuthentication');
+const isUser = require('../middlewares/isUser');
+const equipment = require('../models/Equipment');
+const equipmentDA = require('../viewModel/equipmentDA');
 
 const connectEmail = require('../config/mail');
 
@@ -35,7 +38,7 @@ router.get('/member/registerPage', (req, res) => {
 	}
 });
 //main dashboard
-router.get('/member/memberProfile', isauthenticated, (req, res) => {
+router.get('/member/memberProfile', isauthenticated, isUser,  (req, res) => {
 	const user = req.user;
 	user.password = '';
 	res.render('memberMyProfile', { profile: user });
@@ -100,7 +103,7 @@ router.post('/member/register', async (req, res) => {
 		res.redirect(req.get('referer'));
 	}
 });
-router.post('/member/updateMember', async (req, res) => {
+router.post('/member/updateMember', isauthenticated, isUser,  async (req, res) => {
 	//const user = new User(req.)
 	const user = req.user;
 
@@ -120,14 +123,14 @@ router.post('/member/updateMember', async (req, res) => {
 	}
 	res.render('memberMyProfile', { profile: user });
 });
-router.get('/member/memberMyProfile', isauthenticated, (req, res) => {
+router.get('/member/memberMyProfile', isauthenticated, isUser,  (req, res) => {
 	const profile = req.user;
 	profile.password = '';
 	res.render('memberMyProfile', { profile });
 });
 
 
-router.post('/member/deactivateAccount', async (req, res) => {
+router.post('/member/deactivateAccount', isauthenticated, isUser,  async (req, res) => {
 	const user = req.user;
 	user.status = 'deactivated';
 	try {
@@ -138,6 +141,12 @@ router.post('/member/deactivateAccount', async (req, res) => {
 	//add flash messages
 	//req.flash('email', 'User email already exists !');
 	res.render('login');
+});
+
+//Equipment Route//
+router.get('/member/viewEquipmentPage', isauthenticated, isUser, async (req, res) => {
+    const equs = await equipmentDA.viewEquipment();
+    res.render('equipmentList',{equ: equs});
 });
 
 //Loading an error page if coming request does not matches with 

@@ -1,3 +1,6 @@
+// Sherif Khaled Abouelmagd
+// A17CS4009
+
 const mongoose = require('mongoose');
 const validator = require('validator');
 
@@ -56,7 +59,7 @@ const equipment = new mongoose.Schema({
         default: false,
     },
 
-    photo: {
+    type: {
         type: String,
         requried: true,
         default: false,
