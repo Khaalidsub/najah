@@ -1,41 +1,79 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const User = require('./models/User');
+const auth = require('./middlewares/checkAuthentication');
+const userroute = require('./routes/loginRouter');
+const memberroute = require('./routes/memberRouter');
+const employeeroute = require('./routes/employeeRouter');
+const equipmentRouter = require('./routes/equipmentRouter');
+const flash = require('connect-flash');
+const session = require('express-session');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+require('./config/passport')(passport);
+require('./config/mongoose'); // to initialize mongoose and mongodb connection
+//const db = require('./config/keys').MongoURI;
 
-var app = express();
+const app = express();
+port = process.env.PORT || 3000; /*
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+ADDD EMAIL PART WHERE IT WILL SAY YOU ADDED AND APPLICATION IS PERNDING
 
-app.use(logger('dev'));
+
+*/
+
+//set handlebars view engine
+const handlebars = require('express3-handlebars').create({
+	defaultLayout: 'main',
+	helpers: {
+		get: function (obj) {
+			return JSON.stringify(obj)
+		},
+		
+		math: function(val){
+			parseInt(val);
+			return val+1
+		}
+	}
+});
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
+
 app.use(express.json());
+app.use(require('body-parser').urlencoded({ extended: false }));
+
+//creating express session object
+
+//**Session EXPIRE TIME NEED TO BE ADDED***
+app.use(
+	session({
+		secret: 'HarryPotty',
+		saveUninitialized: false,
+		resave: false
+		//cookie:{_expires: 12000}
+	})
+);
+app.use(flash()); // for flash messages!
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//to register stylesheets and images
+app.use(express.static('public/images'));
+app.use(express.static('public/stylesheets'));
+app.use(express.static('public/javascripts'));
+//app.use(express.static('public/assets'));
+//Passport middlewares for session handling
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// All the route files, please Configure Here
+//login routes
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(userroute);
+//member routes
+app.use(memberroute);
+app.use(employeeroute);
+//equipmentRouters
+app.use(equipmentRouter);
+//server
+app.listen(port, () => {
+	console.log('the server is up and running at port ' + port);
 });
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;

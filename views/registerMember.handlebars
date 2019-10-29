@@ -1,0 +1,63 @@
+<br>
+<br>
+{{#if registered}}
+<div class="alert alert-danger" role="alert">
+  {{{registered}}}
+</div>
+{{/if}}
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body">
+      {{#if emailError}}
+      <div class="alert alert-danger" role="alert">
+        {{{emailError}}}
+      </div>
+      {{/if}}
+      <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i> Register</h1>
+      <form action="/member/register" method="post">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="name" id="name" name="name" class="form-control" placeholder="Enter name" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email" />
+        </div>
+        <div class="form-group">
+          <label for="name">IC</label>
+
+          <input type="IC" id="IC" name="IC" class="form-control" placeholder="Enter IC" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" />
+        </div>
+        <div class="form-group">
+
+          <div class="radio">
+            <label><input type="radio" name="gender" value="male" checked>Male</label>
+          </div>
+          <div class="radio">
+            <label><input type="radio" name="gender" value="female">Female</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="Type">Phone</label>
+          <input type="phone" id="phone" name="phone" class="form-control" placeholder="Enter Phone number" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+      </form>
+      <p class="lead mt-4">
+        Already have an Account? <a href="/loginPage">Login</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>
+<script>
+
+</script>
