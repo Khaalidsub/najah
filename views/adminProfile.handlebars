@@ -5,92 +5,90 @@
 //****************************// --}}
 
 
-<div class="row h-50" style="">
+<div class="img p-4">
 
-
-
-    <div class="col">
-        <div class="img h-100 ">
-
+    <div class="card text-white  mb-5 p-5" style="max-width: 20rem; background-color:   rgb(255, 60, 0);">
+        <div class="card-body">
+            <h5 class="card-title"> hello {{admin.name}}</h5>
         </div>
     </div>
-
 </div>
 <br>
-<br>
-<div class="row h-75 justify-content-center">
-    <div class="col-3">
-        <div class="card bg-primary mb-3" style="max-width: 20rem;">
-            <div class="card-header">Latest added members</div>
-            <h5 class="card-title"></h5>
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  
-                    <span class="badge badge-primary badge-pill"></span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-          
-                    <span class="badge badge-primary badge-pill"></span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
 
-                    <span class="badge badge-primary badge-pill">1sets</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card bg-primary">
+<div class="container-fluid padding">
+    <div class="row justify-content-center padding">
+        <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="card bg-primary mb-3">
+                <div class="card-header">Latest added members</div>
+                <h5 class="card-title"></h5>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
 
-            <div class="card">
-                <div class="card-body bg-primary text-white text-align-center">
-                    <h5 class="card-title">Register Member</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the
-                        card's
-                        content.</p>
-                    <!-- Button trigger modal -->
-                     <form action="/member/registerPage" method="get">
-                    <button type="submit" class="btn btn-primary" name="admin">
-                        Register
-                    </button>
-                    </form>
-                </div>
+                        <span class="badge badge-primary badge-pill"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                        <span class="badge badge-primary badge-pill"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                        <span class="badge badge-primary badge-pill">1sets</span>
+                    </li>
+                </ul>
             </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="card bg-primary">
 
+                <div class="card">
+                    <div class="card-body bg-primary text-white text-align-center">
+                        <h5 class="card-title">Register Member</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                            the
+                            card's
+                            content.</p>
+                        <!-- Button trigger modal -->
+                        <form action="/member/registerPage" method="get">
+                            <button type="submit" class="btn btn-primary" name="admin">
+                                Register
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3">
+            <div class="card bg-primary mb-3">
+                <div class="card-header">Latest Payments</div>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                        <span class="badge badge-primary badge-pill">none</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                        <span class="badge badge-primary badge-pill">none</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                        <span class="badge badge-primary badge-pill">none</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-    <div class="col-3">
-        <div class="card bg-primary mb-3" style="max-width: 20rem;">
-            <div class="card-header">Latest Payments</div>
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+</div>
 
-                    <span class="badge badge-primary badge-pill">none</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+<br>
+<hr class="m4-light">
+<br>
 
-                    <span class="badge badge-primary badge-pill">none</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-
-                    <span class="badge badge-primary badge-pill">none</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-
-
-    <br>
-    <br>
-
-    <div class="row">
-
-
-        <div class="col">
-            <div class="card" style="width: 18rem;">
+<div class="container-fluid padding">
+    <div class="row justify-content-center padding">
+        <div class="col-xs-12 col-sm-6 col-md-4 ">
+            <div class="card">
                 <div class="card-body bg-primary text-white">
                     <h5 class="card-title">View Members</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -107,8 +105,9 @@
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="card" style="width: 18rem;">
+
+        <div class="col-xs-12 col-sm-6 col-md-4 ">
+            <div class="card">
                 <div class="card-body text-white" style="background-color: rgb(255, 82, 2);">
                     <h5 class="card-title">Register Employee</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -126,8 +125,10 @@
             </div>
         </div>
 
-        <div class="col">
-            <div class="card" style="width: 18rem;">
+
+
+        <div class="col-xs-12 col-sm-6 col-md-4 ">
+            <div class="card">
                 <div class="card-body bg-primary text-white">
                     <h5 class="card-title">View Applications</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -143,8 +144,41 @@
                 </div>
             </div>
         </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="card">
+                <div class="card-body bg-primary text-white">
+                    <h5 class="card-title">Personal Training</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                        the
+                        card's
+                        content.</p>
+                    <form action="/admin/viewTraining" method="get">
+                        <button type="submit" class="btn btn-primary">
+                            View
+                        </button>
+                    </form>
+                    <a href="/admin/addTrainingPage"><button class="btn btn-primary">Add</button></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="card">
+                <div class="card-body bg-primary text-white">
+                    <h5 class="card-title">Equipment </h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                        the
+                        card's
+                        content.</p>
+                    <form action="/admin/viewEquipmentPage" method="get">
+                        <button type="submit" class="btn btn-primary">
+                            View
+                        </button>
+                    </form>
+                    <a href="/admin/addEquipmentPage"><button class="btn btn-primary">Add</button></a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-
-

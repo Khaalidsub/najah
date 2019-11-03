@@ -1,12 +1,8 @@
-
 //****************************//
-    // Author of this Code:
-    // Khaalid Subaan
-    // A17CS4037
-    //****************************// 
-    
-
-
+// Author of this Code:
+// Khaalid Subaan
+// A17CS4037
+//****************************//
 
 const express = require('express');
 const router = new express.Router();
@@ -38,7 +34,7 @@ router.get('/member/registerPage', (req, res) => {
 	}
 });
 //main dashboard
-router.get('/member/memberProfile', isauthenticated, isUser,  (req, res) => {
+router.get('/member/memberProfile', isauthenticated, isUser, (req, res) => {
 	const user = req.user;
 	user.password = '';
 	res.render('memberMyProfile', { profile: user });
@@ -71,7 +67,7 @@ router.post('/member/register', async (req, res) => {
 		const mailer = await connectEmail.connect;
 		try {
 			//sending mail to the user email
-			
+
 			await mailer.sendMail({
 				from: 'khaalidsubaan@gmail.com',
 				to: user.email,
@@ -103,7 +99,7 @@ router.post('/member/register', async (req, res) => {
 		res.redirect(req.get('referer'));
 	}
 });
-router.post('/member/updateMember', isauthenticated, isUser,  async (req, res) => {
+router.post('/member/updateMember', isauthenticated, isUser, async (req, res) => {
 	//const user = new User(req.)
 	const user = req.user;
 
@@ -123,14 +119,13 @@ router.post('/member/updateMember', isauthenticated, isUser,  async (req, res) =
 	}
 	res.render('memberMyProfile', { profile: user });
 });
-router.get('/member/memberMyProfile', isauthenticated, isUser,  (req, res) => {
+router.get('/member/memberMyProfile', isauthenticated, isUser, (req, res) => {
 	const profile = req.user;
 	profile.password = '';
 	res.render('memberMyProfile', { profile });
 });
 
-
-router.post('/member/deactivateAccount', isauthenticated, isUser,  async (req, res) => {
+router.post('/member/deactivateAccount', isauthenticated, isUser, async (req, res) => {
 	const user = req.user;
 	user.status = 'deactivated';
 	try {
@@ -145,19 +140,22 @@ router.post('/member/deactivateAccount', isauthenticated, isUser,  async (req, r
 
 //Equipment Route//
 router.get('/member/viewEquipmentPage', isauthenticated, isUser, async (req, res) => {
-    const equs = await equipmentDA.viewEquipment();
-    res.render('equipmentList',{equ: equs});
+	const profile = req.user;
+	profile.password = '';
+
+	const equs = await equipmentDA.viewEquipment();
+	res.render('equipmentList', { equ: equs, profile });
 });
 
-//Loading an error page if coming request does not matches with 
+//Loading an error page if coming request does not matches with
 //any of the above configured routes
 //MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
-router.get('/member/*', (req,res)=>{
+router.get('/member/*', (req, res) => {
 	res.render('errorPage');
-  })
+});
 
-  router.get('/member/registerPage/*', (req,res)=>{
+router.get('/member/registerPage/*', (req, res) => {
 	res.render('errorPage');
-  })
+});
 
 module.exports = router;
