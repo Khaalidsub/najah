@@ -12,7 +12,7 @@ const registerMember = async (User) => {
 };
 
 
-const registerEmployee = async function(user) {
+const registerEmployee = async function (user) {
 	try {
 		await user.save();
 	} catch (e) {
@@ -47,7 +47,9 @@ const searchUser = async (email) => {
 	}
 };
 
-const fetchMembers = async function() {
+//route for fetching the members form db
+
+const fetchMembers = async function () {
 	try {
 		// taking out the sensitive information of the user, before sending back to the client!
 		dbValues = await User.find({ role: 'user' }, { password: 0, role: 0 });
@@ -59,7 +61,7 @@ const fetchMembers = async function() {
 		return null;
 	}
 };
-const deleteMember = async function(id) {
+const deleteMember = async function (id) {
 	try {
 		const deletedMember = await User.findByIdAndDelete(id);
 		if (!deleteMember) {
@@ -70,12 +72,12 @@ const deleteMember = async function(id) {
 	}
 };
 
- const useractive = async function (id){
-	 
-	  console.log(await User.findByIdAndUpdate(id,{status:'active'}));
-	  
-	  return
- }
+const useractive = async function (id) {
+
+	console.log(await User.findByIdAndUpdate(id, { status: 'active' }));
+
+	return
+}
 module.exports = {
 	registerMember: registerMember,
 	registerEmployee: registerEmployee,
@@ -84,6 +86,6 @@ module.exports = {
 	searchUser: searchUser,
 	fetchMembers: fetchMembers,
 	deleteMember: deleteMember,
-	useractive:useractive
-	
+	useractive: useractive
+
 };

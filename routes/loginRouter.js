@@ -6,16 +6,22 @@ const isauthenticated = require('../middlewares/checkAuthentication');
 const nodemailer = require('nodemailer');
 const connectEmail = require('../config/mail');
 
+
+router.get('/auth/facebook', passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback',passport.authenticate('facebook', {failureRedirect: '/loginpage' }),(req,res)=>{
+
+   
+
+});
+
 router.get('/', (req, res) => {
 	res.render('Home');
 });
 router.get('/loginpage', (req, res) => {
 	res.render('login', { error: req.flash('error') });
 });
-router.post(
-	'/login',
-	passport.authenticate('local', { failureRedirect: '/loginPage', failureFlash: true }),
-	(req, res) => {
+router.post('/login',passport.authenticate('local', { failureRedirect: '/loginPage', failureFlash: true }),(req, res) => {
 		//res.send('you are loggedin as adeen' + req.user.name);
 
 		const profile = req.user;

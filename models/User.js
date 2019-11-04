@@ -1,10 +1,10 @@
 
 //****************************//
-    // Author of this Code:
-    // Muhammad Adeen Rabbani
-    // A17CS4006
-    //****************************// 
-    
+// Author of this Code:
+// Muhammad Adeen Rabbani
+// A17CS4006
+//****************************// 
+
 
 
 
@@ -70,13 +70,13 @@ const userSchema = new mongoose.Schema(
 		status: {
 			type: String,
 			default: undefined,
-			enum: [ 'active', 'deactivated', 'pending' ]
+			enum: ['active', 'deactivated', 'pending']
 		},
 		//roles will be assigned by the server.
 		role: {
 			type: String,
 			requried: true,
-			enum: [ 'user', 'admin' ]
+			enum: ['user', 'admin']
 		},
 		imageProfile: {
 			type: String,
@@ -96,7 +96,7 @@ userSchema.virtual('application', {
 	justOne: true
 });
 //This method will make sure, the password is hashed before saving into the database
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
 	const user = this;
 	console.log(user);
 	if (user.isModified('password') || user.password) {
@@ -105,7 +105,7 @@ userSchema.pre('save', async function(next) {
 	next();
 });
 
-userSchema.pre('remove', async function(next) {
+userSchema.pre('remove', async function (next) {
 	//Later we have to put here the logic that
 	//when ever the user is romoved, delete all his applications
 	//before deleting

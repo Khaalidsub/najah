@@ -116,11 +116,13 @@ router.get('/admin/viewMembers', isauthenticated, isAdmin, async (req, res) => {
 			admin: user
 		});
 	}
-
+});
 	//Admin can delete Member Profiles. After that That member has to be registered again
 
 	router.get('/admin/deleteMember/:id', isauthenticated, isAdmin, async (req, res) => {
 		const id = req.params.id;
+		console.log(id);
+		
 		const val = await userDA.deleteMember(id);
 		if (!val) {
 			req.flash('failure', 'Error occured while Deleting!');
@@ -130,7 +132,7 @@ router.get('/admin/viewMembers', isauthenticated, isAdmin, async (req, res) => {
 			res.redirect('/admin/viewMembers');
 		}
 	});
-});
+
 //route for member search
 router.get('/admin/searchMember', isauthenticated, isAdmin, async (req, res) => {
 
