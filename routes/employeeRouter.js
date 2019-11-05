@@ -24,7 +24,7 @@ router.get('/admin/registerPage', isauthenticated, isAdmin, (req, res) => {
 	const user = req.user;
 	user.password = '';
 
-	res.render('registerEmployee', {
+	res.render('admin/registerEmployee', {
 		emailError: req.flash('email'),
 		registered: req.flash('registered'),
 		admin: user
@@ -57,9 +57,9 @@ router.get('/admin/viewapplications', isauthenticated, isAdmin, async (req, res)
 	// *** render same page with no applicaitoion flash mesg
 	if (fetchedApps.length < 1) {
 		req.flash('noView', 'No Applications to View!');
-		res.render('applications', { noView: req.flash('noView'), admin: user });
+		res.render('admin/applications', { noView: req.flash('noView'), admin: user });
 	} else
-		res.render('applications', {
+		res.render('admin/applications', {
 			apps: fetchedApps,
 			info: req.flash('info'),
 			warning: req.flash('warning'),
@@ -97,7 +97,7 @@ router.get('/admin/viewMembers', isauthenticated, isAdmin, async (req, res) => {
 
 	if (members == null) {
 		req.flash('noView', 'There are no members Registered!');
-		res.render('MembersView', {
+		res.render('admin/MembersView', {
 			noView: req.flash('noView'),
 			deleted: req.flash('deleted'),
 			failure: req.flash('failure'),
@@ -105,7 +105,7 @@ router.get('/admin/viewMembers', isauthenticated, isAdmin, async (req, res) => {
 			admin: user
 		});
 	} else {
-		res.render('MembersView', {
+		res.render('admin/MembersView', {
 			apps: members,
 			deleted: req.flash('deleted'),
 			failure: req.flash('failure'),
@@ -139,7 +139,7 @@ router.get('/admin/searchMember', isauthenticated, isAdmin, async (req, res) => 
 
 	if (member.length) {
 		req.flash('foundsearch', 'We have found a member!');
-		res.render('MembersView', { apps: member, searchsuccess: req.flash('foundsearch'), admin: user });
+		res.render('admin/MembersView', { apps: member, searchsuccess: req.flash('foundsearch'), admin: user });
 	} else {
 		req.flash('nosearch', 'No member found with this email. Please provide valid email.');
 		res.redirect('/admin/viewMembers');
@@ -153,15 +153,15 @@ router.get('/admin/adminProfile', isauthenticated, isAdmin, (req, res) => {
 	const user = req.user;
 	user.password = '';
 
-	res.render('adminProfile', { admin: user });
+	res.render('admin/adminProfile', { admin: user });
 });
 
-//Equipment Route//
+//EQUIPMENT ROUTES//
 router.get('/admin/addEquipmentPage', isauthenticated, isAdmin, (req, res) => {
 	const user = req.user;
 	user.password = '';
 
-	res.render('equipment');
+	res.render('admin/equipment');
 });
 
 router.get('/admin/viewEquipmentPage', isauthenticated, isAdmin, async (req, res) => {
@@ -169,7 +169,7 @@ router.get('/admin/viewEquipmentPage', isauthenticated, isAdmin, async (req, res
 	user.password = '';
 
 	const equs = await equipmentDA.viewEquipment();
-	res.render('equipmentListAdmin', { equ: equs, admin: user });
+	res.render('admin/equipmentListAdmin', { equ: equs, admin: user });
 });
 
 router.post('/admin/addEquipment', isauthenticated, isAdmin, async (req, res) => {
@@ -178,7 +178,7 @@ router.post('/admin/addEquipment', isauthenticated, isAdmin, async (req, res) =>
 
 	const equ = new equipment(req.body); // instacne of user model
 	equipmentDA.AddEquipment(equ); //user.save();
-	res.render('equipment', { admin: user });
+	res.render('admin/equipment', { admin: user });
 });
 
 router.get('/admin/deleteEquipment/:id', isauthenticated, isAdmin, async (req, res) => {
@@ -201,7 +201,7 @@ router.get('/admin/updateEquipmentPage/:id', isauthenticated, isAdmin, async (re
 	const id = req.params.id;
 	const val = await equipmentDA.SearchEquipment(req.params.id);
 	console.log(id);
-	res.render('updateEquipment', { equ: val, admin: user });
+	res.render('admin/updateEquipment', { equ: val, admin: user });
 });
 
 router.post('/admin/updateEquipment/:id', isauthenticated, isAdmin, async (req, res) => {
@@ -210,6 +210,20 @@ router.post('/admin/updateEquipment/:id', isauthenticated, isAdmin, async (req, 
 	console.log(id);
 	res.redirect('/admin/viewEquipmentPage');
 });
+
+//Personal Training Routes
+//view training page
+router.get('/admin/viewTrainingPage', isauthenticated, isAdmin, async (req, res) => {});
+//add training page
+router.get('/admin/addTrainingPage', isauthenticated, isAdmin, async (req, res) => {});
+//add training packages
+router.post('/admin/addTraining', isauthenticated, isAdmin, async (req, res) => {
+	const user = req.user;
+	user.password = '';
+});
+//deleting packages
+router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, res) => {});
+//update packages like trainer and cost
 
 //Loading an error page if coming request does not matches with
 //any of the above configured routes
