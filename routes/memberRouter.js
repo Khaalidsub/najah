@@ -31,14 +31,14 @@ router.get('/member/registerPage', (req, res) => {
 			admin: user
 		});
 	} else {
-		res.render('registerMember', { emailError: req.flash('email'), registered: req.flash('registered') });
+		res.render('member/registerMember', { emailError: req.flash('email'), registered: req.flash('registered') });
 	}
 });
 //main dashboard
 router.get('/member/memberProfile', isauthenticated, isUser, (req, res) => {
 	const user = req.user;
 	user.password = '';
-	res.render('memberMyProfile', { profile: user });
+	res.render('member/memberMyProfile', { profile: user });
 });
 
 //registerhandler
@@ -93,7 +93,11 @@ router.post('/member/register', async (req, res) => {
 		} else {
 			req.flash('registered', 'We have sent you an email and it should have reached you by now!');
 			user.password = '';
-			res.render('pendingProfile', { pending: req.flash('registered'), application: application, user: user });
+			res.render('member/pendingProfile', {
+				pending: req.flash('registered'),
+				application: application,
+				user: user
+			});
 		}
 	} catch (error) {
 		req.flash('email', 'User email already exists !');
@@ -118,12 +122,12 @@ router.post('/member/updateMember', isauthenticated, isUser, async (req, res) =>
 	} catch (error) {
 		console.log(error);
 	}
-	res.render('memberMyProfile', { profile: user });
+	res.render('member/memberMyProfile', { profile: user });
 });
 router.get('/member/memberMyProfile', isauthenticated, isUser, (req, res) => {
 	const profile = req.user;
 	profile.password = '';
-	res.render('memberMyProfile', { profile });
+	res.render('member/memberMyProfile', { profile });
 });
 
 router.post('/member/deactivateAccount', isauthenticated, isUser, async (req, res) => {
@@ -145,8 +149,16 @@ router.get('/member/viewEquipmentPage', isauthenticated, isUser, async (req, res
 	profile.password = '';
 
 	const equs = await equipmentDA.viewEquipment();
-	res.render('equipmentList', { equ: equs, profile });
+	res.render('member/equipmentList', { equ: equs, profile });
 });
+
+//Personal Training Routes//
+//view Training
+router.get('/member/viewTrainingPage', isauthenticated, isUser, async (req, res) => {});
+//join Training
+router.post('/member/joinTraining', isauthenticated, isUser, async (req, res) => {});
+//quit training
+router.get('/member/quitTraining/:id', isauthenticated, isUser, async (req, res) => {});
 
 //Loading an error page if coming request does not matches with
 //any of the above configured routes
