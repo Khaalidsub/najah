@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const registerMember = async (User) => {
 	try {
-		//await User.save();
+		
 		await User.save();
 	} catch (error) {
 		res.status(401).send('somthing went wrong');

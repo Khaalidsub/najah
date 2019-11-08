@@ -9,11 +9,11 @@ const connectEmail = require('../config/mail');
 
 router.get('/auth/facebook', passport.authenticate('facebook'));
 
-app.get('/auth/facebook/callback',passport.authenticate('facebook', {failureRedirect: '/loginpage' }),(req,res)=>{
+//app.get('/auth/facebook/callback',passport.authenticate('facebook', {failureRedirect: '/loginpage' }),(req,res)=>{
 
    
 
-});
+//});
 
 router.get('/', (req, res) => {
 	res.render('Home');

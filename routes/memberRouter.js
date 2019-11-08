@@ -5,6 +5,7 @@
 //****************************//
 
 const express = require('express');
+const merchandiseDA = require('../viewModel/MerchandiseDA')
 const router = new express.Router();
 const passport = require('passport');
 const User = require('../models/User');
@@ -157,5 +158,36 @@ router.get('/member/*', (req, res) => {
 router.get('/member/registerPage/*', (req, res) => {
 	res.render('errorPage');
 });
+
+
+//****************************//
+// Author of this Code:
+// Muhammad Adeen Rabbani
+// A17CS4006
+//****************************//
+
+//Merchandise Module Routes Starts Here
+
+//view all merchandise
+
+
+router.get('/user/shop',isauthenticated, async (req,res)=>{
+	 
+	try {
+		
+		const vals = await merchandiseDA.fetchMerchandise()
+		console.log(vals);
+		
+	    res.render('merchandiseShop', {values: vals})
+	} catch (e) {
+		
+	}
+	
+})
+
+
+
+
+
 
 module.exports = router;

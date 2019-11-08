@@ -1,0 +1,26 @@
+
+
+
+
+<h1 style="text-align: center; marging-top:5px">Merchandise Shop</h1>
+
+<br><br><br>
+
+<div class="container">
+   <div class="row padding">
+  {{#each values}}
+        <div class=" col-sm-12 col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.name}}</h5>
+                    <p class="card-text">{{this.description}}</p>
+                    <div class="row">
+                    <a href="#" class="btn btn-primary">Add to cart</a><a href="#" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

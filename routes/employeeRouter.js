@@ -3,7 +3,10 @@
 // Muhammad Adeen Rabbani
 // A17CS4006
 //****************************//
-
+const merchandiseDA = require('../viewModel/MerchandiseDA')
+const Merchandise = require('../models/Merchandise')
+const checking = require('../models/checking')
+const multer = require('multer');
 const express = require('express');
 const router = new express.Router();
 const passport = require('passport');
@@ -114,21 +117,21 @@ router.get('/admin/viewMembers', isauthenticated, isAdmin, async (req, res) => {
 		});
 	}
 });
-	//Admin can delete Member Profiles. After that That member has to be registered again
+//Admin can delete Member Profiles. After that That member has to be registered again
 
-	router.get('/admin/deleteMember/:id', isauthenticated, isAdmin, async (req, res) => {
-		const id = req.params.id;
-		console.log(id);
-		
-		const val = await userDA.deleteMember(id);
-		if (!val) {
-			req.flash('failure', 'Error occured while Deleting!');
-			res.redirect('/admin/viewMembers');
-		} else {
-			req.flash('deleted', 'Member has been deleted Successfully!');
-			res.redirect('/admin/viewMembers');
-		}
-	});
+router.get('/admin/deleteMember/:id', isauthenticated, isAdmin, async (req, res) => {
+	const id = req.params.id;
+	console.log(id);
+
+	const val = await userDA.deleteMember(id);
+	if (!val) {
+		req.flash('failure', 'Error occured while Deleting!');
+		res.redirect('/admin/viewMembers');
+	} else {
+		req.flash('deleted', 'Member has been deleted Successfully!');
+		res.redirect('/admin/viewMembers');
+	}
+});
 
 //route for member search
 router.get('/admin/searchMember', isauthenticated, isAdmin, async (req, res) => {
@@ -157,6 +160,91 @@ router.get('/admin/adminProfile', isauthenticated, isAdmin, (req, res) => {
 
 	res.render('adminProfile', { admin: user });
 });
+
+
+//admin view merchandise
+
+router.get('/admin/addMerchandisePage', isauthenticated, isAdmin, async (req, res) => {
+	res.render('addMerchandise', {imageError:req.flash('imageError') , addMerchandise: req.flash('addMerchandise')});
+})
+
+
+
+
+
+//where to store, and with what name config.
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, 'public/images')
+	},
+	filename: function (req, file, cb) {
+		cb(null, Date.now() + file.originalname)
+	}
+})
+
+
+const upload = multer({
+	limits: {
+		fileSize: 1000000
+	},
+	fileFilter(req, file, cb) {
+		if (!file.originalname.match(/\.(jpg|jpeg)/)) {
+			console.log('came here');
+			
+		  return	cb(new Error("File type not supported!"))
+		}
+		console.log('came here as well');
+		
+		cb(undefined, true);
+	},
+	storage: storage
+})
+router.post('/admin/addMerchandise', upload.single('image'), async (req, res) => {
+
+	var merch = new Merchandise(req.body);
+	merch.avatar = req.file.path
+	merch.status = true
+	await merchandiseDA.addMerchandise(merch)
+	req.flash('addMerchandise','The item has been added successfully')
+	res.redirect(req.get('referer'));
+
+}, (error, req, res, next) => { 
+	req.flash('imageError', error.message);
+	res.redirect(req.get('referer'));
+})
+
+
+// PRACTICE FOR AJAX
+
+ router.get('/ajax',(req,res)=>{
+	 res.render('ajaxPractice');
+ })
+
+ router.post('/admin/ajax', (req,res)=>{
+	 console.log("the request came");
+	 console.log(req.body)
+	 res.send({name: req.body.name})
+ })
+
+
+
+
+//=============================
+
+
+
+
+
+
+
+//****************************//
+// Author of this Code:
+// Sheref Abolmagd
+// matic number goes here**
+//****************************//
+
+
+
 
 //Equipment Route//
 router.get('/admin/addEquipmentPage', isauthenticated, isAdmin, (req, res) => {
@@ -213,11 +301,55 @@ router.post('/admin/updateEquipment/:id', isauthenticated, isAdmin, async (req, 
 	res.redirect('/admin/viewEquipmentPage');
 });
 
+
+
+
+
+// router.get('/checkPage', (req, res) => {
+// 	res.render('checking')
+// })
+
+// var storage = multer.diskStorage({
+// 	destination: function (req, file, cb) {
+// 		cb(null, 'public/images')
+// 	},
+// 	filename: function (req, file, cb) {
+// 		cb(null, Date.now() + file.originalname)
+// 	}
+// })
+
+
+// const upload1 = multer({
+// 	storage: storage
+// })
+
+// router.post('/checking', upload.single('upload'), async (req, res) => {
+// 	var image = new checking();
+// 	image.avatar = req.file.path;
+// 	console.log(req.file.path)
+// 	console.log(image.avatar.replace("public\\images\\", ""))
+// 	await image.save()
+// 	res.send("The file has been uploaded!")
+// })
+
+router.get('/getpic', async (req, res) => {
+	const image = await Merchandise.findById("5dc4cb59d230af3da461dc80")
+	console.log(image)
+    image.avatar = image.avatar.replace("images\\","")
+	//res.set('Content-Type', 'image/jpeg')
+	res.render('image', {path: image.avatar });
+})
+
 //Loading an error page if coming request does not matches with
 //any of the above configured routes
 //MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
 router.get('/admin/*', (req, res) => {
 	res.render('errorPage');
 });
+
+
+
+
+
 
 module.exports = router;
