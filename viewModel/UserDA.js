@@ -11,7 +11,6 @@ const registerMember = async (User) => {
 	}
 };
 
-
 const registerEmployee = async function(user) {
 	try {
 		await user.save();
@@ -59,6 +58,18 @@ const fetchMembers = async function() {
 		return null;
 	}
 };
+const fetchEmployees = async () => {
+	try {
+		// taking out the sensitive information of the user, before sending back to the client!
+		dbValues = await User.find({ role: 'admin' }, { password: 0, role: 0 });
+		if (!dbValues) {
+			throw new Error();
+		}
+		return dbValues;
+	} catch (error) {
+		return null;
+	}
+};
 const deleteMember = async function(id) {
 	try {
 		const deletedMember = await User.findByIdAndDelete(id);
@@ -70,12 +81,40 @@ const deleteMember = async function(id) {
 	}
 };
 
- const useractive = async function (id){
-	 
-	  console.log(await User.findByIdAndUpdate(id,{status:'active'}));
-	  
-	  return
- }
+const useractive = async function(id) {
+	console.log(await User.findByIdAndUpdate(id, { status: 'active' }));
+
+	return;
+};
+
+const joinTraining = async (userid, id) => {
+	try {
+		const joined = await User.findByIdAndUpdate(userid, { trainingMember: id });
+		console.log(joined);
+
+		if (!joined) {
+			throw new Error();
+		} else {
+			return joined;
+		}
+	} catch (error) {
+		return null;
+	}
+};
+const quitTraining = async (userid, id) => {
+	try {
+		const joined = await User.findByIdAndUpdate(userid, { trainingMember: undefined });
+		console.log(joined);
+
+		if (!joined) {
+			throw new Error();
+		} else {
+			return joined;
+		}
+	} catch (error) {
+		return null;
+	}
+};
 module.exports = {
 	registerMember: registerMember,
 	registerEmployee: registerEmployee,
@@ -83,7 +122,9 @@ module.exports = {
 	deactivateMember: deactivateMember,
 	searchUser: searchUser,
 	fetchMembers: fetchMembers,
+	fetchEmployees: fetchEmployees,
 	deleteMember: deleteMember,
-	useractive:useractive
-	
+	useractive: useractive,
+	joinTraining,
+	quitTraining
 };

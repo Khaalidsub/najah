@@ -1,12 +1,8 @@
-
 //****************************//
-    // Author of this Code:
-    // Muhammad Adeen Rabbani
-    // A17CS4006
-    //****************************// 
-    
-
-
+// Author of this Code:
+// Muhammad Adeen Rabbani
+// A17CS4006
+//****************************//
 
 const mongoose = require('mongoose');
 const validator = require('validator');
@@ -82,6 +78,12 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: undefined,
 			trim: true
+		},
+		trainingMember: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: false,
+			default: undefined,
+			ref: 'Training'
 		}
 	},
 	{
@@ -95,6 +97,15 @@ userSchema.virtual('application', {
 	foreignField: 'owner',
 	justOne: true
 });
+
+//this method is connecting witrh the Training table during runtime
+userSchema.virtual('training', {
+	ref: 'Training',
+	localField: '_id',
+	foreignField: 'trainer',
+	justOne: true
+});
+
 //This method will make sure, the password is hashed before saving into the database
 userSchema.pre('save', async function(next) {
 	const user = this;

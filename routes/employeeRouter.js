@@ -14,6 +14,8 @@ const isauthenticated = require('../middlewares/checkAuthentication');
 const isAdmin = require('../middlewares/isAdmin');
 const equipment = require('../models/Equipment');
 const equipmentDA = require('../viewModel/equipmentDA');
+const Training = require('../models/PersonalTraining');
+const trainingDA = require('../viewModel/PersonalTrainingDA');
 
 //const applications = require('../models/Application')
 
@@ -29,6 +31,14 @@ router.get('/admin/registerPage', isauthenticated, isAdmin, (req, res) => {
 		registered: req.flash('registered'),
 		admin: user
 	});
+});
+
+//member registration
+router.get('/admin/memberPage', isauthenticated, isAdmin, (req, res) => {
+	//for navigation recognition
+	const user = req.user;
+	user.password = '';
+	res.render('member/registerMember', { admin: user });
 });
 
 //route for handling the registration
@@ -53,6 +63,7 @@ router.get('/admin/viewapplications', isauthenticated, isAdmin, async (req, res)
 	user.password = '';
 
 	const query = req.query.status;
+
 	const fetchedApps = await appDA.fetchApps(query);
 	// *** render same page with no applicaitoion flash mesg
 	if (fetchedApps.length < 1) {
@@ -213,16 +224,85 @@ router.post('/admin/updateEquipment/:id', isauthenticated, isAdmin, async (req, 
 
 //Personal Training Routes
 //view training page
-router.get('/admin/viewTrainingPage', isauthenticated, isAdmin, async (req, res) => {});
-//add training page
-router.get('/admin/addTrainingPage', isauthenticated, isAdmin, async (req, res) => {});
-//add training packages
-router.post('/admin/addTraining', isauthenticated, isAdmin, async (req, res) => {
+router.get('/admin/viewTrainingPage', isauthenticated, isAdmin, async (req, res) => {
 	const user = req.user;
 	user.password = '';
+
+	const training = await trainingDA.fetchTraining();
+	const trainers = await userDA.fetchEmployees();
+	if (training.length < 1) {
+		req.flash('noView', 'No packages to View!');
+		res.render('admin/viewTraining', {
+			noView: req.flash('noView'),
+			admin: user,
+			deleted: req.flash('deleted'),
+			failure: req.flash('failure')
+		});
+	} else {
+		res.render('admin/viewTraining', {
+			training,
+			trainers,
+			admin: user,
+			deleted: req.flash('deleted'),
+			warning: req.flash('warning'),
+			failure: req.flash('failure')
+		});
+	}
+});
+//add training page
+router.get('/admin/addTrainingPage', isauthenticated, isAdmin, async (req, res) => {
+	const user = req.user;
+	user.password = '';
+
+	//get a list of all users that are admin
+	const trainers = await userDA.fetchEmployees();
+	res.render('admin/addTraining', { admin: user, trainers, failure: req.flash('failure') });
+});
+//add training packages
+router.post('/admin/addTraining', isauthenticated, isAdmin, async (req, res) => {
+	const train = new Training(req.body); // instacne of user model
+	const trainers = await trainingDA.addTraining(train); //user.save();
+	//failure going back to addTraining
+	if (!trainers) {
+		console.log('here in out');
+
+		req.flash('failure', 'Name of the Package do already exist!');
+		res.redirect(router.get('referer'));
+	} else {
+		//successs with flash
+		console.log('here in');
+		req.flash('warning', 'Package has been updated successfully!');
+		res.redirect('/admin/viewTrainingPage');
+	}
+});
+router.post('/admin/updateTraining/:id', isauthenticated, isAdmin, async (req, res) => {
+	const id = req.params.id;
+	const val = await trainingDA.updateTraining(id, req.body);
+	console.log(val);
+	//failure going back to addTraining
+	if (!val) {
+		req.flash('failure', 'Package has been updated unsuccessfully!');
+		res.redirect('/admin/viewTrainingPage');
+	} else {
+		//successs with flash
+		req.flash('warning', 'Package has been updated successfully!');
+		res.redirect('/admin/viewTrainingPage');
+	}
 });
 //deleting packages
-router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, res) => {});
+router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, res) => {
+	const id = req.params.id;
+	const val = await trainingDA.deleteTraining(id);
+	//failure
+	if (!val) {
+		req.flash('failure', 'Package has been deleted unsuccessfully!');
+		res.render('/admin/viewTrainingPage');
+	} else {
+		//successs
+		req.flash('deleted', 'Package has been deleted Successfully!');
+		res.redirect('/admin/viewTrainingPage');
+	}
+});
 //update packages like trainer and cost
 
 //Loading an error page if coming request does not matches with

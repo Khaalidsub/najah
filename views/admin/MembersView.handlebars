@@ -50,6 +50,12 @@
     </div>
     {{/if}}
 
+    {{#if registered}}
+<div class="alert alert-success" role="alert">
+  {{{registered}}}
+</div>
+{{/if}}
+
     {{#if apps}}
 
     <form action="/admin/searchMember" method="get">

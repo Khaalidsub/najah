@@ -32,12 +32,15 @@ const TrainingSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		required: false,
 		ref: 'users'
-	},
-	attendees: {
-		type: mongoose.Schema.Types.ObjectId,
-		required: false,
-		ref: 'users'
 	}
+});
+
+//this method is connecting witrh the User table during runtime
+TrainingSchema.virtual('Users', {
+	ref: 'users',
+	localField: '_id',
+	foreignField: 'trainingMember',
+	justOne: true
 });
 
 const training = mongoose.model('Training', TrainingSchema);
