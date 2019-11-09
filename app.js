@@ -15,24 +15,19 @@ require('./config/mongoose'); // to initialize mongoose and mongodb connection
 //const db = require('./config/keys').MongoURI;
 
 const app = express();
-port = process.env.PORT || 3000; /*
-
-ADDD EMAIL PART WHERE IT WILL SAY YOU ADDED AND APPLICATION IS PERNDING
-
-
-*/
+port = process.env.PORT || 3000;
 
 //set handlebars view engine
 const handlebars = require('express3-handlebars').create({
 	defaultLayout: 'main',
 	helpers: {
-		get: function (obj) {
-			return JSON.stringify(obj)
+		get: function(obj) {
+			return JSON.stringify(obj);
 		},
-		
-		math: function(val){
+
+		math: function(val) {
 			parseInt(val);
-			return val+1
+			return val + 1;
 		}
 	}
 });

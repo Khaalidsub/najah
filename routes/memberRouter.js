@@ -14,7 +14,8 @@ const isauthenticated = require('../middlewares/checkAuthentication');
 const isUser = require('../middlewares/isUser');
 const equipment = require('../models/Equipment');
 const equipmentDA = require('../viewModel/equipmentDA');
-
+const Training = require('../models/PersonalTraining');
+const trainingDA = require('../viewModel/PersonalTrainingDA');
 const connectEmail = require('../config/mail');
 
 //registerpage
@@ -30,14 +31,24 @@ router.get('/member/registerPage', (req, res) => {
 			admin: user
 		});
 	} else {
-		res.render('registerMember', { emailError: req.flash('email'), registered: req.flash('registered') });
+		res.render('member/registerMember', { emailError: req.flash('email'), registered: req.flash('registered') });
 	}
 });
 //main dashboard
-router.get('/member/memberProfile', isauthenticated, isUser, (req, res) => {
-	const user = req.user;
-	user.password = '';
-	res.render('memberMyProfile', { profile: user });
+router.get('/member/memberProfile', isauthenticated, isUser, async (req, res) => {
+	const profile = req.user;
+	profile.password = '';
+	if (profile.trainingMember == undefined) {
+		res.render('member/memberMyProfile', { profile, warning: req.flash('warning') });
+	} else {
+		//load personal training
+		console.log('hello');
+
+		const training = await trainingDA.getTraining(req.user.trainingMember);
+		console.log(req.user.trainingMember);
+
+		res.render('member/memberMyProfile', { profile, training, warning: req.flash('warning') });
+	}
 });
 
 //registerhandler
@@ -52,7 +63,7 @@ router.post('/member/register', async (req, res) => {
 
 	try {
 		if (!req.user == null) {
-			if (!req.user.role == 'admin') {
+			if (req.user.role == 'admin') {
 				await userDA.registerMember(user);
 				user.status = 'active';
 			} else {
@@ -87,12 +98,16 @@ router.post('/member/register', async (req, res) => {
 		if (!req.user == null) {
 			if (req.user.role == 'admin') {
 				req.flash('registered', 'The member has been registered successfully!');
-				res.redirect(req.get('referer'));
+				res.redirect('/admin/viewMembers');
 			}
 		} else {
 			req.flash('registered', 'We have sent you an email and it should have reached you by now!');
 			user.password = '';
-			res.render('pendingProfile', { pending: req.flash('registered'), application: application, user: user });
+			res.render('member/pendingProfile', {
+				pending: req.flash('registered'),
+				application: application,
+				user: user
+			});
 		}
 	} catch (error) {
 		req.flash('email', 'User email already exists !');
@@ -117,19 +132,25 @@ router.post('/member/updateMember', isauthenticated, isUser, async (req, res) =>
 	} catch (error) {
 		console.log(error);
 	}
-	res.render('memberMyProfile', { profile: user });
+	res.render('member/memberMyProfile', { profile: user });
 });
-router.get('/member/memberMyProfile', isauthenticated, isUser, (req, res) => {
+router.get('/member/memberMyProfile', isauthenticated, isUser, async (req, res) => {
 	const profile = req.user;
 	profile.password = '';
-	res.render('memberMyProfile', { profile });
+	if (profile.trainingMember == undefined) {
+		res.render('member/memberMyProfile', { profile });
+	} else {
+		//load personal training
+		const training = await trainingDA.getTraining(profile.trainingMember);
+		res.render('member/memberMyProfile', { profile, training });
+	}
 });
 
 router.post('/member/deactivateAccount', isauthenticated, isUser, async (req, res) => {
 	const user = req.user;
 	user.status = 'deactivated';
 	try {
-		userDA.deactivateMember(user);
+		await userDA.deactivateMember(user);
 	} catch (error) {
 		console.log(error);
 	}
@@ -144,7 +165,72 @@ router.get('/member/viewEquipmentPage', isauthenticated, isUser, async (req, res
 	profile.password = '';
 
 	const equs = await equipmentDA.viewEquipment();
-	res.render('equipmentList', { equ: equs, profile });
+	res.render('member/equipmentList', { equ: equs, profile });
+});
+
+//Personal Training Routes//
+//view Training
+router.get('/member/viewTrainingPage', isauthenticated, isUser, async (req, res) => {
+	const profile = req.user;
+	profile.password = '';
+
+	const training = await trainingDA.fetchTraining();
+	const trainers = await userDA.fetchEmployees();
+	if (training.length < 1) {
+		req.flash('noView', 'No Trainings to View!');
+		res.render('member/viewTraining', {
+			noView: req.flash('noView'),
+			profile,
+			failure: req.flash('failure')
+		});
+	} else {
+		res.render('member/viewTraining', {
+			training,
+			profile,
+			deleted: req.flash('deleted'),
+			warning: req.flash('warning'),
+			failure: req.flash('failure'),
+			info: req.flash('info')
+		});
+	}
+});
+//join Training
+router.post('/member/joinTraining/:id', isauthenticated, isUser, async (req, res) => {
+	const id = req.params.id;
+
+	const user = req.user;
+
+	if (user.trainingMember == undefined) {
+		user.trainingMember = id;
+		//	let val = await userDA.joinTraining(user._id, id);
+		let val = await userDA.joinTraining(user._id, id);
+		if (!val) {
+			req.flash('failure', 'Package has not been added!');
+			res.render('/member/viewTrainingPage');
+		} else {
+			//successs
+			req.flash('warning', 'Package has been added into your system Successfully!');
+			res.redirect('/member/memberProfile');
+		}
+	} else {
+		req.flash('info', 'You already have another program! ');
+		res.redirect('/member/viewTrainingPage');
+	}
+});
+//quit training
+router.post('/member/quitTraining/:id', isauthenticated, isUser, async (req, res) => {
+	const id = req.params.id;
+	const user = req.user;
+	console.log('helo there here i am', id);
+	let val = await userDA.quitTraining(user._id, id);
+	if (!val) {
+		req.flash('failure', 'Package has not been added!');
+		res.render('/member/memberProfile');
+	} else {
+		//successs
+		req.flash('warning', 'Training Program has been removed from your account Successfully!');
+		res.redirect('/member/memberProfile');
+	}
 });
 
 //Loading an error page if coming request does not matches with

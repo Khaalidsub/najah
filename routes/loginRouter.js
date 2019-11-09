@@ -26,7 +26,7 @@ router.post(
 			//if user application has not been accepted yet
 			if (req.user.status == 'pending') {
 				req.flash('pending', 'Your application is still being reviewed by the admins.');
-				res.render('pendingProfile', { pending: req.flash('pending'), user: profile });
+				res.render('member/pendingProfile', { pending: req.flash('pending'), user: profile });
 			} else if (req.user.status == 'deactivated') {
 				//displaying alert card asking to reApply
 
@@ -38,7 +38,7 @@ router.post(
 				res.redirect('/member/memberProfile');
 			}
 		} else if (req.user.role == 'admin') {
-			res.render('adminProfile', { admin: profile });
+			res.render('admin/adminProfile', { admin: profile });
 		} else {
 			console.log(`error, no user role found : ${req.user.role}`);
 		}
