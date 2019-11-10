@@ -6,7 +6,7 @@ const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
 const employeeroute = require('./routes/employeeRouter');
-const equipmentRouter = require('./routes/equipmentRouter');
+
 const flash = require('connect-flash');
 const session = require('express-session');
 
@@ -15,24 +15,19 @@ require('./config/mongoose'); // to initialize mongoose and mongodb connection
 //const db = require('./config/keys').MongoURI;
 
 const app = express();
-port = process.env.PORT || 3000; /*
-
-ADDD EMAIL PART WHERE IT WILL SAY YOU ADDED AND APPLICATION IS PERNDING
-
-
-*/
+port = process.env.PORT || 3000;
 
 //set handlebars view engine
 const handlebars = require('express3-handlebars').create({
 	defaultLayout: 'main',
 	helpers: {
-		get: function (obj) {
-			return JSON.stringify(obj)
+		get: function(obj) {
+			return JSON.stringify(obj);
 		},
-		
-		math: function(val){
+
+		math: function(val) {
 			parseInt(val);
-			return val+1
+			return val + 1;
 		}
 	}
 });
@@ -71,8 +66,7 @@ app.use(userroute);
 //member routes
 app.use(memberroute);
 app.use(employeeroute);
-//equipmentRouters
-app.use(equipmentRouter);
+
 //server
 app.listen(port, () => {
 	console.log('the server is up and running at port ' + port);

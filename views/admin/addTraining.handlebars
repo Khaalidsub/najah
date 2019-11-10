@@ -1,0 +1,59 @@
+<br>
+<div class="row mt-5">
+
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <h1 class="text-center mb-3"><i class="fas fa-plus"></i> Add Training</h1>
+            <form action="/admin/addTraining" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Name</label>
+                        <input type="name" class="form-control" name="name" id="name" placeholder="Training Name"
+                            required>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Description</label>
+                        <textarea name="description" class="form-control" id="exampleTextarea" rows="3"
+                            spellcheck="true" placeholder="brief description about the training" required></textarea>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Type</label>
+                        <select name="type" id="type" class="form-control">
+                            <option selected value="weight-loss">Weight-Loss</option>
+                            <option value="muscle-gain">Muscle-Gain</option>
+                            <option value="athlete">Athlete</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Days of week</label>
+                        <input type="Number" class="form-control" name="days" id="days"
+                            placeholder="e.g 7 = 7 days a week" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Duration</label>
+                        <input type="Number" class="form-control" name="duration" id="duration"
+                            placeholder="e.g 4 = 4 weeks" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Cost</label>
+                        <input type="Number" class="form-control" name="cost" id="cost">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Trainer</label>
+                        <select name="trainer" id="trainer" class="form-control">
+                            {{#each trainers}}
+                            <option value="{{this.id}}">{{this.name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                </div>
+                <button type="submit" class="btn btn-primary">Add Training</button>
+            </form>
+        </div>
+    </div>
+</div>

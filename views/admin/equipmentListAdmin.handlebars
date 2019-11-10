@@ -1,22 +1,22 @@
-   <br>
- <div class="row mt-5">
- 
+<br>
+<div class="row mt-5">
+
     <div class="col-md-12 m-auto">
         <div class="card card-body">
             <h1 class="text-center mb-3"><i class="fas fa-list"></i> View Equipment</h1>
             <div class="row text-center m-auto">
-            {{#each equ}}
+                {{#each equ}}
                 <div class="col-3 m-auto" style="width: 18rem;">
                     <div class="card m-2">
                         <img src="/{{this.type}}.png" class="card-img-top" alt="{{this.type}}">
                         <div class="card-body">
                             <p class="card-text">{{this.name}}</p>
                             <button id="{{@index}}" name="button1" type="button" class="viewapp btn btn-primary"
-                            data-toggle="modal" data-target="#myModal">More</button>
+                                data-toggle="modal" data-target="#myModal">More</button>
                         </div>
                     </div>
                 </div>
-            {{/each}}
+                {{/each}}
             </div>
         </div>
 
@@ -36,13 +36,13 @@
                         <div class="modal-body">
                         </div>
 
-                        
+
                     </div>
 
                 </div>
             </div>
-
-        </div>  
+        </div>
+    </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
@@ -54,7 +54,7 @@
  
 
         var html = '';
-        html += `
+    html += `
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row no-gutters">
                     <div class="col-md-4">
@@ -77,6 +77,7 @@
                     <a href="/admin/updateEquipmentPage/${equ[id]._id}" name="delete" id="3" title="Delete User" type="button" class="offset-8 col-2 btn btn-info">
                         <i class="fa fa-wrench" aria-hidden="true" style="font-size:28px"></i>
                     </a>
+                </div>
             </div>
         `;
 

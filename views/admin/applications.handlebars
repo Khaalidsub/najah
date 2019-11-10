@@ -56,39 +56,39 @@
 
   {{#if apps}}
 
-<div class="container-fluid padding">
+  <div class="container-fluid padding">
 
 
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Email</th>
-        <th scope="col">Status</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each apps}}
-      <tr class="table-light">
-        <td>{{this.owner.name}}</td>
-        <td>{{this.owner.email}}</td>
-        <td>{{this.status}}</td>
-        <td>
-          <button id="{{@index}}" name="button1" type="button" class="viewapp btn btn-primary" data-toggle="modal"
-            data-target="#myModal">View Application</button>
-          {{!-- <a href="/admin/accept/{{this.id}}" id="1"><img src="/public/images/accepticon.png"
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each apps}}
+        <tr class="table-light">
+          <td>{{this.owner.name}}</td>
+          <td>{{this.owner.email}}</td>
+          <td>{{this.status}}</td>
+          <td>
+            <button id="{{@index}}" name="button1" type="button" class="viewapp btn btn-primary" data-toggle="modal"
+              data-target="#myModal">View Application</button>
+            {{!-- <a href="/admin/accept/{{this.id}}" id="1"><img src="/public/images/accepticon.png"
             style="width:82px; height:86px" title="Accept Application" alt="icon"></a> --}}
-          {{!-- <a  href="/admin/accept/{{this.id}}" name="accept" id="1" type="button" class="btn btn-primary">Accept</a> --}}
+            {{!-- <a  href="/admin/accept/{{this.id}}" name="accept" id="1" type="button" class="btn btn-primary">Accept</a> --}}
 
-        </td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
 
-  
-</div>
+
+  </div>
 
   <div class="container">
     <!-- Modal -->
@@ -129,7 +129,8 @@
 
   $('.viewapp').on('click', function (event) {
     var id = parseInt(this.id)
-    var app = {{{ get apps }}}
+    var app = {{{ get apps }
+  }}
   
   
 
@@ -165,8 +166,8 @@
       event.preventDefault()
     }
   }
-  
-     
+
+
   //for alerts to go away after few seconds
 
 
