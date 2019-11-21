@@ -1,16 +1,22 @@
-
 {{!-- //****************************//
 // Author of this Code:
 // Khaalid Subaan
 // A17CS4037
 //****************************// --}}
 
+<style>
+ 
+  a:hover {
+  color: sandybrown;
+}
 
+</style>
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="background-color: black;">
   <a class="navbar-brand" href="memberDashboard.handlebars">Najah</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -28,15 +34,21 @@
       <li class="nav-item">
         <a class="nav-link" href="/admin/registerPage">Register Employee</a>
       </li>
-            <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link" href="/member/registerPage">Register Member</a>
       </li>
-            <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link" href="/admin/viewEquipmentPage">Equipment</a>
       </li>
     </ul>
-      <form action="/logout" method="GET">
-      <button class="btn btn-secondary my-2 my-sm-0 rounded-pill text-white" name="logout" style="background-color: rgb(255, 60, 0);" >logout</button>
-      </form>
+  
+   
+     <a class="cart" href="/viewCart" style="color: rgb(255, 60, 0);"><i class="fa fa-shopping-cart"
+        style="font-size:35px;"></i> <div class="badge" style="font-size: medium;">{{{val.items}}}</div></a>
+    
+    <form action="/logout" method="GET">
+      <button class="btn btn-secondary my-2 my-sm-0 rounded-pill text-white" name="logout"
+        style="background-color: rgb(255, 60, 0); margin: 5px;">logout</button>
+    </form>
   </div>
 </nav>

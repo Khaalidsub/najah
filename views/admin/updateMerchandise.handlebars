@@ -1,0 +1,81 @@
+<div class="container-fluid">
+
+    <div class="row mt-5">
+        <div class="col-md-6 m-auto">
+            <div class="card card-body">
+
+
+                <h1 class="text-center mb-3"><i class="fa fa-edit"></i>Update Merchandise</h1>
+                <span>
+                    <p style="color:rgb(255, 60, 0) ;">*Please Enter the editable values and press update to save your
+                        changes.</p>
+                </span>
+                <form action="/admin/updateMerchandise/{{value.id}}" id="myform" method="post">
+                    <div class="form-group">
+                        <label for="name"><h5>Name</h5></label>
+                        <input type="name" id="name" name="name" class="form-control"
+                            value="{{value.name}}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="description"><h5>Description</h5></label>
+                        <input type="text" id="description" required name="description" class="form-control"
+                            value="{{value.description}}" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="price"><h5>Price</h5></label>
+                            <input type="number" class="form-control" required name="price" required
+                                value="{{value.price}}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="quantity"><h5>Quantity</h5></label>
+                            <input type="number" required class="form-control" name="quantity" required
+                                value="{{value.quantity}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="category"><h5>Category</h5></label>
+                        <select name="category" id="">
+                            <option value="clothing">Clothing</option>
+                            <option value="fitness">Fitness</option>
+                        </select>
+                    </div>
+                    {{#if imageError}}
+                    <div class="alert alert-danger" role="alert">
+                        {{{imageError}}}
+                    </div>
+                    {{/if}}
+
+                    <button id="butt" class="btn btn-success" type="submit">Update</button>
+                    <a href="/admin/viewMerchandise" class="btn btn-primary" style="background-color: rgb(255, 60, 0);" name="edit" id="3" title="Back off" type="button" >I dont want to make Changes</a>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+
+$("#myform :input").change(function() {
+   $("#myform").data("changed",true);
+});
+
+$('#butt').on('click', function(e){
+
+ if ($("#myform").data("changed")) {
+
+     $('#myform').submit();
+     
+}else{
+    e.preventDefault()
+    alert('You havent made any changes.')
+}
+
+})
+if ($("#myform").data("changed")) {
+   // submit the form
+}
+</script>

@@ -28,13 +28,6 @@ module.exports = function (passport) {
 		})
 	);
 	 
-	 
-
-
-
-
-
-
 
 	//Mehtods used for sessions, by passportjs
 	//after authentication is done, this will be executed

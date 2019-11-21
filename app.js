@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const User = require('./models/User');
+const Cart = require('./models/cart')
 require('./models/Merchandise')
 const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
@@ -23,7 +24,7 @@ ADDD EMAIL PART WHERE IT WILL SAY YOU ADDED AND APPLICATION IS PERNDING
 
 */
 
-//set handlebars view engine
+//set handlebars view engine and hbs helper functions
 const handlebars = require('express3-handlebars').create({
 	defaultLayout: 'main',
 	helpers: {
@@ -34,9 +35,16 @@ const handlebars = require('express3-handlebars').create({
 		math: function(val){
 			parseInt(val);
 			return val+1
+		},
+		check: function(val){
+			  const value = parseInt(val)
+			   if(value < 15){
+				   return {isLow: true}
+			   }
 		}
 	}
 });
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -58,6 +66,7 @@ app.use(flash()); // for flash messages!
 app.use(express.urlencoded({ extended: false }));
 //to register stylesheets and images
 app.use(express.static('public/images'));
+app.use(express.static('public/products'));
 app.use(express.static('public/stylesheets'));
 app.use(express.static('public/javascripts'));
 //app.use(express.static('public/assets'));
@@ -74,6 +83,8 @@ app.use(memberroute);
 app.use(employeeroute);
 //equipmentRouters
 app.use(equipmentRouter);
+
+
 //server
 app.listen(port, () => {
 	console.log('the server is up and running at port ' + port);

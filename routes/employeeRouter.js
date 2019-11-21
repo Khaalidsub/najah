@@ -161,11 +161,11 @@ router.get('/admin/adminProfile', isauthenticated, isAdmin, (req, res) => {
 	res.render('admin/adminProfile', { admin: user });
 });
 
-
+//Merchandise admin controls starts here!
 //admin view merchandise
 
 router.get('/admin/addMerchandisePage', isauthenticated, isAdmin, async (req, res) => {
-	res.render('addMerchandise', {imageError:req.flash('imageError') , addMerchandise: req.flash('addMerchandise')});
+	res.render('addMerchandise', { imageError: req.flash('imageError'), addMerchandise: req.flash('addMerchandise'),admin:1 });
 })
 
 
@@ -175,7 +175,7 @@ router.get('/admin/addMerchandisePage', isauthenticated, isAdmin, async (req, re
 //where to store, and with what name config.
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		cb(null, 'public/images')
+		cb(null, 'public/products')
 	},
 	filename: function (req, file, cb) {
 		cb(null, Date.now() + file.originalname)
@@ -190,44 +190,82 @@ const upload = multer({
 	fileFilter(req, file, cb) {
 		if (!file.originalname.match(/\.(jpg|jpeg)/)) {
 			console.log('came here');
-			
-		  return	cb(new Error("File type not supported!"))
+
+			return cb(new Error("File type not supported!"))
 		}
-		console.log('came here as well');
-		
+
 		cb(undefined, true);
 	},
 	storage: storage
 })
+
+
+//adding new Merchandise
 router.post('/admin/addMerchandise', upload.single('image'), async (req, res) => {
 
 	var merch = new Merchandise(req.body);
 	merch.avatar = req.file.path
-	merch.status = true
 	await merchandiseDA.addMerchandise(merch)
-	req.flash('addMerchandise','The item has been added successfully')
+	req.flash('addMerchandise', 'The item has been added successfully')
 	res.redirect(req.get('referer'));
 
-}, (error, req, res, next) => { 
+}, (error, req, res, next) => {
 	req.flash('imageError', error.message);
 	res.redirect(req.get('referer'));
 })
 
+router.get('/admin/viewMerchandise', isauthenticated, isAdmin, async (req, res) => {
 
-// PRACTICE FOR AJAX
+	try {
+		const values = await merchandiseDA.fetchMerchandise(req.user.role);
+		if (values) {
+			res.render('admin/adminMerchandise', { merchandise: values, updated: req.flash('updateSuccess'), deleted: req.flash('deleted') })
+		} else {
+			req.flash('nothingToShow', 'There are no merchandise in the system!')
+			res.render('admin/adminMerchandise', { merchandise: values, nothing: req.flash('nothingToShow') })
+		}
+	} catch (e) {
+		console.log(e);
 
- router.get('/ajax',(req,res)=>{
-	 res.render('ajaxPractice');
- })
+	}
 
- router.post('/admin/ajax', (req,res)=>{
-	 console.log("the request came");
-	 console.log(req.body)
-	 res.send({name: req.body.name})
- })
+})
+
+//delete Merchandise from the system
+router.get('/admin/deleteMerchandise/:id', isauthenticated, isAdmin, async (req, res) => {
+
+	try {
+		const deleted = await merchandiseDA.deleteMerchandise(req.params.id)
+		if (deleted) {
+			req.flash('deleted', 'Item has been deleted...')
+			res.redirect(req.get('referer'));
+		}
+	} catch (error) {
+
+	}
+
+})
 
 
 
+//update an existing Merchandise in the system
+router.get('/admin/updateMerchandisePage', isauthenticated, isAdmin, async (req, res) => {
+	const item = await Merchandise.findById(req.query.value);
+	res.render('admin/updateMerchandise', { value: item ,admin:1})
+})
+
+router.post('/admin/updateMerchandise/:id', isauthenticated, isAdmin, async (req, res) => {
+	//logic goes here
+	try {
+		const updated = await Merchandise.findByIdAndUpdate(req.params.id, req.body);
+		req.flash('updateSuccess', 'Item has been updated and saved successfully!')
+		res.redirect('/admin/viewMerchandise');
+	} catch (error) {
+
+	}
+
+
+})
 
 //=============================
 
@@ -302,55 +340,18 @@ router.post('/admin/updateEquipment/:id', isauthenticated, isAdmin, async (req, 
 });
 
 
-
-
-
-// router.get('/checkPage', (req, res) => {
-// 	res.render('checking')
-// })
-
-// var storage = multer.diskStorage({
-// 	destination: function (req, file, cb) {
-// 		cb(null, 'public/images')
-// 	},
-// 	filename: function (req, file, cb) {
-// 		cb(null, Date.now() + file.originalname)
-// 	}
-// })
-
-
-// const upload1 = multer({
-// 	storage: storage
-// })
-
-// router.post('/checking', upload.single('upload'), async (req, res) => {
-// 	var image = new checking();
-// 	image.avatar = req.file.path;
-// 	console.log(req.file.path)
-// 	console.log(image.avatar.replace("public\\images\\", ""))
-// 	await image.save()
-// 	res.send("The file has been uploaded!")
-// })
-
-router.get('/getpic', async (req, res) => {
-	const image = await Merchandise.findById("5dc4cb59d230af3da461dc80")
-	console.log(image)
-    image.avatar = image.avatar.replace("images\\","")
-	//res.set('Content-Type', 'image/jpeg')
-	res.render('image', {path: image.avatar });
-})
 //Personal Training Routes
 //view training page
-router.get('/admin/viewTrainingPage', isauthenticated, isAdmin, async (req, res) => {});
+router.get('/admin/viewTrainingPage', isauthenticated, isAdmin, async (req, res) => { });
 //add training page
-router.get('/admin/addTrainingPage', isauthenticated, isAdmin, async (req, res) => {});
+router.get('/admin/addTrainingPage', isauthenticated, isAdmin, async (req, res) => { });
 //add training packages
 router.post('/admin/addTraining', isauthenticated, isAdmin, async (req, res) => {
 	const user = req.user;
 	user.password = '';
 });
 //deleting packages
-router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, res) => {});
+router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, res) => { });
 //update packages like trainer and cost
 
 //Loading an error page if coming request does not matches with

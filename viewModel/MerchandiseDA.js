@@ -12,19 +12,37 @@ try {
 }
 
 }
-fetchMerchandise = async function (req,res){
+fetchMerchandise = async function (role){
+    var values
 try{
-   const values =  await Merchandise.find({status:true});
+    if(role == 'user'){
+      values =  await Merchandise.find({status:'available'});
+    }else{
+      values = await Merchandise.find()
+    }
    if(values.length > 0){
        return values
    }else
    throw new Error();
 }catch(e){
-    throw new Error();
+    return null
 }
+}
+
+deleteMerchandise = async function(id){
+  try {
+     const item = await Merchandise.findById(id)
+     item.remove();
+     return item
+     
+  } catch (error) {
+      return null
+  }
+
 }
 
 module.exports = {
     addMerchandise: addMerchandise,
-    fetchMerchandise: fetchMerchandise
+    fetchMerchandise: fetchMerchandise,
+    deleteMerchandise: deleteMerchandise
 }

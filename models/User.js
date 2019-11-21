@@ -95,6 +95,13 @@ userSchema.virtual('application', {
 	foreignField: 'owner',
 	justOne: true
 });
+//connecting with the cart model .
+userSchema.virtual('cartItems',{
+	ref: 'cart',
+	localField: '_id',
+	foreignField:'customer',
+	count:false
+})
 //This method will make sure, the password is hashed before saving into the database
 userSchema.pre('save', async function (next) {
 	const user = this;

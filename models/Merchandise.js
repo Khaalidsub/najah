@@ -3,6 +3,7 @@
 
 const mongoose = require('mongoose');
 const validator = require('validator');
+const fs = require('fs')
 
 const merchandise = new mongoose.Schema({
     
@@ -28,8 +29,9 @@ const merchandise = new mongoose.Schema({
     },
 
     status: {
-        type: Boolean,
+        type: String,
         require: true,
+        enum: ['available','unavailable']
     },
 
     category: {
@@ -42,6 +44,19 @@ const merchandise = new mongoose.Schema({
         requried: true,
     }
 
+})
+
+ merchandise.virtual('cart', {
+	ref: 'cart',
+	localField: '_id',
+	foreignField: 'ite',
+	//justOne: true
+});
+
+merchandise.pre('remove', async function (next){
+    const path = this.avatar;
+     fs.unlinkSync(path)
+    next()  
 })
 
 //creating databasel model
