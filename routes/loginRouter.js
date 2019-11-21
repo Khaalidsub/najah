@@ -5,9 +5,11 @@ const User = require('../models/User');
 const isauthenticated = require('../middlewares/checkAuthentication');
 const nodemailer = require('nodemailer');
 const connectEmail = require('../config/mail');
+const equipmentDA = require('../viewModel/equipmentDA');
 
-router.get('/', (req, res) => {
-	res.render('Home');
+router.get('/', async(req, res) => {
+	const equs = await equipmentDA.viewEquipment();
+	res.render('Home', {equ: equs});
 });
 router.get('/loginpage', (req, res) => {
 	res.render('login', { error: req.flash('error') });
@@ -48,7 +50,8 @@ router.post(
 router.get('/logout', isauthenticated, async (req, res) => {
 	await req.logout();
 	console.log('logged out' + req.user);
-	res.render('Home');
+	const equs = await equipmentDA.viewEquipment();
+	res.render('Home', {equ: equs});
 });
 
 module.exports = router;

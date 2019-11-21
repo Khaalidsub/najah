@@ -1,0 +1,100 @@
+<br>
+<br>
+<div class="container-fluid text-center">
+    <h1 style="text-align: center; marging-top:5px"><i class="fa fa-briefcase" aria-hidden="true"></i> Workout Routine
+    </h1>
+</div>
+<div class="row w-100 mt-5 mr-auto ml-auto">
+    <div class="col-md-12 mr-auto">
+        <div class="row">
+            {{#each wrs}}
+            <div class="col-lg-3 mb-4">
+                <a href="" data-toggle="modal" data-target="#myModal{{this._id}}">
+                    <div class="card bg-dark border-danger" id="wr" style="height: 200px;">
+                        <img src="/upload/{{this.img_path}}" class="card-img h-100 img-fluid"
+                            alt="Couldn't load picture">
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">Name: {{this.name}}, Type: {{this.type}}</h5>
+                            <p class="card-text">Workout Takes {{this.duration}} Days, Focus On {{this.body_part}}
+                                <br>{{this.comment}}</p>
+                            <p class="card-text">Last Update On {{this.time}}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <!-- Modal -->
+    {{#each wrs}}
+    <div class="modal fade" id="myModal{{this._id}}">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <!-- Modal content-->
+            <div class="modal-content card">
+                <img src="/upload/{{this.img_path}}" class="card-img-top" height="300px" alt="Can't load">
+                <div class="card-body">
+                    <form action="/admin/updateWorkoutRoutine" method="POST"
+                        class="was-validated modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="name">id</label>
+                                <input type="text" class="form-control" name="id" id="id"
+                                    placeholder="Workout ID" value="{{this._id}}">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6 hidden">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control is-invalid" name="name" id="name"
+                                    placeholder="Workout Routine Name" value="{{this.name}}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="type">Type</label>
+                                <input type="text" class="form-control is-invalid" name="type" id="type"
+                                    placeholder="Type Of Workout Routine" value="{{this.type}}" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="duration">Duration</label>
+                                <input type="number" class="form-control is-invalid" name="duration" id="duration"
+                                    placeholder="Duration Of The Workout Routine In Days"  value="{{this.duration}}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="body_part">Body Part</label>
+                                <input type="text" class="form-control is-invalid" name="body_part" id="body_part"
+                                    placeholder="Body Part Involove In The Workout Routine" value="{{this.body_part}}" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="comment">Comment</label>
+                                <textarea class="form-control is-invalid" name="comment" id="validationTextarea"
+                                    cols="100" rows="3" placeholder="About The Workout Routine" required>{{this.comment}}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button name="action" type="submit" class="btn btn-primary col-md-4" value="Update">
+                                <i class="fa fa-wrench" aria-hidden="true"></i> 
+                                Update
+                            </button>
+                            <button name="action" type="submit" class="btn btn-primary col-md-4" value="Delete">
+                                <i class="fa fa-trash" aria-hidden="true"></i> 
+                                Delete
+                            </button>
+                            <a href="#" data-dismiss="modal" class="btn btn-primary col-md-4">
+                                <i class="fa fa-times" aria-hidden="true"></i> 
+                                Close
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
