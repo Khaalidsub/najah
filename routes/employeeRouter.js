@@ -22,17 +22,6 @@ const trainingDA = require('../viewModel/PersonalTrainingDA');
 const workoutRoutine = require('../models/workoutRoutine');
 const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
 
-//Upload File
-var storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-	  cb(null, './public/images/upload/')
-	},
-	filename: (req, file, cb) => {
-	  cb(null, file.fieldname + '-' + Date.now() + "." + file.mimetype.substring(file.mimetype.search("/") + 1));
-	}
-});
-var upload = multer({storage: storage});
-
 //Employee Registration
 router.get('/admin/registerPage', isauthenticated, isAdmin, (req, res) => {
 	//for navigation recognition
@@ -451,6 +440,17 @@ router.get(('/admin/workoutRoutine'), isauthenticated, isAdmin, async(req,res) =
 	
 	res.render('admin/addWorkoutRoutine', {admin: user});
 });
+
+//Upload File
+var storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+	  cb(null, './public/images/upload/')
+	},
+	filename: (req, file, cb) => {
+	  cb(null, file.fieldname + '-' + Date.now() + "." + file.mimetype.substring(file.mimetype.search("/") + 1));
+	}
+});
+var upload = multer({storage: storage});
 
 //Workout add Routine
 router.post(('/admin/addWorkoutRoutine'), isauthenticated, isAdmin, upload.single('img_path'), async(req,res) => {
