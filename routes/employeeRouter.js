@@ -16,22 +16,11 @@ const equipment = require('../models/Equipment');
 const equipmentDA = require('../viewModel/equipmentDA');
 const Training = require('../models/PersonalTraining');
 const trainingDA = require('../viewModel/PersonalTrainingDA');
-const workoutRoutine = require('../models/workoutRoutine');
-const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
-const multer = require('multer');
 
-//Upload File
-var storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-	  cb(null, './public/images/upload/')
-	},
-	filename: (req, file, cb) => {
-	  cb(null, file.fieldname + '-' + Date.now() + "." + file.mimetype.substring(file.mimetype.search("/") + 1));
-	}
-});
-var upload = multer({storage: storage});
+//const applications = require('../models/Application')
 
 //Employee Registration
+
 router.get('/admin/registerPage', isauthenticated, isAdmin, (req, res) => {
 	//for navigation recognition
 	const user = req.user;
@@ -315,47 +304,6 @@ router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, re
 	}
 });
 //update packages like trainer and cost
-
-//Workout add Routine View
-router.get(('/admin/workoutRoutine'), isauthenticated, isAdmin, async(req,res) => {
-	const user = req.user;
-	user.password = ''; 
-	
-	res.render('admin/addWorkoutRoutine', {admin: user});
-});
-
-//Workout add Routine
-router.post(('/admin/addWorkoutRoutine'), isauthenticated, isAdmin, upload.single('img_path'), async(req,res) => {
-	const user = req.user;
-	user.password = '';
-	req.body.img_path = req.file.filename;
-	const wr = new workoutRoutine(req.body);
-	workoutRoutineDA.AddWR(wr);
-	res.redirect('/admin/workoutRoutine');
-});
-
-//Workout view Routine
-router.get(('/admin/viewWorkoutRoutine'), isauthenticated, isAdmin, async(req,res) => {
-	const user = req.user;
-	user.password = '';
-	const wrs = await workoutRoutineDA.viewWR();
-	res.render('admin/listWorkoutRoutine', {wrs: wrs, admin: user});
-});
-
-//Workout update Routine
-router.post(('/admin/updateWorkoutRoutine'), isauthenticated, isAdmin, async(req,res,error) => {
-	console.log(req.body);
-	if(req.body.action == 'Update'){
-		console.log('upd');
-		const del = await workoutRoutineDA.updateWR(req.body.id, req.body);
-	}else if(req.body.action == 'Delete'){
-		console.log('dle');
-		await workoutRoutineDA.DelWR(req.body.id);
-	}
-	res.redirect('/admin/viewWorkoutRoutine');
-});
-
-
 
 //Loading an error page if coming request does not matches with
 //any of the above configured routes
