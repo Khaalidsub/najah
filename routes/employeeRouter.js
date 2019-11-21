@@ -3,7 +3,10 @@
 // Muhammad Adeen Rabbani
 // A17CS4006
 //****************************//
-
+const merchandiseDA = require('../viewModel/MerchandiseDA')
+const Merchandise = require('../models/Merchandise')
+const checking = require('../models/checking')
+const multer = require('multer');
 const express = require('express');
 const router = new express.Router();
 const passport = require('passport');
@@ -124,21 +127,23 @@ router.get('/admin/viewMembers', isauthenticated, isAdmin, async (req, res) => {
 			admin: user
 		});
 	}
-
-	//Admin can delete Member Profiles. After that That member has to be registered again
-
-	router.get('/admin/deleteMember/:id', isauthenticated, isAdmin, async (req, res) => {
-		const id = req.params.id;
-		const val = await userDA.deleteMember(id);
-		if (!val) {
-			req.flash('failure', 'Error occured while Deleting!');
-			res.redirect('/admin/viewMembers');
-		} else {
-			req.flash('deleted', 'Member has been deleted Successfully!');
-			res.redirect('/admin/viewMembers');
-		}
-	});
 });
+//Admin can delete Member Profiles. After that That member has to be registered again
+
+router.get('/admin/deleteMember/:id', isauthenticated, isAdmin, async (req, res) => {
+	const id = req.params.id;
+	console.log(id);
+
+	const val = await userDA.deleteMember(id);
+	if (!val) {
+		req.flash('failure', 'Error occured while Deleting!');
+		res.redirect('/admin/viewMembers');
+	} else {
+		req.flash('deleted', 'Member has been deleted Successfully!');
+		res.redirect('/admin/viewMembers');
+	}
+});
+
 //route for member search
 router.get('/admin/searchMember', isauthenticated, isAdmin, async (req, res) => {
 	const member = await userDA.searchUser(req.query.email);
@@ -167,7 +172,130 @@ router.get('/admin/adminProfile', isauthenticated, isAdmin, (req, res) => {
 	res.render('admin/adminProfile', { admin: user });
 });
 
-//EQUIPMENT ROUTES//
+//Merchandise admin controls starts here!
+//admin view merchandise
+
+router.get('/admin/addMerchandisePage', isauthenticated, isAdmin, async (req, res) => {
+	res.render('addMerchandise', { imageError: req.flash('imageError'), addMerchandise: req.flash('addMerchandise'),admin:1 });
+})
+
+
+
+
+
+//where to store, and with what name config.
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, 'public/products')
+	},
+	filename: function (req, file, cb) {
+		cb(null, Date.now() + file.originalname)
+	}
+})
+
+
+const upload = multer({
+	limits: {
+		fileSize: 1000000
+	},
+	fileFilter(req, file, cb) {
+		if (!file.originalname.match(/\.(jpg|jpeg)/)) {
+			console.log('came here');
+
+			return cb(new Error("File type not supported!"))
+		}
+
+		cb(undefined, true);
+	},
+	storage: storage
+})
+
+
+//adding new Merchandise
+router.post('/admin/addMerchandise', upload.single('image'), async (req, res) => {
+
+	var merch = new Merchandise(req.body);
+	merch.avatar = req.file.path
+	await merchandiseDA.addMerchandise(merch)
+	req.flash('addMerchandise', 'The item has been added successfully')
+	res.redirect(req.get('referer'));
+
+}, (error, req, res, next) => {
+	req.flash('imageError', error.message);
+	res.redirect(req.get('referer'));
+})
+
+router.get('/admin/viewMerchandise', isauthenticated, isAdmin, async (req, res) => {
+
+	try {
+		const values = await merchandiseDA.fetchMerchandise(req.user.role);
+		if (values) {
+			res.render('admin/adminMerchandise', { merchandise: values, updated: req.flash('updateSuccess'), deleted: req.flash('deleted') })
+		} else {
+			req.flash('nothingToShow', 'There are no merchandise in the system!')
+			res.render('admin/adminMerchandise', { merchandise: values, nothing: req.flash('nothingToShow') })
+		}
+	} catch (e) {
+		console.log(e);
+
+	}
+
+})
+
+//delete Merchandise from the system
+router.get('/admin/deleteMerchandise/:id', isauthenticated, isAdmin, async (req, res) => {
+
+	try {
+		const deleted = await merchandiseDA.deleteMerchandise(req.params.id)
+		if (deleted) {
+			req.flash('deleted', 'Item has been deleted...')
+			res.redirect(req.get('referer'));
+		}
+	} catch (error) {
+
+	}
+
+})
+
+
+
+//update an existing Merchandise in the system
+router.get('/admin/updateMerchandisePage', isauthenticated, isAdmin, async (req, res) => {
+	const item = await Merchandise.findById(req.query.value);
+	res.render('admin/updateMerchandise', { value: item ,admin:1})
+})
+
+router.post('/admin/updateMerchandise/:id', isauthenticated, isAdmin, async (req, res) => {
+	//logic goes here
+	try {
+		const updated = await Merchandise.findByIdAndUpdate(req.params.id, req.body);
+		req.flash('updateSuccess', 'Item has been updated and saved successfully!')
+		res.redirect('/admin/viewMerchandise');
+	} catch (error) {
+
+	}
+
+
+})
+
+//=============================
+
+
+
+
+
+
+
+//****************************//
+// Author of this Code:
+// Sheref Abolmagd
+// matic number goes here**
+//****************************//
+
+
+
+
+//Equipment Route//
 router.get('/admin/addEquipmentPage', isauthenticated, isAdmin, (req, res) => {
 	const user = req.user;
 	user.password = '';
@@ -221,6 +349,7 @@ router.post('/admin/updateEquipment/:id', isauthenticated, isAdmin, async (req, 
 	console.log(id);
 	res.redirect('/admin/viewEquipmentPage');
 });
+
 
 //Personal Training Routes
 //view training page
@@ -311,5 +440,10 @@ router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, re
 router.get('/admin/*', (req, res) => {
 	res.render('errorPage');
 });
+
+
+
+
+
 
 module.exports = router;
