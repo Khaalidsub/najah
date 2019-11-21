@@ -63,8 +63,8 @@ const performAction = async (id, query, com) => {
 			if (await check(id, 'accepted')) {
 				return 0;
 			} else {
-				 const use = await update(id, 'accepted','_id');
-				   await userDA.useractive(use.owner._id);
+				 const use = await update(id, 'accepted');
+				   await userDA.useractive(use.owner);
 				   	 
 			}
 			break;

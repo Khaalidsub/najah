@@ -23,7 +23,8 @@
 
     <br><br>
 
-    <h1 id="heading" style="text-align:center;text-decoration:underline;font-family:'Courier New', Courier, monospace"> Member Profiles</h1><br><br>
+    <h1 id="heading" style="text-align:center;text-decoration:underline;font-family:'Courier New', Courier, monospace">
+        Member Profiles</h1><br><br>
 
     {{#if searchfailure}}
     <div class="alert alert-danger" role="alert">
@@ -69,38 +70,38 @@
 
 
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Record#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each apps}}
-            <tr class="table-light">
-                <td>{{math @index}}</td>
-                <td>{{this.name}}</td>
-                <td>{{this.email}}</td>
-                <td>{{this.phone}}</td>
-                <td>
-                    <button id="{{@index}}" name="button1" type="button" class="viewapp btn btn-primary"
-                        data-toggle="modal" data-target="#myModal">View Details</button>
-                    {{!-- <a href="/admin/accept/{{this.id}}" id="1"><img src="/public/images/accepticon.png"
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Record#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each apps}}
+                <tr class="table-light">
+                    <td>{{math @index}}</td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.email}}</td>
+                    <td>{{this.phone}}</td>
+                    <td>
+                        <button id="{{@index}}" name="button1" type="button" class="viewapp btn btn-primary"
+                            data-toggle="modal" data-target="#myModal">View Details</button>
+                        {{!-- <a href="/admin/accept/{{this.id}}" id="1"><img src="/public/images/accepticon.png"
             style="width:82px; height:86px" title="Accept Application" alt="icon"></a> --}}
-                    {{!-- <a  href="/admin/accept/{{this.id}}" name="accept" id="1" type="button" class="btn btn-primary">Accept</a> --}}
+                        {{!-- <a  href="/admin/accept/{{this.id}}" name="accept" id="1" type="button" class="btn btn-primary">Accept</a> --}}
 
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-    
-</div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+    </div>
 
 
     <div class="container">
@@ -140,7 +141,7 @@
 
 <script>
 
-    
+
 
 
     $('.viewapp').on('click', function (event) {

@@ -5,7 +5,7 @@ body {
 	height: 100%;
 	width: 100%;
 	font-family: 'Poppins', sans-serif;
-	color: #222;
+	color: none;
 }
 .navbar {
 	padding: .8rem;

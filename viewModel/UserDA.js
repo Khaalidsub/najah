@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const registerMember = async (User) => {
 	try {
-		//await User.save();
+		
 		await User.save();
 	} catch (error) {
 		res.status(401).send('somthing went wrong');
@@ -46,7 +46,9 @@ const searchUser = async (email) => {
 	}
 };
 
-const fetchMembers = async function() {
+//route for fetching the members form db
+
+const fetchMembers = async function () {
 	try {
 		// taking out the sensitive information of the user, before sending back to the client!
 		dbValues = await User.find({ role: 'user' }, { password: 0, role: 0 });
@@ -70,7 +72,7 @@ const fetchEmployees = async () => {
 		return null;
 	}
 };
-const deleteMember = async function(id) {
+const deleteMember = async function (id) {
 	try {
 		const deletedMember = await User.findByIdAndDelete(id);
 		if (!deleteMember) {
@@ -115,6 +117,7 @@ const quitTraining = async (userid, id) => {
 		return null;
 	}
 };
+
 module.exports = {
 	registerMember: registerMember,
 	registerEmployee: registerEmployee,

@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const User = require('./models/User');
+const Cart = require('./models/cart')
+require('./models/Merchandise')
 const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
@@ -17,7 +19,7 @@ require('./config/mongoose'); // to initialize mongoose and mongodb connection
 const app = express();
 port = process.env.PORT || 3000;
 
-//set handlebars view engine
+//set handlebars view engine and hbs helper functions
 const handlebars = require('express3-handlebars').create({
 	defaultLayout: 'main',
 	helpers: {
@@ -31,6 +33,7 @@ const handlebars = require('express3-handlebars').create({
 		}
 	}
 });
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -52,6 +55,7 @@ app.use(flash()); // for flash messages!
 app.use(express.urlencoded({ extended: false }));
 //to register stylesheets and images
 app.use(express.static('public/images'));
+app.use(express.static('public/products'));
 app.use(express.static('public/stylesheets'));
 app.use(express.static('public/javascripts'));
 //app.use(express.static('public/assets'));

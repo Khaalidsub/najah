@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row mt-5">
+            <div class="col-md-6 m-auto">
+                <div class="card card-body">
+
+
+                    {{#if nothing}}
+                    <div class="alert alert-success" role="alert">
+                        {{{nothing}}}
+                    </div>
+                    {{/if}}
+
+                    {{#if addMerchandise}}
+                    <div class="alert alert-success" role="alert">
+                        {{{addMerchandise}}}
+                    </div>
+                    {{/if}}
+
+
+                    <h1 class="text-center mb-3"><i class="fa fa-plus"></i> Add Merchandise</h1>
+                    <form action="/admin/addMerchandise" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="name"><h6>Name</h6></label>
+                            <input type="name" id="name" name="name" class="form-control"
+                                placeholder="Name of The merchandise" />
+                        </div>
+                        <div class="form-group">
+                            <label for="description"><h6>Description</h6></label>
+                            <input type="text" id="description" required name="description" class="form-control"
+                                placeholder="Provide a brief Description" />
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="price"><h6>Price</h6></label>
+                                <input type="number" class="form-control" required name="price" required
+                                    placeholder="Enter Price in RM">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="quantity"><h6>Quantity</h6></label>
+                                <input type="number" required class="form-control" name="quantity" required
+                                    placeholder="Enter the quantiy">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="category"><h6>Category</h6></label>
+                            <select name="category" id="">
+                                <option value="clothing">Clothing</option>
+                                <option value="fitness">Fitness</option>
+                            </select>
+                        </div>
+
+                          <label for=""><h6>Set as</h6></label>
+                         <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" value="available" id="defaultChecked"
+                                name="status" checked>
+                            <label class="custom-control-label" for="defaultChecked">Available</label>
+                        </div>
+                        
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" value="unavailable"  id="defaultUnchecked" name="status">
+                            <label class="custom-control-label" for="defaultUnchecked">Unavailable</label>
+                        </div>
+
+                       
+                       
+
+
+
+                            <br>
+                        {{#if imageError}}
+                        <div class="alert alert-danger" role="alert">
+                            {{{imageError}}}
+                        </div>
+                        {{/if}}
+                        
+                        <div class="form-group">
+                            <label for="image"><h6>Image</h6></label>
+                            <input type="file" id="gender" name="image" class="form-control"
+                                placeholder="upload Image" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg">Add Merchandise</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
