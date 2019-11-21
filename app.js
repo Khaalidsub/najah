@@ -63,7 +63,6 @@ app.use(passport.session());
 //login routes
 
 app.use(userroute);
-//member routes
 app.use(memberroute);
 app.use(employeeroute);
 

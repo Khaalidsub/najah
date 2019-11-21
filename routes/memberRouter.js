@@ -159,15 +159,6 @@ router.post('/member/deactivateAccount', isauthenticated, isUser, async (req, re
 	res.render('login');
 });
 
-//Equipment Route//
-router.get('/member/viewEquipmentPage', isauthenticated, isUser, async (req, res) => {
-	const profile = req.user;
-	profile.password = '';
-
-	const equs = await equipmentDA.viewEquipment();
-	res.render('member/equipmentList', { equ: equs, profile });
-});
-
 //Personal Training Routes//
 //view Training
 router.get('/member/viewTrainingPage', isauthenticated, isUser, async (req, res) => {
