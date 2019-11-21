@@ -21,7 +21,6 @@ const Training = require('../models/PersonalTraining');
 const trainingDA = require('../viewModel/PersonalTrainingDA');
 const workoutRoutine = require('../models/workoutRoutine');
 const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
-const multer = require('multer');
 
 //Upload File
 var storage = multer.diskStorage({
@@ -205,7 +204,7 @@ var storage = multer.diskStorage({
 })
 
 
-const upload = multer({
+const uploadmarch = multer({
 	limits: {
 		fileSize: 1000000
 	},
@@ -223,7 +222,7 @@ const upload = multer({
 
 
 //adding new Merchandise
-router.post('/admin/addMerchandise', upload.single('image'), async (req, res) => {
+router.post('/admin/addMerchandise', uploadmarch.single('image'), async (req, res) => {
 
 	var merch = new Merchandise(req.body);
 	merch.avatar = req.file.path
