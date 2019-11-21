@@ -4,6 +4,11 @@
     <div class="col-md-6 m-auto">
         <div class="card card-body">
             <h1 class="text-center mb-3"><i class="fas fa-plus"></i> Add Training</h1>
+            {{#if failure}}
+            <div class="alert alert-warning" role="alert">
+            {{{failure}}}
+            </div>
+            {{/if}}
             <form action="/admin/addTraining" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-12">
@@ -40,7 +45,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Cost</label>
-                        <input type="Number" class="form-control" name="cost" id="cost">
+                        <input type="Number" class="form-control" name="cost" id="cost" required>
                     </div>
                     <div class="form-group col-md-3">
                         <label>Trainer</label>

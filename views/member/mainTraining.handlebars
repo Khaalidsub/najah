@@ -1,0 +1,62 @@
+
+<br>
+
+
+
+<div class="container-fluid text-center">
+    <h1 style="text-align: center; marging-top:5px">Choose type of Training</h1>
+</div>
+<br>
+<div class="container ">
+
+
+
+    <div class="card-deck">
+        <div class=" col-sm-12 col-md-4">
+            <div class="card h-100">
+                <img class="card-img-top" src="/weight-loss.jpg"
+                    alt="Card image cap">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Weight Loss</h5>
+                    <p class="card-text">This Program emphasizes on losing weight</p>
+                    <p class="card-text">Programs :{{weight.length}}</p>
+                    <form action="/member/viewTraining" method="get">
+                    <button name="program" type="submit" value="weight-loss" class="viewapp btn btn-primary  mt-auto"
+                        >View</button>   
+                        </form>
+                </div>
+            </div>
+        </div>
+        <div class=" col-sm-12 col-md-4">
+            <div class="card h-100">
+                <img class="card-img-top" src="/muscle-gain.jpg"
+                    alt="Card image cap">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Muscle Gain</h5>
+                    <p class="card-text">This Program emphasizes on gaining muscles</p>
+                    <p class="card-text">Programs :{{muscle.length}}</p>
+                    <form action="/member/viewTraining" method="get">
+                    <button name="program" type="submit" value="muscle-gain" class="viewapp btn btn-primary  mt-auto"
+                        >View</button>   
+                        </form>
+                </div>
+            </div>
+        </div>
+        <div class=" col-sm-12 col-md-4">
+            <div class="card h-100">
+                <img class="card-img-top" src="/athlete.jpg"
+                    alt="Card image cap">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Athlete</h5>
+                    <p class="card-text">This Program emphasizes on becoming an athlete</p>
+                    <p class="card-text">Programs :{{athlete.length}}</p>
+                    <form action="/member/viewTraining" method="get">
+                    <button name="program" type="submit" value="athlete" class="viewapp btn btn-primary  mt-auto"
+                        >View</button>   
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

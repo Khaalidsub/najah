@@ -173,8 +173,31 @@ router.get('/member/viewEquipmentPage', isauthenticated, isUser, async (req, res
 router.get('/member/viewTrainingPage', isauthenticated, isUser, async (req, res) => {
 	const profile = req.user;
 	profile.password = '';
+	//get the size of weight loss
+	const weight = await Training.find({ type: 'weight-loss' });
+	//get the size of muscle gain
+	const muscle = await Training.find({ type: 'muscle-gain' });
+	//get the size of athlete
+	const athlete = await Training.find({ type: 'athlete' });
 
-	const training = await trainingDA.fetchTraining();
+	res.render('member/mainTraining', {
+		noView: req.flash('noView'),
+		profile,
+		weight,
+		muscle,
+		athlete,
+		failure: req.flash('failure')
+	});
+});
+router.get('/member/viewTraining', isauthenticated, isUser, async (req, res) => {
+	const profile = req.user;
+	profile.password = '';
+
+	const program = req.query.program;
+	console.log('Program ' + program);
+
+	const training = await trainingDA.fetchTraining(program);
+
 	const trainers = await userDA.fetchEmployees();
 	if (training.length < 1) {
 		req.flash('noView', 'No Trainings to View!');
@@ -195,7 +218,7 @@ router.get('/member/viewTrainingPage', isauthenticated, isUser, async (req, res)
 	}
 });
 //join Training
-router.post('/member/joinTraining/:id', isauthenticated, isUser, async (req, res) => {
+router.get('/member/joinTraining/:id', isauthenticated, isUser, async (req, res) => {
 	const id = req.params.id;
 
 	const user = req.user;

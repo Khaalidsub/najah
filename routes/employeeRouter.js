@@ -228,7 +228,7 @@ router.get('/admin/viewTrainingPage', isauthenticated, isAdmin, async (req, res)
 	const user = req.user;
 	user.password = '';
 
-	const training = await trainingDA.fetchTraining();
+	const training = await trainingDA.adminfetchTraining();
 	const trainers = await userDA.fetchEmployees();
 	if (training.length < 1) {
 		req.flash('noView', 'No packages to View!');
@@ -256,29 +256,29 @@ router.get('/admin/addTrainingPage', isauthenticated, isAdmin, async (req, res) 
 
 	//get a list of all users that are admin
 	const trainers = await userDA.fetchEmployees();
+
 	res.render('admin/addTraining', { admin: user, trainers, failure: req.flash('failure') });
 });
 //add training packages
 router.post('/admin/addTraining', isauthenticated, isAdmin, async (req, res) => {
 	const train = new Training(req.body); // instacne of user model
-	const trainers = await trainingDA.addTraining(train); //user.save();
-	//failure going back to addTraining
-	if (!trainers) {
-		console.log('here in out');
 
-		req.flash('failure', 'Name of the Package do already exist!');
-		res.redirect(router.get('referer'));
-	} else {
+	try {
+		const trainers = await trainingDA.addTraining(train); //user.save();
 		//successs with flash
-		console.log('here in');
-		req.flash('warning', 'Package has been updated successfully!');
+
+		req.flash('warning', 'Package has been added successfully!');
 		res.redirect('/admin/viewTrainingPage');
+	} catch (error) {
+		//failure going back to addTraining
+		req.flash('failure', 'Name of the Package do already exist!');
+		res.redirect('/admin/addTrainingPage');
 	}
 });
 router.post('/admin/updateTraining/:id', isauthenticated, isAdmin, async (req, res) => {
 	const id = req.params.id;
 	const val = await trainingDA.updateTraining(id, req.body);
-	console.log(val);
+
 	//failure going back to addTraining
 	if (!val) {
 		req.flash('failure', 'Package has been updated unsuccessfully!');
