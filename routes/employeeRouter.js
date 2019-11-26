@@ -214,7 +214,7 @@ const uploadmarch = multer({
 router.post('/admin/addMerchandise', uploadmarch.single('image'), async (req, res) => {
 
 	var merch = new Merchandise(req.body);
-	merch.avatar = req.file.path
+	merch.avatar = req.file.filename
 	await merchandiseDA.addMerchandise(merch)
 	req.flash('addMerchandise', 'The item has been added successfully')
 	res.redirect(req.get('referer'));
