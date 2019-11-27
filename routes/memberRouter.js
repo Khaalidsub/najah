@@ -399,20 +399,15 @@ router.get('/checkout', isauthenticated, async (req, res) => {
 	//console.log(res.locals.val);
 	await cart.populate('items.item', 'name avatar').execPopulate()
 	//Do something for the avatar route that is going to be rendered on the front end!
-<<<<<<< Updated upstream
-	res.render('checkout', { cart: cart, user: user, admin: req.user.name });
-	
-})
-=======
 	res.render('checkout', { cart: cart, user: user, profile: req.user.name });
->>>>>>> Stashed changes
-
+	
+});
 router.get('/member/viewWorkoutRoutine', isauthenticated, async (req, res) => {
 	const user = req.user;
 	user.password = ''; 
 	const wrs = await workoutRoutineDA.viewWR();
 	res.render('member/workoutRoutine', {wrs: wrs, profile: user});
-})
+});
 
 //Loading an error page if coming request does not matches with
 //any of the above configured routes
