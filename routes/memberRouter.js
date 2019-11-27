@@ -18,6 +18,7 @@ const equipment = require('../models/Equipment');
 const equipmentDA = require('../viewModel/equipmentDA');
 const Training = require('../models/PersonalTraining');
 const trainingDA = require('../viewModel/PersonalTrainingDA');
+const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
 const Cart = require('../models/cart')
 
 const connectEmail = require('../config/mail');
@@ -43,13 +44,15 @@ router.get('/member/memberProfile', isauthenticated, isUser, async (req, res) =>
 	const profile = req.user;
 	profile.password = '';
 	if (profile.trainingMember == undefined) {
-		res.render('member/memberMyProfile', { profile, warning: req.flash('warning') });
+		const wrs = await workoutRoutineDA.viewWR();
+		res.render('member/memberMyProfile', {wrs: wrs, profile, warning: req.flash('warning') });
 	} else {
 		//load personal training
 		console.log('hello');
 
 		const training = await trainingDA.getTraining(req.user.trainingMember);
 		console.log(req.user.trainingMember);
+
 
 		res.render('member/memberMyProfile', { profile, training, warning: req.flash('warning') });
 	}
@@ -251,18 +254,6 @@ router.post('/member/quitTraining/:id', isauthenticated, isUser, async (req, res
 	}
 });
 
-//Loading an error page if coming request does not matches with
-//any of the above configured routes
-//MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
-router.get('/member/*', (req, res) => {
-	res.render('errorPage');
-});
-
-router.get('/member/registerPage/*', (req, res) => {
-	res.render('errorPage');
-});
-
-
 //****************************//
 // Author of this Code:
 // Muhammad Adeen Rabbani
@@ -403,14 +394,32 @@ router.get('/checkout', isauthenticated, async (req, res) => {
 	user.email = req.user.email
 	user.phone = req.user.phone
 	user.address = req.user.address
-
+	
 	const cart = await Cart.findOne({ customer: req.user.id })
 	//console.log(res.locals.val);
 	await cart.populate('items.item', 'name avatar').execPopulate()
 	//Do something for the avatar route that is going to be rendered on the front end!
 	res.render('checkout', { cart: cart, user: user, admin: req.user.name });
-
+	
 })
+
+router.get('/member/viewWorkoutRoutine', isauthenticated, async (req, res) => {
+	const user = req.user;
+	user.password = ''; 
+	const wrs = await workoutRoutineDA.viewWR();
+	res.render('member/workoutRoutine', {wrs: wrs, profile: user});
+})
+
+//Loading an error page if coming request does not matches with
+//any of the above configured routes
+//MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
+router.get('/member/*', (req, res) => {
+	res.render('errorPage');
+});
+
+router.get('/member/registerPage/*', (req, res) => {
+	res.render('errorPage');
+});
 
 
 

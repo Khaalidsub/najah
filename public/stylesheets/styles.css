@@ -97,16 +97,17 @@ Extra (xl) large devices (large desktops, 1200px and up)
 }
 
 #wr img{
-	filter: blur(3px);
+	filter: brightness(50%);
 }
 
 #wr{
 	color: white;
-	transition: all 1s;
+	filter: brightness(60%);
+	transition: all 0.5s;
 }
 
 #wr:hover{
 	margin: auto;
-	color: #000;
-	-webkit-text-stroke: black 1px;
+	color: white;
+	filter: brightness(100%);
 }

@@ -437,8 +437,8 @@ router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, re
 router.get(('/admin/workoutRoutine'), isauthenticated, isAdmin, async(req,res) => {
 	const user = req.user;
 	user.password = ''; 
-	
-	res.render('admin/addWorkoutRoutine', {admin: user});
+	const wrs = await workoutRoutineDA.viewWR();
+	res.render('admin/workoutRoutine', {wrs: wrs, admin: user});
 });
 
 //Upload File
@@ -462,14 +462,6 @@ router.post(('/admin/addWorkoutRoutine'), isauthenticated, isAdmin, upload.singl
 	res.redirect('/admin/workoutRoutine');
 });
 
-//Workout view Routine
-router.get(('/admin/viewWorkoutRoutine'), isauthenticated, isAdmin, async(req,res) => {
-	const user = req.user;
-	user.password = '';
-	const wrs = await workoutRoutineDA.viewWR();
-	res.render('admin/listWorkoutRoutine', {wrs: wrs, admin: user});
-});
-
 //Workout update Routine
 router.post(('/admin/updateWorkoutRoutine'), isauthenticated, isAdmin, async(req,res,error) => {
 	console.log(req.body);
@@ -480,7 +472,7 @@ router.post(('/admin/updateWorkoutRoutine'), isauthenticated, isAdmin, async(req
 		console.log('dle');
 		await workoutRoutineDA.DelWR(req.body.id);
 	}
-	res.redirect('/admin/viewWorkoutRoutine');
+	res.redirect('/admin/workoutRoutine');
 });
 
 
