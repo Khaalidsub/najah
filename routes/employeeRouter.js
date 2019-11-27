@@ -220,7 +220,7 @@ router.post(
 		res.redirect(req.get('referer'));
 	},
 	(error, req, res, next) => {
-		req.flash('imageError', error.message);
+		req.flash('imageError', error.message + ' Please Uplaod .JPEG or JPG file');
 		res.redirect(req.get('referer'));
 	}
 );
@@ -236,7 +236,11 @@ router.get('/admin/viewMerchandise', isauthenticated, isAdmin, async (req, res) 
 			});
 		} else {
 			req.flash('nothingToShow', 'There are no merchandise in the system!');
-			res.render('admin/adminMerchandise', { merchandise: values, nothing: req.flash('nothingToShow') });
+			res.render('admin/adminMerchandise', {
+				admin: req.user.name,
+				merchandise: values,
+				nothing: req.flash('nothingToShow')
+			});
 		}
 	} catch (e) {
 		console.log(e);

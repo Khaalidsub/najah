@@ -7,7 +7,7 @@ module.exports = function(req,res, next){
     if(req.user.role=='user'){
         next()
     }else{
-        res.send('Please You are not allowed')
-        //we will redirect later to login page
+        
+        res.redirect('/admin/viewMerchandise')
     }
 }

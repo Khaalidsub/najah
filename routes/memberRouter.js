@@ -267,7 +267,7 @@ router.post('/member/quitTraining/:id', isauthenticated, isUser, async (req, res
 // his parents and followed his own path and succeeded xD XD XD
 //view all merchandise
 
-router.get('/user/shop', isauthenticated, async (req, res) => {
+router.get('/user/shop', isauthenticated, isUser, async (req, res) => {
            
 	try {
 		//chunking the array for better front end rendering
@@ -278,7 +278,7 @@ router.get('/user/shop', isauthenticated, async (req, res) => {
 			chunkarr.push(vals.slice(i, i + chunkSize))
 		}
 
-		res.render('merchandiseShop', { values: chunkarr, cart_msg: req.flash('cart-success'), noitem: req.flash('no_items'), admin: req.user.name, val: req.session.vals })
+		res.render('merchandiseShop', { values: chunkarr, cart_msg: req.flash('cart-success'), noitem: req.flash('no_items'), profile: req.user.name, val: req.session.vals })
 	} catch (e) {
 	}
 
@@ -355,7 +355,7 @@ router.get('/viewcart', isauthenticated, async (req, res) => {
 
 		await cart.populate('items.item', 'name avatar').execPopulate()
 		//Do something for the avatar route that is going to be rendered on the front end!
-		res.render('cart', { cart: cart, deleteMsg: req.flash('deleteSuccess'), admin: req.user.name, val: req.session.vals }); //REMOVE THE UNECCESSARY ITEM FROM THE SENDING OBJECT!
+		res.render('cart', { cart: cart, deleteMsg: req.flash('deleteSuccess'), profile: req.user.name, val: req.session.vals }); //REMOVE THE UNECCESSARY ITEM FROM THE SENDING OBJECT!
 	} else {
 		req.flash('no_items', "Your Cart is Empty, Continue Shopping!")
 		res.redirect('/user/shop')
@@ -399,9 +399,13 @@ router.get('/checkout', isauthenticated, async (req, res) => {
 	//console.log(res.locals.val);
 	await cart.populate('items.item', 'name avatar').execPopulate()
 	//Do something for the avatar route that is going to be rendered on the front end!
+<<<<<<< Updated upstream
 	res.render('checkout', { cart: cart, user: user, admin: req.user.name });
 	
 })
+=======
+	res.render('checkout', { cart: cart, user: user, profile: req.user.name });
+>>>>>>> Stashed changes
 
 router.get('/member/viewWorkoutRoutine', isauthenticated, async (req, res) => {
 	const user = req.user;
