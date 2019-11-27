@@ -220,7 +220,7 @@ router.post('/admin/addMerchandise', uploadmarch.single('image'), async (req, re
 	res.redirect(req.get('referer'));
 
 }, (error, req, res, next) => {
-	req.flash('imageError', error.message);
+	req.flash('imageError', error.message+ " Please Uplaod .JPEG or JPG file");
 	res.redirect(req.get('referer'));
 })
 
@@ -232,7 +232,7 @@ router.get('/admin/viewMerchandise', isauthenticated, isAdmin, async (req, res) 
 			res.render('admin/adminMerchandise', { merchandise: values, updated: req.flash('updateSuccess'), deleted: req.flash('deleted') })
 		} else {
 			req.flash('nothingToShow', 'There are no merchandise in the system!')
-			res.render('admin/adminMerchandise', { merchandise: values, nothing: req.flash('nothingToShow') })
+			res.render('admin/adminMerchandise', { admin:req.user.name, merchandise: values, nothing: req.flash('nothingToShow') })
 		}
 	} catch (e) {
 		console.log(e);
