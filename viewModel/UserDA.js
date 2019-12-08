@@ -118,6 +118,14 @@ const quitTraining = async (userid, id) => {
 	}
 };
 
+const addPackage = async (id,userId)=>{
+	
+  const val = await User.findByIdAndUpdate(userId,{package:id})
+  //console.log(val);
+  
+  return val;
+}
+
 module.exports = {
 	registerMember: registerMember,
 	registerEmployee: registerEmployee,
@@ -128,6 +136,7 @@ module.exports = {
 	fetchEmployees: fetchEmployees,
 	deleteMember: deleteMember,
 	useractive: useractive,
+	addPackage,
 	joinTraining,
 	quitTraining
 };

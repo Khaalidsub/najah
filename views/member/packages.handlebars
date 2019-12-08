@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+
+    <div class="container-fluid text-center">
+        <h1 style="text-align: center; marging-top:5px">Gym Packages</h1>
+         <p style="color:rgb(255, 60, 0) ;">*You are only allowed to subscribe to one Package!</p>
+    </div>
+    <br>
+    <div class="container ">
+
+
+       {{#if pkgsuc}}
+    <div class="alert alert-success" role="alert">
+        {{{pkgsuc}}}
+    </div>
+    {{/if}}
+
+       {{#if pkgalrdy}}
+    <div class="alert alert-danger" role="alert">
+        {{{pkgalrdy}}}
+    </div>
+    {{/if}}
+       
+        <div class="card-deck">
+            {{#each packages}}
+            <div class=" col-sm-12 col-md-4">
+                <div class="card h-100">
+                    <img class="card-img-top" src="/weight-loss.jpg" alt="Card image cap">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <p class="card-text">{{this.description}}</p>
+                        <p class="card-text">Price :{{this.price}}</p>
+                        <form action="/member/subscription/{{this._id}}" method="get">
+                            <button name="program" type="submit" value=""
+                                class="viewapp btn btn-primary  mt-auto">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        
+</div>
+</body>
+
+</html>

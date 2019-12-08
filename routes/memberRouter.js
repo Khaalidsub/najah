@@ -21,6 +21,8 @@ const trainingDA = require('../viewModel/PersonalTrainingDA');
 const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
 const Cart = require('../models/cart');
 
+const PackageDA = require('../viewModel/packagesDA');
+
 const connectEmail = require('../config/mail');
 
 //registerpage
@@ -407,6 +409,36 @@ router.get('/member/viewWorkoutRoutine', isauthenticated, async (req, res) => {
 	const wrs = await workoutRoutineDA.viewWR();
 	res.render('member/workoutRoutine', { wrs: wrs, profile: user });
 });
+//res.render('checkout', { cart: cart, user: user, profile: req.user.name });
+
+router.get('/member/viewPackages', isauthenticated, async (req, res) => {
+	//console.log(req.user.gender);
+	const pkgs = await PackageDA.fetchPackages(req.user.gender);
+	if (pkgs == null) {
+		//right now MY DICK
+	} else {
+		res.render('member/packages', {
+			profile: req.user.name,
+			packages: pkgs,
+			pkgalrdy: req.flash('alrdyPackage'),
+			pkgsuc: req.flash('packageSuccess')
+		});
+	}
+});
+
+router.get('/member/subscription/:id', isauthenticated, isUser, async (req, res) => {
+	if (req.user.package) {
+		req.flash('alrdyPackage', 'You have already registered one package! please come to the counter.');
+		res.redirect(req.get('referer'));
+	} else {
+		const id = req.params.id;
+		const val = await userDA.addPackage(id, req.user.id);
+		req.flash('packageSuccess', 'Package successfully subscribed! GO PAY MY DICK');
+		res.redirect(req.get('referer'));
+	}
+});
+
+//console.log(val);
 
 router.get('/member/paymentPage', isauthenticated, async (req, res) => {
 	const profile = req.user;
@@ -434,6 +466,10 @@ router.post('/member/pay', isauthenticated, async (req, res) => {
 //any of the above configured routes
 //MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
 router.get('/member/*', (req, res) => {
+	res.render('errorPage');
+});
+
+router.get('/member/registerPage/*', (req, res) => {
 	res.render('errorPage');
 });
 

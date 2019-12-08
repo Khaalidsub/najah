@@ -21,6 +21,9 @@ const Training = require('../models/PersonalTraining');
 const trainingDA = require('../viewModel/PersonalTrainingDA');
 const workoutRoutine = require('../models/workoutRoutine');
 const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
+const Package = require('../viewModel/packagesDA');
+
+//const applications = require('../models/Application')
 
 //Employee Registration
 router.get('/admin/registerPage', isauthenticated, isAdmin, (req, res) => {
@@ -198,8 +201,6 @@ const uploadmarch = multer({
 	},
 	fileFilter(req, file, cb) {
 		if (!file.originalname.match(/\.(jpg|jpeg)/)) {
-			console.log('came here');
-
 			return cb(new Error('File type not supported!'));
 		}
 
@@ -232,7 +233,9 @@ router.get('/admin/viewMerchandise', isauthenticated, isAdmin, async (req, res) 
 			res.render('admin/adminMerchandise', {
 				merchandise: values,
 				updated: req.flash('updateSuccess'),
-				deleted: req.flash('deleted')
+				deleted: req.flash('deleted'),
+				deleteErr: req.flash('deleteErr'),
+				admin: req.user.role
 			});
 		} else {
 			req.flash('nothingToShow', 'There are no merchandise in the system!');
@@ -255,7 +258,10 @@ router.get('/admin/deleteMerchandise/:id', isauthenticated, isAdmin, async (req,
 			req.flash('deleted', 'Item has been deleted...');
 			res.redirect(req.get('referer'));
 		}
-	} catch (error) {}
+	} catch (error) {
+		req.flash('deleteErr', 'Something Went Wrong While Deleting!');
+		res.redirect(req.get('referer'));
+	}
 });
 
 //update an existing Merchandise in the system
@@ -417,6 +423,15 @@ router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, re
 		res.redirect('/admin/viewTrainingPage');
 	}
 });
+
+router.get('/admin/addPackagePage', isauthenticated, isAdmin, (req, res) => {
+	res.render('admin/addPackage');
+});
+router.post('/admin/addPackages', isauthenticated, isAdmin, async (req, res) => {
+	await Package.savePackage(req.body);
+	res.redirect(req.get('referrer'));
+});
+
 //update packages like trainer and cost
 
 //Workout add Routine View
