@@ -408,6 +408,28 @@ router.get('/member/viewWorkoutRoutine', isauthenticated, async (req, res) => {
 	res.render('member/workoutRoutine', { wrs: wrs, profile: user });
 });
 
+router.get('/member/paymentPage', isauthenticated, async (req, res) => {
+	const profile = req.user;
+	//get the payment table for that certain user
+	//display the outstanding balance etc
+	res.render('member/Payment', { profile });
+});
+
+router.post('/member/pay', isauthenticated, async (req, res) => {
+	//getting the payment db
+	//getting the amount the user wishes to pay
+	//set the payment json with the user amount
+	//if success redirect a certain router
+	//after success ,reduce the outstanding balance with the current user amount
+	//if the outstnanding is still above 0 then it still stays unpaid
+	//ifsuccess ,create an invoice for the user to see
+	//optional: user can print the invoice
+	//if fail redirect to another router url
+});
+
+//success router url
+//fail router url
+
 //Loading an error page if coming request does not matches with
 //any of the above configured routes
 //MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES

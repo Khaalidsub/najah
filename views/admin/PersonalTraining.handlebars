@@ -5,13 +5,12 @@
     <h1 style="text-align: center; marging-top:5px"><i class="fa fa-running" aria-hidden="true"></i> Personal Training
     </h1>
     <br>
-    <a class="btn btn-danger text-light" id="view">View Personal Training</a>
-    <a class="btn btn-danger text-light" id="add">Add Personal Training</a>
+    <a class="btn btn-danger text-light" id="add">View Personal Training</a>
+    <a class="btn btn-danger text-light" id="view">Add Personal Training</a>
 </div>
 <br>
+
 <div class="container-fluid">
-
-
 {{#if error}}
 <div class="alert alert-warning" role="alert">
     {{{error}}}
@@ -211,26 +210,15 @@
   })
 
 </script>
-
-
 <script>
     $(document).ready(function () {
         $("#add").click(function () {
-            $("#viewpt").fadeOut(50);
-            $("#addpt").fadeIn();
+            $("#viewwr").fadeOut(50);
+            $("#addwr").fadeIn();
         });
         $("#view").click(function () {
-            $("#addpt").fadeOut(50);
-             $("#viewpt").fadeIn();
+            $("#addwr").fadeOut(50);
+             $("#viewwr").fadeIn();
         });
     });
 </script>
-
-  <script>
-    $(document).ready(function () {
-      // show the alert
-      setTimeout(function () {
-        $(".alert").alert('close');
-      }, 3000);
-    });
-    </script>
