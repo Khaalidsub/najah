@@ -1,67 +1,76 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+<style>
+    .card-img-top {
+        width: 100%;
+        height: 25vh;
+        object-fit: cover;
+    }
+</style>
+
 <body>
-    
-
-<div class="container-fluid text-center">
-    <br><br>
-    <h1 style="text-decoration: underline;">Merchandise Shop</h1>
-</div>
-
-<div style="color: red; text-align: center;">
-    {{{noitem}}}
-</div>
-
-{{#if cart_msg}}
-<div class="alert alert-success" role="alert">
-    {{{cart_msg}}}
-</div>
-{{/if}}
-{{#if noitem}}
-<div class="alert alert-primary" role="alert">
-    {{{noitem}}}
-</div>
-{{/if}}
 
 
+    <div class="container-fluid text-center">
+        <br><br>
+        <h1 style="text-decoration: underline;">Merchandise Shop</h1>
+    </div>
 
-<div class="container" style="margin-top: 5%;">
-    {{#each values}}
-    <div class="row mt-5">
-        {{#each this}}
-        <div class=" col-sm-12 col-md-4">
-            <div class="card h-100" style="width: 20rem;">
-                <img class="card-img-top img-responsive" src="/{{this.avatar}}" alt="Card image cap">
-                <div class="card-body d-flex flex-column">
-                    <h3 class="card-title">{{this.name}}</h3>
-                    <p style="font-weight: bold;">Product Description</p>
-                    <p class="card-text" style="text-overflow: ellipsis; white-space: nowrap; overflow:hidden">
-                        {{this.description}}</p>
+    <div style="color: red; text-align: center;">
+        {{{noitem}}}
+    </div>
+
+    {{#if cart_msg}}
+    <div class="alert alert-success" role="alert">
+        {{{cart_msg}}}
+    </div>
+    {{/if}}
+    {{#if noitem}}
+    <div class="alert alert-primary" role="alert">
+        {{{noitem}}}
+    </div>
+    {{/if}}
+
+
+
+    <div class="container" style="margin-top: 5%;">
+        {{#each values}}
+        <div class="row mt-5">
+            {{#each this}}
+            <div class=" col-sm-12 col-md-4">
+                <div class="card h-100" style="width: 20rem;">
+                    <img class="card-img-top  img-fluid" src="/{{this.avatar}}" alt="Card image cap">
+                    <div class="card-body d-flex flex-column">
+                        <h4 class="">{{this.name}}</h4>
+                        <h6 style="font-weight: bold;">Product Description:</h6>
+                        <p class="card-text" style="text-overflow: ellipsis; white-space: nowrap; overflow:hidden">
+                            {{this.description}}</p>
                         <p style="color:rgb(255, 60, 0); ;"> Hurry up! only {{this.quantity}} items left!</p>
-                    <h3 class="card-text mt-auto" style="float: left; font-weight: bold; margin-bottom:0;"> RM{{this.price}}</h3>
-                  <div class="mt-auto" ><span class="badge badge-pill badge-success" style="float: right;margin-bottom:10px;">{{this.status}}</span></div>
-            
-                    <a href="/add-to-cart/{{this._id}}" class="mt-auto btn btn-danger" style="background-color: rgb(255, 60, 0);">Add to Cart</a>
+                        <h3 class="card-text mt-auto" style="float: left; font-weight: bold; margin-bottom:0;">
+                            RM{{this.price}}</h3>
+                        <div class="mt-auto"><span class="badge badge-pill badge-success"
+                                style="float: right;margin-bottom:10px;">{{this.status}}</span></div>
 
+                        <a href="/add-to-cart/{{this._id}}" class="mt-auto btn btn-danger"
+                            style="background-color: rgb(255, 60, 0);">Add to Cart</a>
+
+                    </div>
                 </div>
             </div>
+            {{/each}}
+
         </div>
+
         {{/each}}
 
     </div>
-
-    {{/each}}
-
-    </div>
 </body>
+
 </html>
-
-
-

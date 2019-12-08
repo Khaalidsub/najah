@@ -15,7 +15,11 @@
     <h1 id="heading" style="text-align:center;text-decoration:underline;font-family:'Courier New', Courier, monospace">Merchandise List</h1><br><br>
 
 
-    
+    {{#if deleteErr}}
+    <div class="alert alert-warning" role="alert">
+        {{{deleteErr}}}
+    </div>
+    {{/if}}
     
     {{#if nothing}}
     <div class="container-fluid" style="align-content: center;">
@@ -30,8 +34,6 @@
         </div>
 
     </div>
-
-
     {{/if}}
 
     {{#if updated}}
@@ -189,15 +191,16 @@
 
     $('.modal-body').html(html)
     })
-  
-});
-
-
-    doConfirm = function (event) {
+     doConfirm = function (event) {
         if (!confirm('Are you sure you want to delete this member?')) {
             event.preventDefault()
         }
     }
+  
+});
+
+
+   
 
 
 
@@ -206,6 +209,3 @@
 
 
 
-</body>
-
-</html>

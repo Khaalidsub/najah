@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
 		gender: {
 			type: String,
 			requried: true,
-			default: undefined
+			enum:['male','female']
 		},
 		email: {
 			type: String,
@@ -88,11 +88,18 @@ const userSchema = new mongoose.Schema(
 			required: false,
 			default: undefined,
 			ref: 'Training'
+		},
+		package:{
+			type: mongoose.Schema.Types.ObjectId,
+			required:false,
+            ref:'Package'			
+
 		}
 	},
 	{
 		timestamps: true
 	}
+	
 );
 //this method is connecting witrh the Application table during runtime
 userSchema.virtual('application', {

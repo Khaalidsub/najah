@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const User = require('./models/User');
 const Cart = require('./models/cart')
+require('./models/Package')
 require('./models/Merchandise')
 const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
