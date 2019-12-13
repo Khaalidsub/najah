@@ -38,6 +38,7 @@ const updatePayment = async (id, cost) => {
 const getPayment = async (id) => {
 	try {
 		const payment = await Payment.findOne({ member: id });
+
 		//payment.populate('member')
 		return payment;
 	} catch (error) {

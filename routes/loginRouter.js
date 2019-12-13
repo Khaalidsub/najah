@@ -7,6 +7,9 @@ const isauthenticated = require('../middlewares/checkAuthentication');
 const nodemailer = require('nodemailer');
 const connectEmail = require('../config/mail');
 const equipmentDA = require('../viewModel/equipmentDA');
+const paymentDA = require('../viewModel/PaymentDA');
+const userDA = require('../viewModel/UserDA');
+const PackageDA = require('../viewModel/packagesDA');
 
 router.get('/', async (req, res) => {
 	const equs = await equipmentDA.viewEquipment();
@@ -45,9 +48,30 @@ router.post(
 				res.render('login');
 			} else {
 				//check last payment date and current date
+				const payment = await paymentDA.getPayment(req.user.id);
+				//sort
+				const sortedTransaction = payment.transactions.reverse();
 				//if payment is above 30 days:
-				// check for the package user registered
-				// check the price and add it in the payment amount
+
+				const prevDate = new Date(sortedTransaction[0].Date).getTime();
+
+				const currDate = new Date().getTime();
+
+				console.log(currDate, '  ', prevDate);
+
+				const differenceTime = currDate - prevDate;
+				const differenceDays = differenceTime / (1000 * 3600 * 24);
+
+				console.log('timeee', differenceDays);
+				if (differenceDays > 30) {
+					// check for the package user registered
+					//console.log('user');
+
+					const package = await PackageDA.getPackage(req.user.package);
+					const cost = package.price;
+					// check the price and add it in the payment amount
+					const updatedPayment = await paymentDA.updatePayment(req.user.id, cost);
+				}
 
 				res.redirect('/member/memberProfile');
 			}
