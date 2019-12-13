@@ -1,6 +1,29 @@
 // THIS FILE WILL BE USED LATER MODULE. PLEASE IGNORE. THANK YOU.
 const mongoose = require('mongoose');
-
+const TransactionsSchema = new mongoose.Schema({
+	orderID: {
+		type: String
+	},
+	name: {
+		type: String
+	},
+	email: {
+		type: String
+	},
+	amount: {
+		type: String
+	},
+	payerid: {
+		type: String
+	},
+	reason: {
+		type: String
+	},
+	Date: {
+		type: Date,
+		default: Date.now
+	}
+});
 const PaymentSchema = new mongoose.Schema({
 	member: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -17,9 +40,10 @@ const PaymentSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now
 	},
+	transactions: [ TransactionsSchema ],
 	amount: {
 		type: Number,
-		required: true,
+		required: false,
 		default: null
 	}
 });

@@ -1,18 +1,63 @@
-><br>
+
 <br>
+<br>
+<br>
+
 <div class="container padding text-center">
+ 
     <div class="row">
         <div class="col-12">
             <div class="card">
-
+                   {{#if invoice}}
+                   <div class="card-body">
+                     {{invoice.name}}
+                   </div>
+                    {{else}}
                 <div class="card-body">
-                    <div class="card-title">Payment</div>
-                    <div class="card-text">Hello</div>
-                    <form action="/member/pay" method="post">
-                        <button class="btn btn-primary" type="submit">Pay</button>
-                    </form>
+                    <h2 class="card-title">Payment</h2>
+                    <h3 class="card-title">{{payment.amount}} RM due </h3>
+                 <div id="paypal-button-container"></div>
+                 <a href="/member/paymentHistory"><button class="btn btn-large btn-primary">Payment history</button></a>
+                {{order}}
                 </div>
+                  {{/if}}
             </div>
         </div>
     </div>
+  
 </div>
+
+<script>
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: {{payment.amount}}
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert('Transaction completed by ' + details.payer.name.given_name);
+        // Call your server to save the transaction
+         fetch('/member/pay', {
+          method: 'post',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            orderID: data.orderID
+          })
+        }).then(()=>{
+        window.location.reload();
+        })
+        
+        
+
+      });
+
+    }
+  }).render('#paypal-button-container');
+</script>

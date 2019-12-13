@@ -18,11 +18,15 @@ const equipment = require('../models/Equipment');
 const equipmentDA = require('../viewModel/equipmentDA');
 const Training = require('../models/PersonalTraining');
 const trainingDA = require('../viewModel/PersonalTrainingDA');
+const paymentDA = require('../viewModel/PaymentDA');
 const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
 const Cart = require('../models/cart');
 
-const PackageDA = require('../viewModel/packagesDA');
+//paypal
+const checkoutNodeJssdk = require('@paypal/checkout-server-sdk');
+const payPalClient = require('../config/paypal');
 
+const PackageDA = require('../viewModel/packagesDA');
 const connectEmail = require('../config/mail');
 
 //registerpage
@@ -231,6 +235,12 @@ router.get('/member/joinTraining/:id', isauthenticated, isUser, async (req, res)
 			res.render('/member/viewTrainingPage');
 		} else {
 			//successs
+			//get the training program to get the price
+			const trainPackage = await trainingDA.getTraining(id);
+
+			//add amount to the payment module
+			const response = await paymentDA.updatePayment(req.user.id, trainPackage.cost);
+
 			req.flash('warning', 'Package has been added into your system Successfully!');
 			res.redirect('/member/memberProfile');
 		}
@@ -433,6 +443,10 @@ router.get('/member/subscription/:id', isauthenticated, isUser, async (req, res)
 	} else {
 		const id = req.params.id;
 		const val = await userDA.addPackage(id, req.user.id);
+		//get the package cost
+		const package = await PackageDA.getPackage(id);
+		//create payment document for that user
+		const response = await paymentDA.createPayment(req.user.id, package.price);
 		req.flash('packageSuccess', 'Package successfully subscribed! GO PAY MY DICK');
 		res.redirect(req.get('referer'));
 	}
@@ -443,24 +457,65 @@ router.get('/member/subscription/:id', isauthenticated, isUser, async (req, res)
 router.get('/member/paymentPage', isauthenticated, async (req, res) => {
 	const profile = req.user;
 	//get the payment table for that certain user
+	const payment = await paymentDA.getPayment(req.user.id);
 	//display the outstanding balance etc
-	res.render('member/Payment', { profile });
+	res.render('member/Payment', { profile, payment });
+});
+router.get('/member/paymentHistory', isauthenticated, async (req, res) => {
+	const profile = req.user;
+	//get the payment table for that certain user
+	const payment = await paymentDA.fetchPayments(req.user.id);
+	//display the outstanding balance etc
+	res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
+});
+router.get('/member/printPayment/:id', isauthenticated, async (req, res) => {
+	const profile = req.user;
+	//get the payment table for that certain user
+	const payment = await paymentDA.fetchPayments(req.user.id);
+	//display the outstanding balance etc
+	res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
 });
 
 router.post('/member/pay', isauthenticated, async (req, res) => {
 	//getting the payment db
-	//getting the amount the user wishes to pay
-	//set the payment json with the user amount
-	//if success redirect a certain router
-	//after success ,reduce the outstanding balance with the current user amount
-	//if the outstnanding is still above 0 then it still stays unpaid
-	//ifsuccess ,create an invoice for the user to see
-	//optional: user can print the invoice
-	//if fail redirect to another router url
-});
+	const payment = await paymentDA.getPayment(req.user.id);
 
-//success router url
-//fail router url
+	//orderID
+	const orderID = req.body.orderID;
+
+	//enter the orderID that has been given from the user
+	let request = new checkoutNodeJssdk.orders.OrdersGetRequest(orderID);
+
+	let order;
+	try {
+		//process the orderId to find the transaction details
+		order = await payPalClient.client().execute(request);
+	} catch (err) {
+		//handle errors if there is no transaction details of that order id
+		console.error(err);
+		return res.send(500);
+	}
+
+	if (Math.round(order.result.purchase_units[0].amount.value) !== payment.amount) {
+		//send error page once the payment is not similar
+		res.sendStatus(400);
+	}
+	//create an object containing
+	const name = order.result.payer.name.given_name;
+	const email = order.result.payer.email_address;
+	const amount = order.result.purchase_units[0].amount.value;
+	const payerid = order.result.payer.payer_id;
+	const reason = 'outstanding balance najah gym';
+
+	//save it to the payment so it can be retrieved once it has been refreshed
+	const invoice = { orderID, name, payerid, email, amount, payerid, reason };
+	console.log(invoice);
+	//save the transaction into the payment db and make amount into null
+	const updatedPayment = await paymentDA.completePayment(req.user.id, invoice);
+
+	res.sendStatus(200);
+	//console.log('transaction', Math.round(order.result.purchase_units[0].amount.value));
+});
 
 //Loading an error page if coming request does not matches with
 //any of the above configured routes

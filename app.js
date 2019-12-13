@@ -58,7 +58,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public/images'));
 app.use(express.static('public/products'));
 app.use(express.static('public/stylesheets'));
-app.use(express.static('public/javascripts'));
+
+app.use(express.static('public/js'));
 //app.use(express.static('public/assets'));
 //Passport middlewares for session handling
 app.use(passport.initialize());

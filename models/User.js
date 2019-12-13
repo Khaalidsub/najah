@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
 		gender: {
 			type: String,
 			requried: true,
-			enum:['male','female']
+			enum: [ 'male', 'female' ]
 		},
 		email: {
 			type: String,
@@ -86,17 +86,15 @@ const userSchema = new mongoose.Schema(
 			default: undefined,
 			ref: 'Training'
 		},
-		package:{
+		package: {
 			type: mongoose.Schema.Types.ObjectId,
-			required:false,
-            ref:'Package'			
-
+			required: false,
+			ref: 'Package'
 		}
 	},
 	{
 		timestamps: true
 	}
-	
 );
 //this method is connecting witrh the Application table during runtime
 userSchema.virtual('application', {
@@ -112,6 +110,12 @@ userSchema.virtual('training', {
 	localField: '_id',
 	foreignField: 'trainer',
 	justOne: true
+});
+//this method is connecting witrh the Payment table during runtime
+userSchema.virtual('payment', {
+	ref: 'Payment',
+	localField: '_id',
+	foreignField: 'member'
 });
 
 //connecting with the cart model .

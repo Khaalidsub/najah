@@ -1,0 +1,85 @@
+<br><br>
+
+<h1 id="heading" style="text-align:center;text-decoration:underline;font-family:'Courier New', Courier, monospace">
+    Transaction History</h1><br><br>
+
+{{#if searchfailure}}
+<div class="alert alert-danger" role="alert">
+    {{{searchfailure}}}
+</div>
+{{/if}}
+
+{{#if searchsuccess}}
+<div class="alert alert-success" role="alert">
+    {{{searchsuccess}}}
+</div>
+{{/if}}
+
+{{#if failure}}
+<div class="alert alert-danger" role="alert">
+    {{{failure}}}
+</div>
+{{/if}}
+
+
+{{#if deleted}}
+<div class="alert alert-success" role="alert">
+    {{{deleted}}}
+</div>
+{{/if}}
+
+{{#if registered}}
+<div class="alert alert-success" role="alert">
+    {{{registered}}}
+</div>
+{{/if}}
+
+
+
+
+
+
+
+<div class="container-fluid" id="printableArea">
+<div class="row">
+    <div class="col">
+ <a href="/member/paymentPage"><button class="btn btn-danger float-left">Payment</button></a>
+  <a href="#" onclick="printDiv('printableArea')"><button class="btn btn-danger float-right">Print</button></a>
+    </div>
+
+   
+</div>
+
+    <br>
+    <br>
+    <table class="table table-hover ">
+        <thead>
+            <tr>
+                <th scope="col">Record#</th>
+                <th scope="col">orderID</th>
+                <th scope="col">email</th>
+                <th scope="col">amount</th>
+                <th scope="col">Date</th>
+          
+            </tr>
+        </thead>
+        <tbody>
+            {{#each transactions}}
+            <tr class="table-light">
+                <td>{{math @index}}</td>
+                <td>{{this.orderID}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.amount}}</td>
+                <td>{{this.Date}}</td>
+                <td></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+</div>
+
+
+
+
+</div>
