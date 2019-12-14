@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="row mt-5">
+        <div class="col-md-6 m-auto">
+            <div class="card card-body">
+                <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i>Add Packages</h1>
+                <form action="/admin/addPackages" method="post">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="name" id="name" name="name" class="form-control"
+                            placeholder="Enter Package name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Description</label>
+                        <input type="text" id="email" name="description" class="form-control"
+                            placeholder="Enter description" />
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Price</label>
+                        <input type="number" id="IC" name="price" class="form-control" placeholder="Enter Price" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Type</label>
+                        <div class="radio">
+                            <label><input type="radio" name="type" value="male">male</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="type" value="female">female</label>
+                        </div>
+                    </div>
+
+                    <button type="submit">Submit</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

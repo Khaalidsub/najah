@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const registerMember = async (User) => {
-	try {
-		
-		await User.save();
-	} catch (error) {
-		res.status(401).send('somthing went wrong');
+	const response = await User.save();
+	if (response) {
+		return response;
+	} else {
+		return new Error();
 	}
 };
 
@@ -48,7 +48,7 @@ const searchUser = async (email) => {
 
 //route for fetching the members form db
 
-const fetchMembers = async function () {
+const fetchMembers = async function() {
 	try {
 		// taking out the sensitive information of the user, before sending back to the client!
 		dbValues = await User.find({ role: 'user' }, { password: 0, role: 0 });
@@ -72,7 +72,7 @@ const fetchEmployees = async () => {
 		return null;
 	}
 };
-const deleteMember = async function (id) {
+const deleteMember = async function(id) {
 	try {
 		const deletedMember = await User.findByIdAndDelete(id);
 		if (!deleteMember) {
@@ -118,6 +118,13 @@ const quitTraining = async (userid, id) => {
 	}
 };
 
+const addPackage = async (id, userId) => {
+	const val = await User.findByIdAndUpdate(userId, { package: id });
+	//console.log(val);
+
+	return val;
+};
+
 module.exports = {
 	registerMember: registerMember,
 	registerEmployee: registerEmployee,
@@ -128,6 +135,7 @@ module.exports = {
 	fetchEmployees: fetchEmployees,
 	deleteMember: deleteMember,
 	useractive: useractive,
+	addPackage,
 	joinTraining,
 	quitTraining
 };

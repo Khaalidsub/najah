@@ -3,9 +3,9 @@
 // Muhammad Adeen Rabbani
 // A17CS4006
 //****************************//
-const merchandiseDA = require('../viewModel/MerchandiseDA')
-const Merchandise = require('../models/Merchandise')
-const checking = require('../models/checking')
+const merchandiseDA = require('../viewModel/MerchandiseDA');
+const Merchandise = require('../models/Merchandise');
+const checking = require('../models/checking');
 const multer = require('multer');
 const express = require('express');
 const router = new express.Router();
@@ -21,6 +21,9 @@ const Training = require('../models/PersonalTraining');
 const trainingDA = require('../viewModel/PersonalTrainingDA');
 const workoutRoutine = require('../models/workoutRoutine');
 const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
+const Package = require('../viewModel/packagesDA');
+
+//const applications = require('../models/Application')
 
 //Employee Registration
 router.get('/admin/registerPage', isauthenticated, isAdmin, (req, res) => {
@@ -175,23 +178,22 @@ router.get('/admin/adminProfile', isauthenticated, isAdmin, (req, res) => {
 //admin view merchandise
 
 router.get('/admin/addMerchandisePage', isauthenticated, isAdmin, async (req, res) => {
-	res.render('addMerchandise', { imageError: req.flash('imageError'), addMerchandise: req.flash('addMerchandise'),admin:1 });
-})
-
-
-
-
+	res.render('addMerchandise', {
+		imageError: req.flash('imageError'),
+		addMerchandise: req.flash('addMerchandise'),
+		admin: 1
+	});
+});
 
 //where to store, and with what name config.
 var storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, 'public/products')
+	destination: function(req, file, cb) {
+		cb(null, 'public/products');
 	},
-	filename: function (req, file, cb) {
-		cb(null, Date.now() + file.originalname)
+	filename: function(req, file, cb) {
+		cb(null, Date.now() + file.originalname);
 	}
-})
-
+});
 
 const uploadmarch = multer({
 	limits: {
@@ -199,100 +201,91 @@ const uploadmarch = multer({
 	},
 	fileFilter(req, file, cb) {
 		if (!file.originalname.match(/\.(jpg|jpeg)/)) {
-			console.log('came here');
-
-			return cb(new Error("File type not supported!"))
+			return cb(new Error('File type not supported!'));
 		}
 
 		cb(undefined, true);
 	},
 	storage: storage
-})
-
+});
 
 //adding new Merchandise
-router.post('/admin/addMerchandise', uploadmarch.single('image'), async (req, res) => {
-
-	var merch = new Merchandise(req.body);
-	merch.avatar = req.file.filename
-	await merchandiseDA.addMerchandise(merch)
-	req.flash('addMerchandise', 'The item has been added successfully')
-	res.redirect(req.get('referer'));
-
-}, (error, req, res, next) => {
-	req.flash('imageError', error.message);
-	res.redirect(req.get('referer'));
-})
+router.post(
+	'/admin/addMerchandise',
+	uploadmarch.single('image'),
+	async (req, res) => {
+		var merch = new Merchandise(req.body);
+		merch.avatar = req.file.filename;
+		await merchandiseDA.addMerchandise(merch);
+		req.flash('addMerchandise', 'The item has been added successfully');
+		res.redirect(req.get('referer'));
+	},
+	(error, req, res, next) => {
+		req.flash('imageError', error.message + ' Please Uplaod .JPEG or JPG file');
+		res.redirect(req.get('referer'));
+	}
+);
 
 router.get('/admin/viewMerchandise', isauthenticated, isAdmin, async (req, res) => {
-
 	try {
 		const values = await merchandiseDA.fetchMerchandise(req.user.role);
 		if (values) {
-			res.render('admin/adminMerchandise', { merchandise: values, updated: req.flash('updateSuccess'), deleted: req.flash('deleted') })
+			res.render('admin/adminMerchandise', {
+				merchandise: values,
+				updated: req.flash('updateSuccess'),
+				deleted: req.flash('deleted'),
+				deleteErr: req.flash('deleteErr'),
+				admin: req.user.role
+			});
 		} else {
-			req.flash('nothingToShow', 'There are no merchandise in the system!')
-			res.render('admin/adminMerchandise', { merchandise: values, nothing: req.flash('nothingToShow') })
+			req.flash('nothingToShow', 'There are no merchandise in the system!');
+			res.render('admin/adminMerchandise', {
+				admin: req.user.name,
+				merchandise: values,
+				nothing: req.flash('nothingToShow')
+			});
 		}
 	} catch (e) {
 		console.log(e);
-
 	}
-
-})
+});
 
 //delete Merchandise from the system
 router.get('/admin/deleteMerchandise/:id', isauthenticated, isAdmin, async (req, res) => {
-
 	try {
-		const deleted = await merchandiseDA.deleteMerchandise(req.params.id)
+		const deleted = await merchandiseDA.deleteMerchandise(req.params.id);
 		if (deleted) {
-			req.flash('deleted', 'Item has been deleted...')
+			req.flash('deleted', 'Item has been deleted...');
 			res.redirect(req.get('referer'));
 		}
 	} catch (error) {
-
+		req.flash('deleteErr', 'Something Went Wrong While Deleting!');
+		res.redirect(req.get('referer'));
 	}
-
-})
-
-
+});
 
 //update an existing Merchandise in the system
 router.get('/admin/updateMerchandisePage', isauthenticated, isAdmin, async (req, res) => {
 	const item = await Merchandise.findById(req.query.value);
-	res.render('admin/updateMerchandise', { value: item ,admin:1})
-})
+	res.render('admin/updateMerchandise', { value: item, admin: 1 });
+});
 
 router.post('/admin/updateMerchandise/:id', isauthenticated, isAdmin, async (req, res) => {
 	//logic goes here
 	try {
 		const updated = await Merchandise.findByIdAndUpdate(req.params.id, req.body);
-		req.flash('updateSuccess', 'Item has been updated and saved successfully!')
+		req.flash('updateSuccess', 'Item has been updated and saved successfully!');
 		res.redirect('/admin/viewMerchandise');
-	} catch (error) {
-
-	}
-
-
-})
+	} catch (error) {}
+});
 
 //=============================
-
-
-
-
-
-
 
 //****************************//
 // Author of this Code:
 // Sheref Abolmagd
 // matic number goes here**
 //****************************//
-
-
-
 
 //Equipment Route//
 router.get('/admin/addEquipmentPage', isauthenticated, isAdmin, (req, res) => {
@@ -349,7 +342,6 @@ router.post('/admin/updateEquipment/:id', isauthenticated, isAdmin, async (req, 
 	res.redirect('/admin/viewEquipmentPage');
 });
 
-
 //Personal Training Routes
 //view training page
 router.get('/admin/viewTrainingPage', isauthenticated, isAdmin, async (req, res) => {
@@ -360,14 +352,14 @@ router.get('/admin/viewTrainingPage', isauthenticated, isAdmin, async (req, res)
 	const trainers = await userDA.fetchEmployees();
 	if (training.length < 1) {
 		req.flash('noView', 'No packages to View!');
-		res.render('admin/viewTraining', {
+		res.render('admin/PersonalTraining', {
 			noView: req.flash('noView'),
 			admin: user,
 			deleted: req.flash('deleted'),
 			failure: req.flash('failure')
 		});
 	} else {
-		res.render('admin/viewTraining', {
+		res.render('admin/PersonalTraining', {
 			training,
 			trainers,
 			admin: user,
@@ -385,7 +377,7 @@ router.get('/admin/addTrainingPage', isauthenticated, isAdmin, async (req, res) 
 	//get a list of all users that are admin
 	const trainers = await userDA.fetchEmployees();
 
-	res.render('admin/addTraining', { admin: user, trainers, failure: req.flash('failure') });
+	res.render('admin/PersonalTraining', { admin: user, trainers, failure: req.flash('failure') });
 });
 //add training packages
 router.post('/admin/addTraining', isauthenticated, isAdmin, async (req, res) => {
@@ -424,36 +416,45 @@ router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, re
 	//failure
 	if (!val) {
 		req.flash('failure', 'Package has been deleted unsuccessfully!');
-		res.render('/admin/viewTrainingPage');
+		res.redirect('/admin/viewTrainingPage');
 	} else {
 		//successs
 		req.flash('deleted', 'Package has been deleted Successfully!');
 		res.redirect('/admin/viewTrainingPage');
 	}
 });
+
+router.get('/admin/addPackagePage', isauthenticated, isAdmin, (req, res) => {
+	res.render('admin/addPackage');
+});
+router.post('/admin/addPackages', isauthenticated, isAdmin, async (req, res) => {
+	await Package.savePackage(req.body);
+	res.redirect(req.get('referrer'));
+});
+
 //update packages like trainer and cost
 
 //Workout add Routine View
-router.get(('/admin/workoutRoutine'), isauthenticated, isAdmin, async(req,res) => {
+router.get('/admin/workoutRoutine', isauthenticated, isAdmin, async (req, res) => {
 	const user = req.user;
-	user.password = ''; 
+	user.password = '';
 	const wrs = await workoutRoutineDA.viewWR();
-	res.render('admin/workoutRoutine', {wrs: wrs, admin: user});
+	res.render('admin/workoutRoutine', { wrs: wrs, admin: user });
 });
 
 //Upload File
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-	  cb(null, './public/images/upload/')
+		cb(null, './public/images/upload/');
 	},
 	filename: (req, file, cb) => {
-	  cb(null, file.fieldname + '-' + Date.now() + "." + file.mimetype.substring(file.mimetype.search("/") + 1));
+		cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.substring(file.mimetype.search('/') + 1));
 	}
 });
-var upload = multer({storage: storage});
+var upload = multer({ storage: storage });
 
 //Workout add Routine
-router.post(('/admin/addWorkoutRoutine'), isauthenticated, isAdmin, upload.single('img_path'), async(req,res) => {
+router.post('/admin/addWorkoutRoutine', isauthenticated, isAdmin, upload.single('img_path'), async (req, res) => {
 	const user = req.user;
 	user.password = '';
 	req.body.img_path = req.file.filename;
@@ -463,19 +464,17 @@ router.post(('/admin/addWorkoutRoutine'), isauthenticated, isAdmin, upload.singl
 });
 
 //Workout update Routine
-router.post(('/admin/updateWorkoutRoutine'), isauthenticated, isAdmin, async(req,res,error) => {
+router.post('/admin/updateWorkoutRoutine', isauthenticated, isAdmin, async (req, res, error) => {
 	console.log(req.body);
-	if(req.body.action == 'Update'){
+	if (req.body.action == 'Update') {
 		console.log('upd');
 		const del = await workoutRoutineDA.updateWR(req.body.id, req.body);
-	}else if(req.body.action == 'Delete'){
+	} else if (req.body.action == 'Delete') {
 		console.log('dle');
 		await workoutRoutineDA.DelWR(req.body.id);
 	}
 	res.redirect('/admin/workoutRoutine');
 });
-
-
 
 //Loading an error page if coming request does not matches with
 //any of the above configured routes
@@ -483,10 +482,5 @@ router.post(('/admin/updateWorkoutRoutine'), isauthenticated, isAdmin, async(req
 router.get('/admin/*', (req, res) => {
 	res.render('errorPage');
 });
-
-
-
-
-
 
 module.exports = router;
