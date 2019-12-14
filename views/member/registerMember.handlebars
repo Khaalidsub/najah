@@ -17,11 +17,11 @@
       <form action="/member/register" method="post">
         <div class="form-group">
           <label for="name">Name</label>
-          <input type="name" id="name" name="name" class="form-control" placeholder="Enter name" />
+          <input type="name" id="name" name="name" class="form-control" placeholder="Enter name" required>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email" />
+          <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email"required />
         </div>
         <div class="form-group">
           <label for="name">IC</label>
@@ -30,7 +30,7 @@
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" />
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" required minlength="9"/>
         </div>
         <div class="form-group">
 
@@ -44,9 +44,9 @@
 
         <div class="form-group">
           <label for="Type">Phone</label>
-          <input type="phone" id="phone" name="phone" class="form-control" placeholder="Enter Phone number" />
+          <input type="phone" id="phone" name="phone" class="form-control" placeholder="Enter Phone number" required/>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+        <button type="submit" class="btn btn-primary btn">Register</button>
       </form>
       <p class="lead mt-4">
         Already have an Account? <a href="/loginPage">Login</a>
@@ -55,9 +55,4 @@
   </div>
 </div>
 
-</body>
 
-</html>
-<script>
-
-</script>

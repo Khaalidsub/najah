@@ -49,32 +49,35 @@ router.post(
 			} else {
 				//check last payment date and current date
 				const payment = await paymentDA.getPayment(req.user.id);
-				//sort
-				const sortedTransaction = payment.transactions.reverse();
-				//if payment is above 30 days:
 
-				const prevDate = new Date(sortedTransaction[0].Date).getTime();
+				if (payment) {
+					//sort
+					const sortedTransaction = payment.transactions.reverse();
+					//if payment is above 30 days:
 
-				const currDate = new Date().getTime();
+					const prevDate = new Date(sortedTransaction[0].Date).getTime();
 
-				console.log(currDate, '  ', prevDate);
+					const currDate = new Date().getTime();
 
-				const differenceTime = currDate - prevDate;
-				const differenceDays = differenceTime / (1000 * 3600 * 24);
+					console.log(currDate, '  ', prevDate);
 
-				console.log('timeee', differenceDays);
-				if (differenceDays > 30) {
-					// check for the package user registered
-					//console.log('user');
+					const differenceTime = currDate - prevDate;
+					const differenceDays = differenceTime / (1000 * 3600 * 24);
 
-					const package = await PackageDA.getPackage(req.user.package);
-					const cost = package.price;
-					//problem arising : payment is stil above 30 and he logs in,payment add again
+					console.log('timeee', differenceDays);
+					if (differenceDays > 30) {
+						// check for the package user registered
+						//console.log('user');
 
-					// if (cost >= payment.amount) {
-					// }
-					// check the price and add it in the payment amount
-					const updatedPayment = await paymentDA.updatePayment(req.user.id, cost);
+						const package = await PackageDA.getPackage(req.user.package);
+						const cost = package.price;
+						//problem arising : payment is stil above 30 and he logs in,payment add again
+
+						// if (cost >= payment.amount) {
+						// }
+						// check the price and add it in the payment amount
+						const updatedPayment = await paymentDA.updatePayment(req.user.id, cost);
+					}
 				}
 
 				res.redirect('/member/memberProfile');

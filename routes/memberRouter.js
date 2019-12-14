@@ -27,8 +27,7 @@ const checkoutNodeJssdk = require('@paypal/checkout-server-sdk');
 const payPalClient = require('../config/paypal');
 
 const PackageDA = require('../viewModel/packagesDA');
-const connectEmail = require('../config/mail');
-
+const sendMail = require('../middlewares/email');
 //registerpage
 router.get('/member/registerPage', (req, res) => {
 	//for navigation recognition
@@ -74,44 +73,22 @@ router.post('/member/register', async (req, res) => {
 	//console.log(user.email);
 
 	try {
-		if (!req.user == null) {
-			if (req.user.role == 'admin') {
-				await userDA.registerMember(user);
-				user.status = 'active';
-			} else {
-				console.log(req.user);
-			}
+		if (req.user) {
+			console.log(req.user);
+			user.status = 'active';
+			await userDA.registerMember(user);
 		} else {
 			user.status = 'pending';
 			await userDA.registerMember(user);
 			application = await applicationDA.addApplication(user); // saving the application
 		}
-		//connecting with the email proxy
-		const mailer = await connectEmail.connect;
-		try {
-			//sending mail to the user email
+		//sending email
+		await sendMail.sendUser(user);
 
-			await mailer.sendMail({
-				from: 'khaalidsubaan@gmail.com',
-				to: user.email,
-				subject: 'Registration Najah Complete',
-				text:
-					'Thank you for applying to najah gym. Your application is in the process and we will response to you shortly!',
-				dsn: {
-					id: 'some random message specific id',
-					return: 'headers',
-					notify: [ 'failure', 'delay' ],
-					recipient: 'khaalidsubaan@gmail.com'
-				}
-			});
-		} catch (error) {
-			console.log(error);
-		}
-		if (!req.user == null) {
-			if (req.user.role == 'admin') {
-				req.flash('registered', 'The member has been registered successfully!');
-				res.redirect('/admin/viewMembers');
-			}
+		//redirection routes  for both admin and user
+		if (req.user) {
+			req.flash('searchsuccess', 'The member has been registered successfully!');
+			res.redirect('/admin/viewMembers');
 		} else {
 			req.flash('registered', 'We have sent you an email and it should have reached you by now!');
 			user.password = '';
@@ -122,7 +99,7 @@ router.post('/member/register', async (req, res) => {
 			});
 		}
 	} catch (error) {
-		req.flash('email', 'User email already exists !');
+		req.flash('emailError', 'User email already exists !');
 		res.redirect(req.get('referer'));
 	}
 });
