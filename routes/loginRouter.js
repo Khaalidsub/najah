@@ -50,7 +50,7 @@ router.post(
 				//check last payment date and current date
 				const payment = await paymentDA.getPayment(req.user.id);
 
-				if (payment) {
+				if (payment.transactions.length > 0) {
 					//sort
 					const sortedTransaction = payment.transactions.reverse();
 					//if payment is above 30 days:

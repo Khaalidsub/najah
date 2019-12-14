@@ -255,7 +255,7 @@ router.post('/member/quitTraining/:id', isauthenticated, isUser, async (req, res
 // his parents and followed his own path and succeeded xD XD XD
 //view all merchandise
 
-router.get('/user/shop', isauthenticated, isUser, async (req, res) => {
+router.get('/member/shop', isauthenticated, isUser, async (req, res) => {
 	try {
 		//chunking the array for better front end rendering
 		const vals = await merchandiseDA.fetchMerchandise(req.user.role);
