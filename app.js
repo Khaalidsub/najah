@@ -2,8 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const User = require('./models/User');
-const Cart = require('./models/cart')
-require('./models/Merchandise')
+const Cart = require('./models/cart');
+require('./models/Package');
+require('./models/Merchandise');
 const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
@@ -57,7 +58,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public/images'));
 app.use(express.static('public/products'));
 app.use(express.static('public/stylesheets'));
-app.use(express.static('public/javascripts'));
+
+app.use(express.static('public/js'));
 //app.use(express.static('public/assets'));
 //Passport middlewares for session handling
 app.use(passport.initialize());

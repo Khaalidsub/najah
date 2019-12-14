@@ -54,7 +54,8 @@ const merchandise = new mongoose.Schema({
 });
 
 merchandise.pre('remove', async function (next){
-    const path = this.avatar;
+    const path = "public/products/"+this.avatar;
+    
      fs.unlinkSync(path)
     next()  
 })

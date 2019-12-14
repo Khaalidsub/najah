@@ -7,6 +7,7 @@
 		"dev": "nodemon app.js"
 	},
 	"dependencies": {
+		"@paypal/checkout-server-sdk": "^1.0.2",
 		"bcrypt": "^3.0.6",
 		"body-parser": "^1.19.0",
 		"connect-flash": "^0.1.1",
@@ -26,6 +27,9 @@
 		"passport": "^0.4.0",
 		"passport-facebook": "^3.0.0",
 		"passport-local": "^1.0.0",
+		"paypal-checkout": "^4.0.305",
+		"paypal-rest-sdk": "^1.8.1",
+		"print-js": "^1.0.63",
 		"validator": "^11.1.0"
 	},
 	"devDependencies": {

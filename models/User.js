@@ -3,10 +3,7 @@
 // Muhammad Adeen Rabbani
 // A17CS4006
 //****************************//
-//****************************// 
-
-
-
+//****************************//
 
 const mongoose = require('mongoose');
 const validator = require('validator');
@@ -33,7 +30,7 @@ const userSchema = new mongoose.Schema(
 		gender: {
 			type: String,
 			requried: true,
-			default: undefined
+			enum: [ 'male', 'female' ]
 		},
 		email: {
 			type: String,
@@ -70,13 +67,13 @@ const userSchema = new mongoose.Schema(
 		status: {
 			type: String,
 			default: undefined,
-			enum: ['active', 'deactivated', 'pending']
+			enum: [ 'active', 'deactivated', 'pending' ]
 		},
 		//roles will be assigned by the server.
 		role: {
 			type: String,
 			requried: true,
-			enum: ['user', 'admin']
+			enum: [ 'user', 'admin' ]
 		},
 		imageProfile: {
 			type: String,
@@ -88,6 +85,11 @@ const userSchema = new mongoose.Schema(
 			required: false,
 			default: undefined,
 			ref: 'Training'
+		},
+		package: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: false,
+			ref: 'Package'
 		}
 	},
 	{
@@ -109,16 +111,22 @@ userSchema.virtual('training', {
 	foreignField: 'trainer',
 	justOne: true
 });
+//this method is connecting witrh the Payment table during runtime
+userSchema.virtual('payment', {
+	ref: 'Payment',
+	localField: '_id',
+	foreignField: 'member'
+});
 
 //connecting with the cart model .
-userSchema.virtual('cartItems',{
+userSchema.virtual('cartItems', {
 	ref: 'cart',
 	localField: '_id',
-	foreignField:'customer',
-	count:false
-})
+	foreignField: 'customer',
+	count: false
+});
 //This method will make sure, the password is hashed before saving into the database
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function(next) {
 	const user = this;
 	console.log(user);
 	if (user.isModified('password') || user.password) {
@@ -127,7 +135,7 @@ userSchema.pre('save', async function (next) {
 	next();
 });
 
-userSchema.pre('remove', async function (next) {
+userSchema.pre('remove', async function(next) {
 	//Later we have to put here the logic that
 	//when ever the user is romoved, delete all his applications
 	//before deleting
