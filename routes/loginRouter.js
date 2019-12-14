@@ -69,6 +69,10 @@ router.post(
 
 					const package = await PackageDA.getPackage(req.user.package);
 					const cost = package.price;
+					//problem arising : payment is stil above 30 and he logs in,payment add again
+
+					// if (cost >= payment.amount) {
+					// }
 					// check the price and add it in the payment amount
 					const updatedPayment = await paymentDA.updatePayment(req.user.id, cost);
 				}
