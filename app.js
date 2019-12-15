@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const session = require('express-session');
 const User = require('./models/User');
 const Cart = require('./models/cart');
 require('./models/Package');
@@ -9,11 +10,11 @@ const auth = require('./middlewares/checkAuthentication');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
 const employeeroute = require('./routes/employeeRouter');
-
+const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
-const session = require('express-session');
 
 require('./config/passport')(passport);
+
 require('./config/mongoose'); // to initialize mongoose and mongodb connection
 //const db = require('./config/keys').MongoURI;
 
@@ -42,11 +43,14 @@ app.use(express.json());
 app.use(require('body-parser').urlencoded({ extended: false }));
 
 //creating express session object
-
+//mongostore  to save session in the databse for future purposes
+mongoose.Promise = global.Promise;
+const db = mongoose.connection;
 //**Session EXPIRE TIME NEED TO BE ADDED***
 app.use(
 	session({
 		secret: 'HarryPotty',
+		store: new MongoStore({ mongooseConnection: db }),
 		saveUninitialized: false,
 		resave: false
 		//cookie:{_expires: 12000}
