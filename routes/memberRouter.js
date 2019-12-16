@@ -425,7 +425,7 @@ router.get('/member/subscription/:id', isauthenticated, isUser, async (req, res)
 		const package = await PackageDA.getPackage(id);
 		//create payment document for that user
 		const response = await paymentDA.createPayment(req.user.id, package.price);
-		req.flash('packageSuccess', 'Package successfully subscribed! GO PAY MY DICK');
+		req.flash('packageSuccess', 'Package successfully subscribed!');
 		res.redirect(req.get('referer'));
 	}
 });
@@ -444,7 +444,10 @@ router.get('/member/paymentHistory', isauthenticated, async (req, res) => {
 	//get the payment table for that certain user
 	const payment = await paymentDA.fetchPayments(req.user.id);
 	//display the outstanding balance etc
-	res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
+	if(payment)
+		res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
+	else
+		res.render('member/PaymentHistory', { profile, transactions: null });
 });
 router.get('/member/printPayment/:id', isauthenticated, async (req, res) => {
 	const profile = req.user;
