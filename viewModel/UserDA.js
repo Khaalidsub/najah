@@ -74,8 +74,11 @@ const fetchEmployees = async () => {
 };
 const deleteMember = async function(id) {
 	try {
-		const deletedMember = await User.findByIdAndDelete(id);
-		if (!deleteMember) {
+		const deletedMember = await User.findById(id);
+	
+		await deletedMember.remove();
+		if (!deletedMember) {
+			
 			throw new Error();
 		} else return deletedMember;
 	} catch (error) {

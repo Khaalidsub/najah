@@ -111,7 +111,7 @@ router.get('/admin/viewMembers', isauthenticated, isAdmin, async (req, res) => {
 	const user = req.user;
 	user.password = '';
 
-	if (members == null) {
+	if (members === null) {
 		req.flash('noView', 'There are no members Registered!');
 		res.render('admin/MembersView', {
 			noView: req.flash('noView'),
