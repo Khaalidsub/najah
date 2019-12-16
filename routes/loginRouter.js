@@ -49,9 +49,10 @@ router.post(
 			} else {
 				//check last payment date and current date
 				const payment = await paymentDA.getPayment(req.user.id);
-
-				if (payment) {
+				console.log(payment);
+					if (payment.transactions.length > 0) {
 					//sort
+					
 					const sortedTransaction = payment.transactions.reverse();
 					//if payment is above 30 days:
 
@@ -96,6 +97,18 @@ router.get('/logout', isauthenticated, async (req, res) => {
 	//delete req.session
 	console.log('logged out ' + req.user.name);
 	res.render('Home');
+});
+
+router.get('/attendence/:id', async (req,res) => {
+	console.log(req.params.id);
+	const user = await userDA.findByCard(req.params.id);
+	console.log(user);
+	const pay = await paymentDA.findPaymentById(user._id);
+	const name = user.name.toString();
+	const amount = pay.amount.toString();
+	const det = {name, amount};
+	
+	res.send(det);
 });
 
 module.exports = router;

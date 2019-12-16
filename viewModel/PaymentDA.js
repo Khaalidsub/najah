@@ -68,10 +68,16 @@ const completePayment = async (userid, transaction) => {
 	}
 };
 
+const findPaymentById = async (id) => {
+	const pay = await Payment.findOne({member: id})
+	return pay;
+};
+
 module.exports = {
 	createPayment,
 	updatePayment,
 	getPayment,
 	completePayment,
-	fetchPayments
+	fetchPayments,
+	findPaymentById
 };
