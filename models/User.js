@@ -90,6 +90,16 @@ const userSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			required: false,
 			ref: 'Package'
+		},
+		code: {
+			type: String,
+			required: false,
+			default: undefined,
+		},
+		attendance: {
+			type: Date,
+			required: false,
+			default: undefined,
 		}
 	},
 	{
