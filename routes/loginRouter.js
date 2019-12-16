@@ -50,34 +50,36 @@ router.post(
 				//check last payment date and current date
 				const payment = await paymentDA.getPayment(req.user.id);
 				console.log(payment);
-					if (payment.transactions.length > 0) {
-					//sort
-					
-					const sortedTransaction = payment.transactions.reverse();
-					//if payment is above 30 days:
+					if(payment){
+						if (payment.transactions.length > 0) {
+						//sort
+						
+						const sortedTransaction = payment.transactions.reverse();
+						//if payment is above 30 days:
 
-					const prevDate = new Date(sortedTransaction[0].Date).getTime();
+						const prevDate = new Date(sortedTransaction[0].Date).getTime();
 
-					const currDate = new Date().getTime();
+						const currDate = new Date().getTime();
 
-					console.log(currDate, '  ', prevDate);
+						console.log(currDate, '  ', prevDate);
 
-					const differenceTime = currDate - prevDate;
-					const differenceDays = differenceTime / (1000 * 3600 * 24);
+						const differenceTime = currDate - prevDate;
+						const differenceDays = differenceTime / (1000 * 3600 * 24);
 
-					console.log('timeee', differenceDays);
-					if (differenceDays > 30) {
-						// check for the package user registered
-						//console.log('user');
+						console.log('timeee', differenceDays);
+						if (differenceDays > 30) {
+							// check for the package user registered
+							//console.log('user');
 
-						const package = await PackageDA.getPackage(req.user.package);
-						const cost = package.price;
-						//problem arising : payment is stil above 30 and he logs in,payment add again
+							const package = await PackageDA.getPackage(req.user.package);
+							const cost = package.price;
+							//problem arising : payment is stil above 30 and he logs in,payment add again
 
-						// if (cost >= payment.amount) {
-						// }
-						// check the price and add it in the payment amount
-						const updatedPayment = await paymentDA.updatePayment(req.user.id, cost);
+							// if (cost >= payment.amount) {
+							// }
+							// check the price and add it in the payment amount
+							const updatedPayment = await paymentDA.updatePayment(req.user.id, cost);
+						}
 					}
 				}
 
