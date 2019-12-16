@@ -74,8 +74,11 @@ const fetchEmployees = async () => {
 };
 const deleteMember = async function(id) {
 	try {
-		const deletedMember = await User.findByIdAndDelete(id);
-		if (!deleteMember) {
+		const deletedMember = await User.findById(id);
+	
+		await deletedMember.remove();
+		if (!deletedMember) {
+			
 			throw new Error();
 		} else return deletedMember;
 	} catch (error) {
@@ -125,6 +128,13 @@ const addPackage = async (id, userId) => {
 	return val;
 };
 
+const findByCardId = async (id) =>{
+	const user = await User.findOneAndUpdate({code: id}, {$set:{attendance: Date.now()}}, {new: true});
+	console.log(Date.now());
+	return user;		
+};
+
+
 module.exports = {
 	registerMember: registerMember,
 	registerEmployee: registerEmployee,
@@ -135,6 +145,7 @@ module.exports = {
 	fetchEmployees: fetchEmployees,
 	deleteMember: deleteMember,
 	useractive: useractive,
+	findByCard: findByCardId,
 	addPackage,
 	joinTraining,
 	quitTraining

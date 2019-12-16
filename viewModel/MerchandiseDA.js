@@ -32,7 +32,7 @@ try{
 deleteMerchandise = async function(id){
   try {
      const item = await Merchandise.findById(id)
-     item.remove();
+     item.remove();//remove is used to trigger middleware!
      return item
      
   } catch (error) {
