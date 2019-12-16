@@ -3,11 +3,15 @@
 // Muhammad Adeen Rabbani
 // A17CS4006
 //****************************//
-//****************************//
+//****************************// 
 
+
+
+const APP = require('../models/Application');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+
 
 const userSchema = new mongoose.Schema(
 	{
@@ -148,7 +152,11 @@ userSchema.pre('save', async function(next) {
 userSchema.pre('remove', async function(next) {
 	//Later we have to put here the logic that
 	//when ever the user is romoved, delete all his applications
-	//before deleting
+	//before deletingddd
+	console.log(this._id)
+ 	await APP.findOneAndDelete({owner:this._id});
+	next();
+	
 });
 
 //creating databasel model
