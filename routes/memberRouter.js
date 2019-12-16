@@ -20,6 +20,7 @@ const Training = require('../models/PersonalTraining');
 const trainingDA = require('../viewModel/PersonalTrainingDA');
 const paymentDA = require('../viewModel/PaymentDA');
 const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
+const connectEmail = require('../config/mail');
 const Cart = require('../models/cart');
 
 //paypal
@@ -486,10 +487,10 @@ router.post('/member/pay', isauthenticated, async (req, res) => {
 
 	//save it to the payment so it can be retrieved once it has been refreshed
 	const invoice = { orderID, name, payerid, email, amount, payerid, reason };
-	console.log(invoice);
+
 	//save the transaction into the payment db and make amount into null
 	const updatedPayment = await paymentDA.completePayment(req.user.id, invoice);
-
+	const sendInvoice = await sendMail.sendTransaction(invoice);
 	res.sendStatus(200);
 	//console.log('transaction', Math.round(order.result.purchase_units[0].amount.value));
 });
