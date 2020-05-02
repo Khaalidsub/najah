@@ -177,7 +177,7 @@ router.get('/admin/adminProfile', isauthenticated, isAdmin, (req, res) => {
 //Merchandise admin controls starts here!
 //admin view merchandise
 
-router.get('/admin/addMerchandisePage', isauthenticated, isAdmin, async (req, res) => {
+router.get('/admin/addMerchandise', isauthenticated, isAdmin, async (req, res) => {
 	res.render('addMerchandise', {
 		imageError: req.flash('imageError'),
 		addMerchandise: req.flash('addMerchandise'),
@@ -425,7 +425,8 @@ router.get('/admin/deleteTraining/:id', isauthenticated, isAdmin, async (req, re
 });
 
 router.get('/admin/addPackagePage', isauthenticated, isAdmin, (req, res) => {
-	res.render('admin/addPackage');
+	const user = req.user;
+	res.render('admin/addPackage', { admin: user });
 });
 router.post('/admin/addPackages', isauthenticated, isAdmin, async (req, res) => {
 	await Package.savePackage(req.body);
