@@ -12,22 +12,6 @@
 {{!-- <button id="{{@index}}"  name="button1" type="button" class="btn btn-primary" data-toggle="modal" 
           data-target="#myModal">View Application</button> --}}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-  <head>
-    <link rel="stylesheet" href="/public/stylesheets/confirmModal.css">
-    {{!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> --}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
-  </head>
-</head>
-<title>Document</title>
-</head>
-
 <body>
 <br>
 <br>
@@ -122,7 +106,6 @@
     </div>
 
   </div>
-  </div>
 
 </body>
 
@@ -162,6 +145,9 @@
       <a href="/admin/performAction/${app[id]._id}/delete" onclick="doConfirm(event)" name="delete" title="Delete Applicaiton" id="3" type="button" class="action "><i class=" btn btn-danger fa fa-trash" aria-hidden="true" style="font-size:28px"></i></a>
         </form>
       `;
+  
+
+  
 
   $('.modal-body').html(html)
   })
