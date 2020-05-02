@@ -100,6 +100,8 @@ router.post('/member/register', async (req, res) => {
 			});
 		}
 	} catch (error) {
+		console.log(error);
+
 		req.flash('emailError', 'User email already exists !');
 		res.redirect(req.get('referer'));
 	}
@@ -444,10 +446,8 @@ router.get('/member/paymentHistory', isauthenticated, async (req, res) => {
 	//get the payment table for that certain user
 	const payment = await paymentDA.fetchPayments(req.user.id);
 	//display the outstanding balance etc
-	if(payment)
-		res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
-	else
-		res.render('member/PaymentHistory', { profile, transactions: null });
+	if (payment) res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
+	else res.render('member/PaymentHistory', { profile, transactions: null });
 });
 router.get('/member/printPayment/:id', isauthenticated, async (req, res) => {
 	const profile = req.user;
