@@ -9,6 +9,4 @@ const credentials = require('./credentials');
 
 //connect mail transport
 
-
-
-module.exports = { connect: transporter };
+// module.exports = { connect: transporter };
