@@ -50,10 +50,10 @@ router.post(
 				//check last payment date and current date
 				const payment = await paymentDA.getPayment(req.user.id);
 				console.log(payment);
-					if(payment){
-						if (payment.transactions.length > 0) {
+				if (payment) {
+					if (payment.transactions.length > 0) {
 						//sort
-						
+
 						const sortedTransaction = payment.transactions.reverse();
 						//if payment is above 30 days:
 
@@ -93,6 +93,25 @@ router.post(
 	}
 );
 
+router.get('/recoveryPage', (req, res) => {
+	res.render('recoveryPage', { emailError: req.flash('emailError'), emailSuccess: req.flash('emailSuccess') });
+});
+
+router.post('/recovery', async (req, res) => {
+	const email = req.body.email;
+	try {
+		const response = await userDA.passwordRecovery(email);
+		if (response != null) {
+			req.flash('emailError', 'Email Does not Exist!');
+		} else res.flash('emailSuccess', 'Email Does not Exist!');
+
+		req.get('referer');
+	} catch (error) {
+		console.log(error);
+		res.flash('emailError', error);
+	}
+});
+
 router.get('/logout', isauthenticated, async (req, res) => {
 	await req.session.destroy();
 	console.log(req.session);
@@ -101,15 +120,15 @@ router.get('/logout', isauthenticated, async (req, res) => {
 	res.render('Home');
 });
 
-router.get('/attendence/:id', async (req,res) => {
+router.get('/attendence/:id', async (req, res) => {
 	console.log(req.params.id);
 	const user = await userDA.findByCard(req.params.id);
 	console.log(user);
 	const pay = await paymentDA.findPaymentById(user._id);
 	const name = user.name.toString();
 	const amount = pay.amount.toString();
-	const det = {name, amount};
-	
+	const det = { name, amount };
+
 	res.send(det);
 });
 

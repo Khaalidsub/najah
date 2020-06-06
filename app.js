@@ -81,6 +81,17 @@ app.use(userroute);
 app.use(memberroute);
 app.use(employeeroute);
 
+if (process.env.NODE_ENV === 'production') {
+	console.log('environment', port);
+
+	app.use('/newTown-Blog/', express.static('build'));
+	app.use(express.static('build/manifest.json'));
+	app.get('/*', (req, res) => {
+		//	console.log('response', res);
+
+		res.sendFile(path.join(__dirname, 'build', 'index.html'));
+	});
+}
 //server
 app.listen(port, () => {
 	console.log('the server is up and running at port ' + port);

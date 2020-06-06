@@ -126,8 +126,11 @@
                                         <h3>RM {{{cart.totalPrice}}}</h3>
                                     </h5>
                                 </li>
-                            </ul><a href="#" class="btn btn-dark rounded-pill py-3 btn-block"
-                                style="background-color: rgb(255, 60, 0);">Place Order</a>
+                            </ul>
+                            <form action="/member/placeOrder" method="post">
+                            <button type="submit"  href="/member/placeOrder" class="btn btn-dark rounded-pill py-3 btn-block"
+                                style="background-color: rgb(255, 60, 0);">Place Order</button>
+                                </form>
                         </div>
                     </div>
                 </div>

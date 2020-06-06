@@ -106,6 +106,7 @@ router.post('/member/register', async (req, res) => {
 		res.redirect(req.get('referer'));
 	}
 });
+
 router.post('/member/updateMember', isauthenticated, isUser, async (req, res) => {
 	//const user = new User(req.)
 	const user = req.user;
@@ -275,7 +276,9 @@ router.get('/member/shop', isauthenticated, isUser, async (req, res) => {
 			profile: req.user.name,
 			val: req.session.vals
 		});
-	} catch (e) {}
+	} catch (e) {
+		console.log(e);
+	}
 });
 
 router.get('/add-to-cart/:id', isauthenticated, async (req, res) => {
@@ -311,6 +314,7 @@ router.get('/add-to-cart/:id', isauthenticated, async (req, res) => {
 			//console.log(item);
 			foundCart.items.push(item);
 			await foundCart.save();
+			localStorage.getItem();
 		}
 	} else {
 		//create the new cart for the customer carting first time
@@ -325,6 +329,7 @@ router.get('/add-to-cart/:id', isauthenticated, async (req, res) => {
 		cart.customer = req.user.id;
 		cart.items.push(item);
 		await cart.save(); //document method
+		localStorage.setItem();
 	}
 	req.flash('cart-success', 'Item has been added successfully :)');
 	res.redirect(req.get('referer'));
@@ -350,7 +355,7 @@ router.get('/viewcart', isauthenticated, async (req, res) => {
 		}); //REMOVE THE UNECCESSARY ITEM FROM THE SENDING OBJECT!
 	} else {
 		req.flash('no_items', 'Your Cart is Empty, Continue Shopping!');
-		res.redirect('/user/shop');
+		res.redirect('/member/shop');
 	}
 });
 
@@ -386,6 +391,9 @@ router.get('/checkout', isauthenticated, async (req, res) => {
 	const cart = await Cart.findOne({ customer: req.user.id });
 	//console.log(res.locals.val);
 	await cart.populate('items.item', 'name avatar').execPopulate();
+
+	//set the local storage
+	req.session.cartPrice = cart.totalPrice;
 	//Do something for the avatar route that is going to be rendered on the front end!
 	res.render('checkout', {
 		cart: cart,
@@ -393,6 +401,18 @@ router.get('/checkout', isauthenticated, async (req, res) => {
 		profile: req.user.name
 	});
 });
+
+router.post('/member/placeOrder', isauthenticated, async (req, res) => {
+	const updated = await paymentDA.updatePayment(req.user.id, req.session.cartPrice);
+	if (updated) {
+		//remove the thing cart
+		await Cart.deleteOne({ customer: req.user.id });
+		req.session.vals = null;
+
+		res.redirect('/member/paymentPage');
+	} else console.log(updated);
+});
+
 router.get('/member/viewWorkoutRoutine', isauthenticated, async (req, res) => {
 	const user = req.user;
 	user.password = '';
