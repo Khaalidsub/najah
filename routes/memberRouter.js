@@ -29,6 +29,7 @@ const payPalClient = require('../config/paypal');
 
 const PackageDA = require('../viewModel/packagesDA');
 const sendMail = require('../middlewares/email');
+
 //registerpage
 router.get('/member/registerPage', (req, res) => {
     //for navigation recognition
@@ -315,7 +316,6 @@ router.get('/add-to-cart/:id', isauthenticated, async(req, res) => {
             //console.log(item);
             foundCart.items.push(item);
             await foundCart.save();
-            localStorage.getItem();
         }
     } else {
         //create the new cart for the customer carting first time
@@ -330,7 +330,6 @@ router.get('/add-to-cart/:id', isauthenticated, async(req, res) => {
         cart.customer = req.user.id;
         cart.items.push(item);
         await cart.save(); //document method
-        localStorage.setItem();
     }
     req.flash('cart-success', 'Item has been added successfully :)');
     res.redirect(req.get('referer'));
@@ -458,7 +457,7 @@ router.get('/member/subscription/:id', isauthenticated, isUser, async(req, res) 
 router.get('/member/paymentPage', isauthenticated, async(req, res) => {
     const profile = req.user;
     //get the payment table for that certain user
-    const payment = await paymentDA.getPayment(req.user.id);
+    const payment = await paymentDA.fetchPayments(req.user.id);
     //display the outstanding balance etc
     res.render('member/Payment', { profile, payment });
 });
@@ -480,7 +479,7 @@ router.get('/member/printPayment/:id', isauthenticated, async(req, res) => {
 
 router.post('/member/pay', isauthenticated, async(req, res) => {
     //getting the payment db
-    const payment = await paymentDA.getPayment(req.user.id);
+    const payment = await paymentDA.fetchPayments(req.user.id);
 
     //orderID
     const orderID = req.body.orderID;
