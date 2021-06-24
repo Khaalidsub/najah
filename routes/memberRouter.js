@@ -30,7 +30,7 @@ const payPalClient = require('../config/paypal');
 const PackageDA = require('../viewModel/packagesDA');
 const sendMail = require('../middlewares/email');
 //registerpage
-router.get('/member/registerPage', (req, res) => {
+router.get('/registerPage', (req, res) => {
     //for navigation recognition
     const user = req.user;
     if (!user == null) {
@@ -46,7 +46,7 @@ router.get('/member/registerPage', (req, res) => {
     }
 });
 //main dashboard
-router.get('/member/memberProfile', isauthenticated, isUser, async(req, res) => {
+router.get('/memberProfile', isauthenticated, isUser, async(req, res) => {
     const profile = req.user;
     profile.password = '';
     if (profile.trainingMember == undefined) {
@@ -64,7 +64,7 @@ router.get('/member/memberProfile', isauthenticated, isUser, async(req, res) => 
 });
 
 //registerhandler
-router.post('/member/register', async(req, res) => {
+router.post('/register', async(req, res) => {
     console.log(req.user);
 
     const user = new User(req.body); // instacne of user model
@@ -107,7 +107,7 @@ router.post('/member/register', async(req, res) => {
     }
 });
 
-router.post('/member/updateMember', isauthenticated, isUser, async(req, res) => {
+router.post('/updateMember', isauthenticated, isUser, async(req, res) => {
     //const user = new User(req.)
     const user = req.user;
 
@@ -127,7 +127,7 @@ router.post('/member/updateMember', isauthenticated, isUser, async(req, res) => 
     }
     res.render('member/memberMyProfile', { profile: user });
 });
-router.get('/member/memberMyProfile', isauthenticated, isUser, async(req, res) => {
+router.get('/memberMyProfile', isauthenticated, isUser, async(req, res) => {
     const profile = req.user;
     profile.password = '';
     if (profile.trainingMember == undefined) {
@@ -139,7 +139,7 @@ router.get('/member/memberMyProfile', isauthenticated, isUser, async(req, res) =
     }
 });
 
-router.post('/member/deactivateAccount', isauthenticated, isUser, async(req, res) => {
+router.post('/deactivateAccount', isauthenticated, isUser, async(req, res) => {
     const user = req.user;
     user.status = 'deactivated';
     try {
@@ -151,101 +151,6 @@ router.post('/member/deactivateAccount', isauthenticated, isUser, async(req, res
     //req.flash('email', 'User email already exists !');
     res.render('login');
 });
-
-//Personal Training Routes//
-//view Training
-router.get('/member/viewTrainingPage', isauthenticated, isUser, async(req, res) => {
-    const profile = req.user;
-    profile.password = '';
-    //get the size of weight loss
-    const weight = await Training.find({ type: 'weight-loss' });
-    //get the size of muscle gain
-    const muscle = await Training.find({ type: 'muscle-gain' });
-    //get the size of athlete
-    const athlete = await Training.find({ type: 'athlete' });
-
-    res.render('member/mainTraining', {
-        noView: req.flash('noView'),
-        profile,
-        weight,
-        muscle,
-        athlete,
-        failure: req.flash('failure')
-    });
-});
-router.get('/member/viewTraining', isauthenticated, isUser, async(req, res) => {
-    const profile = req.user;
-    profile.password = '';
-
-    const program = req.query.program;
-    console.log('Program ' + program);
-
-    const training = await trainingDA.fetchTraining(program);
-
-    const trainers = await userDA.fetchEmployees();
-    if (training.length < 1) {
-        req.flash('noView', 'No Trainings to View!');
-        res.render('member/viewTraining', {
-            noView: req.flash('noView'),
-            profile,
-            failure: req.flash('failure')
-        });
-    } else {
-        res.render('member/viewTraining', {
-            training,
-            profile,
-            deleted: req.flash('deleted'),
-            warning: req.flash('warning'),
-            failure: req.flash('failure'),
-            info: req.flash('info')
-        });
-    }
-});
-//join Training
-router.get('/member/joinTraining/:id', isauthenticated, isUser, async(req, res) => {
-    const id = req.params.id;
-
-    const user = req.user;
-
-    if (user.trainingMember == undefined) {
-        user.trainingMember = id;
-        //	let val = await userDA.joinTraining(user._id, id);
-        let val = await userDA.joinTraining(user._id, id);
-        if (!val) {
-            req.flash('failure', 'Package has not been added!');
-            res.render('/member/viewTrainingPage');
-        } else {
-            //successs
-            //get the training program to get the price
-            const trainPackage = await trainingDA.getTraining(id);
-
-            //add amount to the payment module
-            const response = await paymentDA.updatePayment(req.user.id, trainPackage.cost);
-
-            req.flash('warning', 'Package has been added into your system Successfully!');
-            res.redirect('/member/memberProfile');
-        }
-    } else {
-        req.flash('info', 'You already have another program! ');
-        res.redirect('/member/viewTrainingPage');
-    }
-});
-//quit training
-router.post('/member/quitTraining/:id', isauthenticated, isUser, async(req, res) => {
-    const id = req.params.id;
-    const user = req.user;
-    console.log('helo there here i am', id);
-    let val = await userDA.quitTraining(user._id, id);
-    if (!val) {
-        req.flash('failure', 'Package has not been added!');
-        res.render('/member/memberProfile');
-    } else {
-        //successs
-        req.flash('warning', 'Training Program has been removed from your account Successfully!');
-        res.redirect('/member/memberProfile');
-    }
-});
-
 //****************************//
 // Author of this Code:
 // Muhammad Adeen Rabbani
@@ -259,7 +164,7 @@ router.post('/member/quitTraining/:id', isauthenticated, isUser, async(req, res)
 // his parents and followed his own path and succeeded xD XD XD
 //view all merchandise
 
-router.get('/member/shop', isauthenticated, isUser, async(req, res) => {
+router.get('/shop', isauthenticated, isUser, async(req, res) => {
     try {
         //chunking the array for better front end rendering
         const vals = await merchandiseDA.fetchMerchandise(req.user.role);
@@ -403,7 +308,7 @@ router.get('/checkout', isauthenticated, async(req, res) => {
     });
 });
 
-router.post('/member/placeOrder', isauthenticated, async(req, res) => {
+router.post('/placeOrder', isauthenticated, async(req, res) => {
     const updated = await paymentDA.updatePayment(req.user.id, req.session.cartPrice);
     if (updated) {
         //remove the thing cart
@@ -414,7 +319,7 @@ router.post('/member/placeOrder', isauthenticated, async(req, res) => {
     } else console.log(updated);
 });
 
-router.get('/member/viewWorkoutRoutine', isauthenticated, async(req, res) => {
+router.get('/viewWorkoutRoutine', isauthenticated, async(req, res) => {
     const user = req.user;
     user.password = '';
     const wrs = await workoutRoutineDA.viewWR();
@@ -422,7 +327,7 @@ router.get('/member/viewWorkoutRoutine', isauthenticated, async(req, res) => {
 });
 //res.render('checkout', { cart: cart, user: user, profile: req.user.name });
 
-router.get('/member/viewPackages', isauthenticated, async(req, res) => {
+router.get('/viewPackages', isauthenticated, async(req, res) => {
     //console.log(req.user.gender);
     const pkgs = await PackageDA.fetchPackages(req.user.gender);
     if (pkgs == null) {
@@ -437,7 +342,7 @@ router.get('/member/viewPackages', isauthenticated, async(req, res) => {
     }
 });
 
-router.get('/member/subscription/:id', isauthenticated, isUser, async(req, res) => {
+router.get('/subscription/:id', isauthenticated, isUser, async(req, res) => {
     if (req.user.package) {
         req.flash('alrdyPackage', 'You have already registered one package! please come to the counter.');
         res.redirect(req.get('referer'));
@@ -455,14 +360,14 @@ router.get('/member/subscription/:id', isauthenticated, isUser, async(req, res) 
 
 //console.log(val);
 
-router.get('/member/paymentPage', isauthenticated, async(req, res) => {
+router.get('/paymentPage', isauthenticated, async(req, res) => {
     const profile = req.user;
     //get the payment table for that certain user
     const payment = await paymentDA.getPayment(req.user.id);
     //display the outstanding balance etc
     res.render('member/Payment', { profile, payment });
 });
-router.get('/member/paymentHistory', isauthenticated, async(req, res) => {
+router.get('/paymentHistory', isauthenticated, async(req, res) => {
     const profile = req.user;
     //get the payment table for that certain user
     const payment = await paymentDA.fetchPayments(req.user.id);
@@ -470,7 +375,7 @@ router.get('/member/paymentHistory', isauthenticated, async(req, res) => {
     if (payment) res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
     else res.render('member/PaymentHistory', { profile, transactions: null });
 });
-router.get('/member/printPayment/:id', isauthenticated, async(req, res) => {
+router.get('/printPayment/:id', isauthenticated, async(req, res) => {
     const profile = req.user;
     //get the payment table for that certain user
     const payment = await paymentDA.fetchPayments(req.user.id);
@@ -478,7 +383,7 @@ router.get('/member/printPayment/:id', isauthenticated, async(req, res) => {
     res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
 });
 
-router.post('/member/pay', isauthenticated, async(req, res) => {
+router.post('/pay', isauthenticated, async(req, res) => {
     //getting the payment db
     const payment = await paymentDA.getPayment(req.user.id);
 
@@ -522,15 +427,15 @@ router.post('/member/pay', isauthenticated, async(req, res) => {
 //Loading an error page if coming request does not matches with
 //any of the above configured routes
 //MAKE SURE WE PUT IT AT THE END OF ALL THE ROUTES
-router.get('/member/*', (req, res) => {
+router.get('/*', (req, res) => {
     res.render('errorPage');
 });
 
-router.get('/member/registerPage/*', (req, res) => {
+router.get('/registerPage/*', (req, res) => {
     res.render('errorPage');
 });
 
-router.get('/member/registerPage/*', (req, res) => {
+router.get('/registerPage/*', (req, res) => {
     res.render('errorPage');
 });
 
