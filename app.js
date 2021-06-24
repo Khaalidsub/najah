@@ -7,6 +7,7 @@ require('./models/Merchandise');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
 const employeeroute = require('./routes/employeeRouter');
+const paymentRoute = require('./routes/paymentRoute');
 const memberAdminRoute = require('./routes/memberRouter.admin');
 const merchandiseAdminRoute = require('./routes/merchandiseRouter.admin');
 const trainingAdminRoute = require('./routes/trainingRouter.admin');
@@ -83,7 +84,7 @@ app.use(passport.session());
 // All the route files, please Configure Here
 //login routes
 
-app.use(userroute);
+app.use(userroute,paymentRoute);
 app.use('/member',trainingMemberRoute,memberroute);
 app.use('/admin',memberAdminRoute,merchandiseAdminRoute,workoutRoutineAdminRoute,equipmentAdminRoute,trainingAdminRoute,employeeroute);
 
