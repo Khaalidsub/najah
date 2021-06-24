@@ -18,6 +18,8 @@ router.get('/', async (req, res) => {
 router.get('/loginpage', (req, res) => {
 	res.render('login', { error: req.flash('error') });
 });
+
+// ! LARGE METHOD
 router.post(
 	'/login',
 	passport.authenticate('local', { failureRedirect: '/loginPage', failureFlash: true }),

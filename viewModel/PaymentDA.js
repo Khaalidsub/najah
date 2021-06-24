@@ -34,7 +34,7 @@ const updatePayment = async (id, cost) => {
 		console.log(error);
 	}
 };
-
+// ! DUPLICATE 1
 const getPayment = async (id) => {
 	try {
 		const payment = await Payment.findOne({ member: id });
@@ -67,7 +67,7 @@ const completePayment = async (userid, transaction) => {
 		console.log(error);
 	}
 };
-
+// ! DUPLICATE 
 const findPaymentById = async (id) => {
 	const pay = await Payment.findOne({member: id})
 	return pay;

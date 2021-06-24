@@ -26,6 +26,7 @@ const passwordRecovery = async (email) => {
 		return await user.save();
 	} else return null;
 };
+
 const updateMember = async (user) => {
 	try {
 		//await User.u
@@ -62,7 +63,7 @@ const fetchMembers = async function() {
 		dbValues = await User.find({ role: 'user' }, { password: 0, role: 0 });
 		if (!dbValues) {
 			throw new Error();
-		}
+		}d
 		return dbValues;
 	} catch (error) {
 		return null;
