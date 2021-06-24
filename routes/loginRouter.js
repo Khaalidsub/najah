@@ -63,7 +63,7 @@ router.post(
                     res.render("login");
                     break;
                 default:
-                    const payment = await paymentDA.getPayment(profile.id);
+                    const payment = await paymentDA.fetchPayments(profile.id);
                     console.log(payment);
 
                     payment && (await checkPayment(payment, req)); // && is similar to if statement

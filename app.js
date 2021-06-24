@@ -7,6 +7,12 @@ require('./models/Merchandise');
 const userroute = require('./routes/loginRouter');
 const memberroute = require('./routes/memberRouter');
 const employeeroute = require('./routes/employeeRouter');
+const memberAdminRoute = require('./routes/memberRouter.admin');
+const merchandiseAdminRoute = require('./routes/merchandiseRouter.admin');
+const trainingAdminRoute = require('./routes/trainingRouter.admin');
+const equipmentAdminRoute = require('./routes/equipmentRouter.admin');
+const workoutRoutineAdminRoute = require('./routes/workoutRoutine.admin');
+const trainingMemberRoute = require('./routes/trainingRouter.member');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 
@@ -78,8 +84,8 @@ app.use(passport.session());
 //login routes
 
 app.use(userroute);
-app.use(memberroute);
-app.use(employeeroute);
+app.use('/member',trainingMemberRoute,memberroute);
+app.use('/admin',memberAdminRoute,merchandiseAdminRoute,workoutRoutineAdminRoute,equipmentAdminRoute,trainingAdminRoute,employeeroute);
 
 if (process.env.NODE_ENV === 'production') {
 	console.log('environment', port);
