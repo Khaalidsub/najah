@@ -1,4 +1,8 @@
-const mongoose = require('mongoose');
-const Cart = require('../models/cart')
+// const mongoose = require('mongoose');
+const Cart = require("../models/cart");
 
-const fetch
+const getUserCarts = async function(id) {
+    return await Cart.findOne({ customer: id });
+};
+
+module.exports = getUserCarts;
