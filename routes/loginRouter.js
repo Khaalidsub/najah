@@ -50,7 +50,7 @@ router.post(
 				res.render('login');
 			} else {
 				//check last payment date and current date
-				const payment = await paymentDA.getPayment(req.user.id);
+				const payment = await paymentDA.fetchPayments(req.user.id);
 				console.log(payment);
 				if (payment) {
 					if (payment.transactions.length > 0) {
