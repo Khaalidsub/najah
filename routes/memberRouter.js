@@ -22,6 +22,7 @@ const paymentDA = require('../viewModel/PaymentDA');
 const workoutRoutineDA = require('../viewModel/workoutRoutineDA');
 const connectEmail = require('../config/mail');
 const Cart = require('../models/cart');
+const CartDA = require('../viewModel/cartDA')
 
 //paypal
 const checkoutNodeJssdk = require('@paypal/checkout-server-sdk');
@@ -46,7 +47,7 @@ router.get('/member/registerPage', (req, res) => {
     }
 });
 //main dashboard
-router.get('/member/memberProfile', isauthenticated, isUser, async(req, res) => {
+router.get('/member/memberProfile', isauthenticated, isUser, async (req, res) => {
     const profile = req.user;
     profile.password = '';
     if (profile.trainingMember == undefined) {
@@ -64,7 +65,7 @@ router.get('/member/memberProfile', isauthenticated, isUser, async(req, res) => 
 });
 
 //registerhandler
-router.post('/member/register', async(req, res) => {
+router.post('/member/register', async (req, res) => {
     console.log(req.user);
 
     const user = new User(req.body); // instacne of user model
@@ -107,7 +108,7 @@ router.post('/member/register', async(req, res) => {
     }
 });
 
-router.post('/member/updateMember', isauthenticated, isUser, async(req, res) => {
+router.post('/member/updateMember', isauthenticated, isUser, async (req, res) => {
     //const user = new User(req.)
     const user = req.user;
 
@@ -127,7 +128,7 @@ router.post('/member/updateMember', isauthenticated, isUser, async(req, res) => 
     }
     res.render('member/memberMyProfile', { profile: user });
 });
-router.get('/member/memberMyProfile', isauthenticated, isUser, async(req, res) => {
+router.get('/member/memberMyProfile', isauthenticated, isUser, async (req, res) => {
     const profile = req.user;
     profile.password = '';
     if (profile.trainingMember == undefined) {
@@ -139,7 +140,7 @@ router.get('/member/memberMyProfile', isauthenticated, isUser, async(req, res) =
     }
 });
 
-router.post('/member/deactivateAccount', isauthenticated, isUser, async(req, res) => {
+router.post('/member/deactivateAccount', isauthenticated, isUser, async (req, res) => {
     const user = req.user;
     user.status = 'deactivated';
     try {
@@ -154,7 +155,7 @@ router.post('/member/deactivateAccount', isauthenticated, isUser, async(req, res
 
 //Personal Training Routes//
 //view Training
-router.get('/member/viewTrainingPage', isauthenticated, isUser, async(req, res) => {
+router.get('/member/viewTrainingPage', isauthenticated, isUser, async (req, res) => {
     const profile = req.user;
     profile.password = '';
     //get the size of weight loss
@@ -173,7 +174,7 @@ router.get('/member/viewTrainingPage', isauthenticated, isUser, async(req, res) 
         failure: req.flash('failure')
     });
 });
-router.get('/member/viewTraining', isauthenticated, isUser, async(req, res) => {
+router.get('/member/viewTraining', isauthenticated, isUser, async (req, res) => {
     const profile = req.user;
     profile.password = '';
 
@@ -202,7 +203,7 @@ router.get('/member/viewTraining', isauthenticated, isUser, async(req, res) => {
     }
 });
 //join Training
-router.get('/member/joinTraining/:id', isauthenticated, isUser, async(req, res) => {
+router.get('/member/joinTraining/:id', isauthenticated, isUser, async (req, res) => {
     const id = req.params.id;
 
     const user = req.user;
@@ -231,7 +232,7 @@ router.get('/member/joinTraining/:id', isauthenticated, isUser, async(req, res) 
     }
 });
 //quit training
-router.post('/member/quitTraining/:id', isauthenticated, isUser, async(req, res) => {
+router.post('/member/quitTraining/:id', isauthenticated, isUser, async (req, res) => {
     const id = req.params.id;
     const user = req.user;
     console.log('helo there here i am', id);
@@ -259,7 +260,7 @@ router.post('/member/quitTraining/:id', isauthenticated, isUser, async(req, res)
 // his parents and followed his own path and succeeded xD XD XD
 //view all merchandise
 
-router.get('/member/shop', isauthenticated, isUser, async(req, res) => {
+router.get('/member/shop', isauthenticated, isUser, async (req, res) => {
     try {
         //chunking the array for better front end rendering
         const vals = await merchandiseDA.fetchMerchandise(req.user.role);
@@ -282,62 +283,15 @@ router.get('/member/shop', isauthenticated, isUser, async(req, res) => {
 });
 
 //! SINGLE RESPONSIBILITY
-router.get('/add-to-cart/:id', isauthenticated, async(req, res) => {
-    const id = req.params.id;
-    //first we have to check if the product is already in cart
-    console.log('product id : ', id);
-    //check if the user already as a cart to his name
-    const foundCart = await Cart.findOne({ customer: req.user.id });
-    isthere = false;
-    //if there is a cart for the user, check if the item he is trying to add is there alredy
-    //this is to group the elements .
-    if (foundCart) {
-        for (var val of foundCart.items) {
-            if (val['item'] == id) {
-                await foundCart.populate('items.item').execPopulate();
-                isthere = true;
-                foundCart.totalPrice += val.item.price;
-                val.price += val.item.price;
-                val.quantity++;
-                foundCart.totalItems++;
-                await foundCart.save();
-                break;
-            }
-        }
-
-        if (isthere == false) {
-            const product = await merchandise.findById(id, 'price'); // to get the price
-            foundCart.totalPrice += product.price;
-            item = { item: id, price: product.price };
-            item.quantity = 1;
-            foundCart.totalItems++;
-
-            //console.log(item);
-            foundCart.items.push(item);
-            await foundCart.save();
-            localStorage.getItem();
-        }
-    } else {
-        //create the new cart for the customer carting first time
-        const cart = new Cart();
-        const Product = await merchandise.findById(id, 'price'); //getting the price
-
-        cart.totalItems = 1;
-        cart.totalPrice = Product.price; //change later
-        item = { item: id, price: Product.price };
-        item.quantity = 1;
-        item.item = id;
-        cart.customer = req.user.id;
-        cart.items.push(item);
-        await cart.save(); //document method
-        localStorage.setItem();
-    }
+router.get('/add-to-cart/:id', isauthenticated, async (req, res) => {
+    const merchandiseId = req.params.id;
+    await CartDA.addToCart(merchandiseId, req.user.id);
     req.flash('cart-success', 'Item has been added successfully :)');
     res.redirect(req.get('referer'));
 });
 
 //view cart router goes here
-router.get('/viewcart', isauthenticated, async(req, res) => {
+router.get('/viewcart', isauthenticated, async (req, res) => {
     //logged in user can view their cart
     console.log(req.locals);
     console.log(req.session.vals);
@@ -361,7 +315,7 @@ router.get('/viewcart', isauthenticated, async(req, res) => {
 });
 
 //delete Item from the cart route
-router.get('/cart/deleteitem/:id', isauthenticated, async(req, res) => {
+router.get('/cart/deleteitem/:id', isauthenticated, async (req, res) => {
     const userCart = await Cart.findOne({ customer: req.user.id });
     const item = userCart.items.id(req.params.id);
     //updating numeric values in the cart
@@ -382,7 +336,7 @@ router.get('/cart/deleteitem/:id', isauthenticated, async(req, res) => {
     res.redirect('/viewcart');
 });
 
-router.get('/checkout', isauthenticated, async(req, res) => {
+router.get('/checkout', isauthenticated, async (req, res) => {
     const user = {};
     user.name = req.user.name;
     user.email = req.user.email;
@@ -403,7 +357,7 @@ router.get('/checkout', isauthenticated, async(req, res) => {
     });
 });
 
-router.post('/member/placeOrder', isauthenticated, async(req, res) => {
+router.post('/member/placeOrder', isauthenticated, async (req, res) => {
     const updated = await paymentDA.updatePayment(req.user.id, req.session.cartPrice);
     if (updated) {
         //remove the thing cart
@@ -414,7 +368,7 @@ router.post('/member/placeOrder', isauthenticated, async(req, res) => {
     } else console.log(updated);
 });
 
-router.get('/member/viewWorkoutRoutine', isauthenticated, async(req, res) => {
+router.get('/member/viewWorkoutRoutine', isauthenticated, async (req, res) => {
     const user = req.user;
     user.password = '';
     const wrs = await workoutRoutineDA.viewWR();
@@ -422,7 +376,7 @@ router.get('/member/viewWorkoutRoutine', isauthenticated, async(req, res) => {
 });
 //res.render('checkout', { cart: cart, user: user, profile: req.user.name });
 
-router.get('/member/viewPackages', isauthenticated, async(req, res) => {
+router.get('/member/viewPackages', isauthenticated, async (req, res) => {
     //console.log(req.user.gender);
     const pkgs = await PackageDA.fetchPackages(req.user.gender);
     if (pkgs == null) {
@@ -437,7 +391,7 @@ router.get('/member/viewPackages', isauthenticated, async(req, res) => {
     }
 });
 
-router.get('/member/subscription/:id', isauthenticated, isUser, async(req, res) => {
+router.get('/member/subscription/:id', isauthenticated, isUser, async (req, res) => {
     if (req.user.package) {
         req.flash('alrdyPackage', 'You have already registered one package! please come to the counter.');
         res.redirect(req.get('referer'));
@@ -455,14 +409,14 @@ router.get('/member/subscription/:id', isauthenticated, isUser, async(req, res) 
 
 //console.log(val);
 
-router.get('/member/paymentPage', isauthenticated, async(req, res) => {
+router.get('/member/paymentPage', isauthenticated, async (req, res) => {
     const profile = req.user;
     //get the payment table for that certain user
     const payment = await paymentDA.getPayment(req.user.id);
     //display the outstanding balance etc
     res.render('member/Payment', { profile, payment });
 });
-router.get('/member/paymentHistory', isauthenticated, async(req, res) => {
+router.get('/member/paymentHistory', isauthenticated, async (req, res) => {
     const profile = req.user;
     //get the payment table for that certain user
     const payment = await paymentDA.fetchPayments(req.user.id);
@@ -470,7 +424,7 @@ router.get('/member/paymentHistory', isauthenticated, async(req, res) => {
     if (payment) res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
     else res.render('member/PaymentHistory', { profile, transactions: null });
 });
-router.get('/member/printPayment/:id', isauthenticated, async(req, res) => {
+router.get('/member/printPayment/:id', isauthenticated, async (req, res) => {
     const profile = req.user;
     //get the payment table for that certain user
     const payment = await paymentDA.fetchPayments(req.user.id);
@@ -478,7 +432,7 @@ router.get('/member/printPayment/:id', isauthenticated, async(req, res) => {
     res.render('member/PaymentHistory', { profile, transactions: payment.transactions });
 });
 
-router.post('/member/pay', isauthenticated, async(req, res) => {
+router.post('/member/pay', isauthenticated, async (req, res) => {
     //getting the payment db
     const payment = await paymentDA.getPayment(req.user.id);
 
