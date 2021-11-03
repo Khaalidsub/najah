@@ -33,7 +33,7 @@
 		"paypal-checkout": "^4.0.305",
 		"paypal-rest-sdk": "^1.8.1",
 		"print-js": "^1.0.63",
-		"validator": "^11.1.0"
+		"validator": "^13.7.0"
 	},
 	"devDependencies": {
 		"nodemon": "^1.19.3"
