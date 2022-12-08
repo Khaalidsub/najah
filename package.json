@@ -10,11 +10,11 @@
 	"dependencies": {
 		"@paypal/checkout-server-sdk": "^1.0.2",
 		"bcrypt": "^5.0.0",
-		"body-parser": "^1.19.0",
+		"body-parser": "^1.20.1",
 		"connect-flash": "^0.1.1",
 		"connect-mongo": "^3.2.0",
 		"cookie-parser": "~1.4.4",
-		"express": "~4.16.1",
+		"express": "~4.18.2",
 		"express-session": "^1.16.2",
 		"express3-handlebars": "^0.5.2",
 		"express4-handlebars": "^0.2.0",
